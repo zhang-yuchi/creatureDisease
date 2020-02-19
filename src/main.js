@@ -4,7 +4,8 @@ import router from './router'
 import store from './store'
 /*配置element-ui  如果后期需要减小体积可以将这块内容移至js文件中*/
 import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
+// import 'element-ui/lib/theme-chalk/index.css';
+import '../theme/index.css'
 Vue.use(ElementUI);
 Vue.config.productionTip = false
 
