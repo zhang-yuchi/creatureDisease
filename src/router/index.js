@@ -11,7 +11,33 @@ const routes = [
   {
     path:"/login",
     name:"login",
-    component:()=>import(/* webpackChunkName: "login" */'../views/login')
+    component:()=>import(/* webpackChunkName: "login" */'../views/login'),
+    children:[
+      {
+        path:"",
+        redirect:"index"
+      },
+      {
+        path:"index",
+        name:"index",
+        component:()=>import('../views/login/login')
+      },
+      {
+        path:"step1",
+        name:"changePsw01",
+        component:()=>import('../views/login/changePsw')
+      },
+      {
+        path:"step2",
+        name:"changePsw02",
+        component:()=>import('../views/login/checkPsw')
+      },
+      {
+        path:"success",
+        name:"changePsw03",
+        component:()=>import('../views/login/success')
+      },
+    ]
   },
   {
     path:"/manager",
