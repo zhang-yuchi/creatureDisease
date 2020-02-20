@@ -3,37 +3,36 @@
   <div class="layout">
     <Row type="flex">
       <i-col span="5" class="layout-menu-left">
-        <Menu active-key="1-2" theme="dark" width="auto" :open-keys="['1']">
-          <div class="layout-logo-left"></div>
-          <Menu-item key="1" name="1">
-            <Icon type="ios-paper"></Icon>
-            内容管理
+        <Menu active-name="1" theme="dark" width="auto" :open-keys="['1']">
+          <div class="layout-logo-left">
+            <img src="../../assets/logo.png" alt />
+          </div>
+          <Menu-item replace to="profile" key="1" name="1">
+            <Icon type="ios-person"></Icon>个人中心
           </Menu-item>
-          <Menu-item key="2" name="2">
-            <Icon type="ios-paper"></Icon>
-            内容管理
+          <Menu-item replace to="" key="2" name="2">
+            <Icon type="ios-list-box-outline"></Icon>订单管理
           </Menu-item>
           <Submenu key="3" name="3">
             <template slot="title">
-              <Icon type="ios-analytics"></Icon>导航三
+              <Icon type="md-flower"></Icon>实验室设置
             </template>
-            <Menu-item key="3-1" name="3-1">选项 1</Menu-item>
-            <Menu-item key="3-2" name="3-2">选项 2</Menu-item>
+            <Menu-item replace to="" key="3-1" name="3-1">基础信息</Menu-item>
+            <Menu-item replace to="" key="3-2" name="3-2">检测项目配置</Menu-item>
           </Submenu>
         </Menu>
       </i-col>
       <i-col span="19">
-        <div class="layout-header">
+        <div class="layout-header"></div>
 
-        </div>
-        <div class="layout-breadcrumb">
-          <Breadcrumb separator=">">
-            <Breadcrumb-item href="#">首页</Breadcrumb-item>
-            <Breadcrumb-item href="#">应用中心</Breadcrumb-item>
-            <Breadcrumb-item>某应用</Breadcrumb-item>
-          </Breadcrumb>
-        </div>
         <div class="layout-content">
+          <div class="layout-breadcrumb">
+            <Breadcrumb separator=">">
+              <Breadcrumb-item href="#">首页</Breadcrumb-item>
+              <Breadcrumb-item href="#">应用中心</Breadcrumb-item>
+              <Breadcrumb-item>某应用</Breadcrumb-item>
+            </Breadcrumb>
+          </div>
           <router-view />
           <!-- <div class="layout-content-main">内容区域</div> -->
         </div>
@@ -45,13 +44,18 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-
+var routeMap = {
+  profile:"个人中心",
+  
+}
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {},
   data() {
     //这里存放数据
-    return {};
+    return {
+
+    };
   },
   //监听属性 类似于data概念
   computed: {},
@@ -63,7 +67,8 @@ export default {
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
-
+    console.log(this.$router)
+    console.log(this.$router.history.current.path)
   },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
@@ -76,6 +81,9 @@ export default {
 };
 </script>
 <style scoped>
+.layout-breadcrumb {
+  margin-bottom: 10px;
+}
 .layout {
   height: 100%;
   border: 1px solid #d7dde4;
@@ -83,11 +91,12 @@ export default {
   position: relative;
 }
 .layout-breadcrumb {
-  padding: 10px 15px 0;
+  padding: 10px 0px 0;
 }
 .layout-content {
   min-height: 600px;
-  margin: 15px;
+  /* margin: 15px; */
+  padding: 0 15px;
   overflow: hidden;
   background: #fff;
   border-radius: 4px;
@@ -101,21 +110,30 @@ export default {
   color: #9ea7b4;
 }
 .layout-menu-left {
-  background: #464c5b;
+  background: #051F39;
 }
 .layout-header {
-  height: 60px;
+  height: 70px;
   background: #fff;
+  border-bottom: 1px solid #dbdfe4;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
 }
 .layout-logo-left {
   width: 90%;
-  height: 30px;
-  background: #5b6270;
+  /* height: 30px; */
+  text-align: center;
+  /* background: #5b6270; */
   border-radius: 3px;
   margin: 15px auto;
 }
-.ivu-row-flex{
+.layout-logo-left img{
+  width: 200px;
+  height: 81px;
+}
+.ivu-menu-dark{
+  background-color: transparent;
+}
+.ivu-row-flex {
   height: 100%;
 }
 </style>
