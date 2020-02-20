@@ -1,6 +1,6 @@
 <!--  -->
 <template>
-<div class=''></div>
+<div class=''>个人信息</div>
 </template>
 
 <script>

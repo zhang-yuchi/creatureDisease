@@ -42,7 +42,18 @@ const routes = [
   {
     path:"/manager",
     name:"manager",
-    component:()=>import(/* webpackChunkName: "manager" */"../views/manager")
+    component:()=>import(/* webpackChunkName: "manager" */"../views/manager"),
+    children:[
+      {
+        path:"",
+        redirect:"profile",
+      },
+      {
+        path:"profile",
+        name:"profile",
+        component:()=>import("../views/manager/profile")
+      }
+    ]
   }
 ]
 
