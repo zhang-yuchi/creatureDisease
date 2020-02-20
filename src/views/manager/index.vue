@@ -7,18 +7,18 @@
           <div class="layout-logo-left">
             <img src="../../assets/logo.png" alt />
           </div>
-          <Menu-item replace to="profile" name="profile" >
+          <Menu-item replace to="profile" name="profile">
             <Icon type="ios-person"></Icon>个人中心
           </Menu-item>
-          <Menu-item replace to="order" name="order" >
+          <Menu-item replace to="order" name="order">
             <Icon type="ios-list-box-outline"></Icon>订单管理
           </Menu-item>
-          <Submenu :name="nowpath" >
+          <Submenu :name="nowpath">
             <template slot="title">
               <Icon type="md-flower"></Icon>实验室设置
             </template>
-            <Menu-item replace to="baseInfo" name="baseInfo" >基础信息</Menu-item>
-            <Menu-item replace to="project-setting" name="project-setting" >检测项目配置</Menu-item>
+            <Menu-item replace to="baseInfo" name="baseInfo">基础信息</Menu-item>
+            <Menu-item replace to="project-setting" name="project-setting">检测项目配置</Menu-item>
           </Submenu>
         </Menu>
       </i-col>
@@ -28,9 +28,7 @@
         <div class="layout-content">
           <div class="layout-breadcrumb">
             <Breadcrumb separator=">">
-              <Breadcrumb-item href="#">首页</Breadcrumb-item>
-              <Breadcrumb-item href="#">应用中心</Breadcrumb-item>
-              <Breadcrumb-item>某应用</Breadcrumb-item>
+              <Breadcrumb-item v-for="(item,index) in this.BreadcrumbList" :key="index">{{item}}</Breadcrumb-item>
             </Breadcrumb>
           </div>
           <router-view />
@@ -45,33 +43,49 @@
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
 var routeMap = {
-  "profile":"个人中心",
-  "order":"订单管理",
-  "baseInfo":"实验室设置/基础信息",
-  "project-setting":"实验室设置/检测项目配置",
-}
+  profile: "个人中心",
+  order: "订单管理",
+  baseInfo: "实验室设置/基础信息",
+  "project-setting": "实验室设置/检测项目配置"
+};
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {},
   data() {
     //这里存放数据
     return {
-      nowpath:""
+      nowpath: "",
+      BreadcrumbList: [],
+      routePath:this.$router.history.current.path
     };
   },
   //监听属性 类似于data概念
   computed: {},
   //监控data中的数据变化
-  watch: {},
+  watch: {
+    $route(to, from) {
+      this.getnowpath()
+      this.getBreadcrumbList()
+    }
+  },
   //方法集合
-  methods: {},
+  methods: {
+    getnowpath() {
+      this.nowpath = this.$router.history.current.path.split("/")[
+        this.$router.history.current.path.split("/").length - 1
+      ];
+    },
+    getBreadcrumbList() {
+      this.BreadcrumbList = routeMap[this.nowpath].split("/");
+    }
+  },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
-    console.log(this.$router)
-    this.nowpath = this.$router.history.current.path.split('/')[this.$router.history.current.path.split('/').length-1]
-    console.log(this.nowpath)
+    console.log(this.$router);
+    this.getnowpath();
+    this.getBreadcrumbList();
   },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
@@ -113,7 +127,7 @@ export default {
   color: #9ea7b4;
 }
 .layout-menu-left {
-  background: #051F39;
+  background: #051f39;
 }
 .layout-header {
   height: 70px;
@@ -129,24 +143,22 @@ export default {
   border-radius: 3px;
   margin: 15px auto;
 }
-.layout-logo-left img{
+.layout-logo-left img {
   width: 200px;
   height: 81px;
 }
-.ivu-menu-dark{
+.ivu-menu-dark {
   background-color: transparent;
 }
 .ivu-row-flex {
   height: 100%;
 }
-.ivu-menu-item-selected{
+.ivu-menu-item-selected {
   color: white !important;
-  background-color: #0584D7 !important;
+  background-color: #0584d7 !important;
 }
-.ivu-menu-submenu>.ivu-menu-item-active{
+.ivu-menu-submenu > .ivu-menu-item-active {
   color: white !important;
-  background-color: #0584D7;
+  background-color: #0584d7;
 }
-
-
 </style>
