@@ -1,42 +1,47 @@
 <!-- 管理页面主页面 -->
 <template>
-  <div class="layout">
-    <Row type="flex">
-      <i-col span="5" class="layout-menu-left">
-        <Menu :active-name="nowpath" theme="dark" width="auto" :open-keys="['1']">
-          <div class="layout-logo-left">
-            <img src="../../assets/logo.png" alt />
-          </div>
-          <Menu-item replace to="profile" name="profile">
-            <Icon type="ios-person"></Icon>个人中心
-          </Menu-item>
-          <Menu-item replace to="order" name="order">
-            <Icon type="ios-list-box-outline"></Icon>订单管理
-          </Menu-item>
-          <Submenu :name="nowpath">
+  <el-container class="main">
+    <el-aside width="242px">
+      <el-col :span="24">
+        <!-- <h5>自定义颜色</h5> -->
+        <div class="logo">ddd</div>
+        <el-menu
+          :default-active="nowpath"
+          class="el-menu-vertical-demo"
+          text-color="#b4bbc3"
+          background-color="#051f39"
+          active-background-color="#000"
+          active-text-color="#fff"
+          :router=true
+        >
+          <el-menu-item index="profile">
+            <i class="el-icon-menu"></i>
+            <span slot="title">个人中心</span>
+          </el-menu-item>
+          <el-menu-item index="order">
+            <i class="el-icon-document-remove"></i>
+            <span slot="title">订单管理</span>
+          </el-menu-item>
+          <el-submenu index="3" class="submenu">
             <template slot="title">
-              <Icon type="md-flower"></Icon>实验室设置
+              <i class="el-icon-setting"></i>
+              <span>实验室设置</span>
             </template>
-            <Menu-item replace to="baseInfo" name="baseInfo">基础信息</Menu-item>
-            <Menu-item replace to="project-setting" name="project-setting">检测项目配置</Menu-item>
-          </Submenu>
-        </Menu>
-      </i-col>
-      <i-col span="19">
-        <div class="layout-header"></div>
-
-        <div class="layout-content">
-          <div class="layout-breadcrumb">
-            <Breadcrumb separator=">">
-              <Breadcrumb-item v-for="(item,index) in this.BreadcrumbList" :key="index">{{item}}</Breadcrumb-item>
-            </Breadcrumb>
-          </div>
-          <router-view />
-          <!-- <div class="layout-content-main">内容区域</div> -->
-        </div>
-      </i-col>
-    </Row>
-  </div>
+            <el-menu-item-group>
+              <el-menu-item class="sub-list" index="baseInfo">基础信息</el-menu-item>
+              <el-menu-item class="sub-list" index="project-setting">检测项目配置</el-menu-item>
+            </el-menu-item-group>
+          </el-submenu>
+        </el-menu>
+      </el-col>
+    </el-aside>
+    <el-container>
+      <el-header>Header</el-header>
+      <el-main>
+        
+      </el-main>
+    </el-container>
+  </el-container>
 </template>
 
 <script>
@@ -56,7 +61,7 @@ export default {
     return {
       nowpath: "",
       BreadcrumbList: [],
-      routePath:this.$router.history.current.path
+      routePath: this.$router.history.current.path
     };
   },
   //监听属性 类似于data概念
@@ -64,8 +69,8 @@ export default {
   //监控data中的数据变化
   watch: {
     $route(to, from) {
-      this.getnowpath()
-      this.getBreadcrumbList()
+      this.getnowpath();
+      this.getBreadcrumbList();
     }
   },
   //方法集合
@@ -98,67 +103,61 @@ export default {
 };
 </script>
 <style scoped>
-.layout-breadcrumb {
-  margin-bottom: 10px;
+.el-header,
+.el-footer {
+  background-color: #b3c0d1;
+  color: #333;
+  text-align: center;
+  line-height: 60px;
 }
-.layout {
-  height: 100%;
-  border: 1px solid #d7dde4;
-  background: #f5f7f9;
-  position: relative;
+
+.el-aside {
+  user-select: none;
+  /* overflow: hidden; */
+  min-height: 100%;
+  float: left;
+  background-color: #051f39;
+  color: #333;
+  text-align: center;
+  line-height: 200px;
 }
-.layout-breadcrumb {
-  padding: 10px 0px 0;
+
+.el-main {
+  min-height: 700px;
+  background-color: #e9eef3;
+  color: #333;
+  text-align: center;
+  line-height: 160px;
 }
-.layout-content {
-  min-height: 600px;
-  /* margin: 15px; */
-  padding: 0 15px;
+
+/* .el-container{
+    overflow: hidden;
+    height: 100%;
+  } */
+.el-container,
+.main {
   overflow: hidden;
-  background: #fff;
-  border-radius: 4px;
-}
-.layout-content-main {
-  padding: 10px;
-}
-.layout-copy {
-  text-align: center;
-  padding: 10px 0 20px;
-  color: #9ea7b4;
-}
-.layout-menu-left {
-  background: #051f39;
-}
-.layout-header {
-  height: 70px;
-  background: #fff;
-  border-bottom: 1px solid #dbdfe4;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
-}
-.layout-logo-left {
-  width: 90%;
-  /* height: 30px; */
-  text-align: center;
-  /* background: #5b6270; */
-  border-radius: 3px;
-  margin: 15px auto;
-}
-.layout-logo-left img {
-  width: 200px;
-  height: 81px;
-}
-.ivu-menu-dark {
-  background-color: transparent;
-}
-.ivu-row-flex {
   height: 100%;
 }
-.ivu-menu-item-selected {
-  color: white !important;
-  background-color: #0584d7 !important;
+li[role="menuitem"] {
+  width: 242px;
+  box-sizing: border-box;
+  text-align: left;
 }
-.ivu-menu-submenu > .ivu-menu-item-active {
-  color: white !important;
-  background-color: #0584d7;
+
+.logo {
+  height: 100px;
 }
+.el-menu-item,
+.el-submenu__title {
+  background-color: #051f39;
+}
+.el-menu-item-group .el-menu-item{
+  background-color: #204370 !important;
+}
+#app .is-active{
+  background-color: #0584D7 !important;
+}
+
+
 </style>
