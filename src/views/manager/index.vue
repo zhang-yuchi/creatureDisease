@@ -12,7 +12,7 @@
           background-color="#051f39"
           active-background-color="#000"
           active-text-color="#fff"
-          :router="true"
+          @select="routechange"
         >
           <el-menu-item index="profile">
             <i class="el-icon-menu"></i>
@@ -22,7 +22,7 @@
             <i class="el-icon-document-remove"></i>
             <span slot="title">订单管理</span>
           </el-menu-item>
-          <el-submenu index="3" class="submenu">
+          <el-submenu index="setting" class="submenu">
             <template slot="title">
               <i class="el-icon-setting"></i>
               <span>实验室设置</span>
@@ -78,11 +78,19 @@ export default {
     $route(to, from) {
       this.getnowpath();
       this.getBreadcrumbList();
-      this.beautifyStyle()
+      this.beautifyStyle();
     }
   },
   //方法集合
   methods: {
+    routechange(path) {
+      try{
+        this.$router.replace(path);
+      }catch{
+        console.log(111)
+      }
+      
+    },
     getnowpath() {
       this.nowpath = this.$router.history.current.path.split("/")[
         this.$router.history.current.path.split("/").length - 1
@@ -95,18 +103,32 @@ export default {
       this.$nextTick(() => {
         var bread = document.getElementsByClassName("el-breadcrumb__inner");
         // console.log(bread[1])
+        var b = bread[bread.length - 1];
+        console.log(b)
         if (bread.length > 1) {
-          console.log(1)
-          var b = bread[bread.length - 1]; //找到最后一个面包屑
+           //找到最后一个面包屑
+          b.style.fontWeight = "bold";
+        }
+        if(b.innerHTML == '订单管理'){
           b.style.fontWeight = "bold";
         }
       });
+    },
+    logout(){
+      //需要做一个守卫 相当于注销!
+      this.$router.replace({path: '/'});
+      //replace替换原路由，作用是避免回退死循环
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
+    //监听回退事件
+    if (window.history && window.history.pushState) {
+      history.pushState(null, null, document.URL);
+      window.addEventListener("popstate", this.logout, false);
+    }
     this.beautifyStyle();
     this.getnowpath();
     this.getBreadcrumbList();
@@ -116,7 +138,9 @@ export default {
   beforeUpdate() {}, //生命周期 - 更新之前
   updated() {}, //生命周期 - 更新之后
   beforeDestroy() {}, //生命周期 - 销毁之前
-  destroyed() {}, //生命周期 - 销毁完成
+  destroyed() {
+    window.removeEventListener('popstate', this.goBack, false);
+  }, //生命周期 - 销毁完成
   activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
   deactivated() {} //如果有keep-alive缓存功能,当该页面撤销使这个函数会触发
 };

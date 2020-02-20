@@ -80,6 +80,9 @@ const router = new VueRouter({
 
 router.beforeEach((to,from,next)=>{
   //路由守卫
+  if(to.path === from.path ){
+    this.$router.go(0)
+  }
   next()
 })
 
