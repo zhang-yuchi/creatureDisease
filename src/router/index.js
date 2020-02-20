@@ -10,7 +10,7 @@ const routes = [
   },
   {
     path:"/login",
-    name:"login",
+    name:"登录",
     component:()=>import(/* webpackChunkName: "login" */'../views/login'),
     children:[
       {
@@ -19,7 +19,7 @@ const routes = [
       },
       {
         path:"index",
-        name:"index",
+        name:"登录页",
         component:()=>import('../views/login/login')
       },
       {
@@ -50,9 +50,24 @@ const routes = [
       },
       {
         path:"profile",
-        name:"profile",
+        name:"个人中心",
         component:()=>import("../views/manager/profile")
-      }
+      },
+      {
+        path:"order",
+        name:"订单管理",
+        component:() => import("../views/manager/order")
+      },
+      {
+        path:"baseInfo",
+        name:"基础信息",
+        component:() => import("../views/manager/baseInfo")
+      },
+      {
+        path:"project-setting",
+        name:"检测项目配置",
+        component:() => import("../views/manager/projectSetting")
+      },
     ]
   }
 ]
