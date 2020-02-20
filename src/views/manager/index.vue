@@ -12,7 +12,7 @@
           background-color="#051f39"
           active-background-color="#000"
           active-text-color="#fff"
-          :router=true
+          :router="true"
         >
           <el-menu-item index="profile">
             <i class="el-icon-menu"></i>
@@ -36,9 +36,16 @@
       </el-col>
     </el-aside>
     <el-container>
-      <el-header>Header</el-header>
+      <el-header>
+        <div class="controls">
+          <span class="name">Abin</span>
+          <img class="logout" src="../../assets/psw.png" alt />
+        </div>
+      </el-header>
       <el-main>
-        
+        <el-breadcrumb separator=">">
+          <el-breadcrumb-item v-for="(item,index) in this.BreadcrumbList" :key="index">{{item}}</el-breadcrumb-item>
+        </el-breadcrumb>
       </el-main>
     </el-container>
   </el-container>
@@ -71,6 +78,7 @@ export default {
     $route(to, from) {
       this.getnowpath();
       this.getBreadcrumbList();
+      this.beautifyStyle()
     }
   },
   //方法集合
@@ -82,13 +90,24 @@ export default {
     },
     getBreadcrumbList() {
       this.BreadcrumbList = routeMap[this.nowpath].split("/");
+    },
+    beautifyStyle() {
+      this.$nextTick(() => {
+        var bread = document.getElementsByClassName("el-breadcrumb__inner");
+        // console.log(bread[1])
+        if (bread.length > 1) {
+          console.log(1)
+          var b = bread[bread.length - 1]; //找到最后一个面包屑
+          b.style.fontWeight = "bold";
+        }
+      });
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
-    console.log(this.$router);
+    this.beautifyStyle();
     this.getnowpath();
     this.getBreadcrumbList();
   },
@@ -105,12 +124,38 @@ export default {
 <style scoped>
 .el-header,
 .el-footer {
-  background-color: #b3c0d1;
+  /* background-color: #b3c0d1; */
+  background: #fff;
   color: #333;
   text-align: center;
   line-height: 60px;
 }
-
+.el-header {
+  position: relative;
+  border-bottom: 1px solid #dbdfe4;
+  height: 70px !important;
+}
+/* .name,.logout{
+  float: left;
+} */
+.controls {
+  line-height: 16px;
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.logout {
+  cursor: pointer;
+}
+.name {
+  border-radius: 10px;
+  margin-right: 21px;
+  display: inline-block;
+  padding: 0 13px;
+  background-color: #dddddd;
+  line-height: 33px;
+}
 .el-aside {
   user-select: none;
   /* overflow: hidden; */
@@ -124,16 +169,11 @@ export default {
 
 .el-main {
   min-height: 700px;
-  background-color: #e9eef3;
+  background-color: #fff;
   color: #333;
   text-align: center;
   line-height: 160px;
 }
-
-/* .el-container{
-    overflow: hidden;
-    height: 100%;
-  } */
 .el-container,
 .main {
   overflow: hidden;
@@ -152,12 +192,16 @@ li[role="menuitem"] {
 .el-submenu__title {
   background-color: #051f39;
 }
-.el-menu-item-group .el-menu-item{
+.el-menu-item-group .el-menu-item {
   background-color: #204370 !important;
 }
-#app .is-active{
-  background-color: #0584D7 !important;
+#app .is-active {
+  background-color: #0584d7 !important;
 }
-
-
+.el-breadcrumb__item .el-breadcrumb__inner {
+  font-weight: bold !important;
+}
+.bold {
+  font-weight: bold;
+}
 </style>

@@ -103,7 +103,8 @@ export default {
       this.isLoading = true;
       console.log(this.form);
       //一系列验证之后
-      this.$router.push('/manager')
+      // console.log(this.$router)
+      this.$router.replace('/manager')
     },
     changePsw() {
       this.$router.push("step1");
