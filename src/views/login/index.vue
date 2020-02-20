@@ -8,7 +8,6 @@
           </div>
           <div class="logwindow">
               <router-view />
-              
           </div>
       </div>
   </div>

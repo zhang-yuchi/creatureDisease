@@ -1,20 +1,6 @@
 <!--  -->
 <template>
-<div class=''>
-    <div class>
-    <div class="logtips"><slot name="name"></slot></div>
-    <div class="window">
-      <slot name="form"></slot>
-    </div>
-    <div class="control">
-      <slot name="login"></slot>
-    </div>
-    <div class="changepsw">
-      <slot name="changestate"></slot>
-    </div>
-    <slot name="other"></slot>
-  </div>
-</div>
+<div class=''></div>
 </template>
 
 <script>
@@ -57,34 +43,5 @@ deactivated() {}, //如果有keep-alive缓存功能,当该页面撤销使这个�
 }
 </script>
 <style scoped>
-.control {
-  margin-top: 20px;
-  text-align: center;
-}
-.logtips {
-  color: #333333;
-  font-size: 36px;
-  font-weight: bold;
-  margin: 70px 0 0 60px;
-  letter-spacing: 2px;
-}
-.loginbtn {
-  padding: 10px 30px;
-  box-sizing: content-box;
-}
-.loginbtn:hover {
-  background-color: #0484d6;
-  border-color: #0484d6;
-}
-.changepsw {
-  margin-top: 20px;
-  text-align: center;
-}
-.pswbtn {
-  color: #4b6477;
-}
-.window {
-  margin-left: 60px;
-  width: 70%;
-}
+
 </style>
