@@ -4,7 +4,7 @@
     <el-aside width="242px">
       <el-col :span="24">
         <!-- <h5>自定义颜色</h5> -->
-        <div class="logo">ddd</div>
+        <div class="logo"></div>
         <el-menu
           :default-active="nowpath"
           class="el-menu-vertical-demo"
@@ -12,7 +12,7 @@
           background-color="#051f39"
           active-background-color="#000"
           active-text-color="#fff"
-          @select="routechange"
+          :router="true"
         >
           <el-menu-item index="profile">
             <i class="el-icon-menu"></i>
@@ -44,8 +44,12 @@
       </el-header>
       <el-main>
         <el-breadcrumb separator=">">
-          <el-breadcrumb-item v-for="(item,index) in this.BreadcrumbList" :key="index">{{item}}</el-breadcrumb-item>
+          <el-breadcrumb-item v-for="(item,index) in this.BreadcrumbList" :to="item=='订单管理'&&index==0?'order':''" :key="index">{{item}}</el-breadcrumb-item>
         </el-breadcrumb>
+        <keep-alive exclude="订单管理">
+          <router-view />
+        </keep-alive>
+        
       </el-main>
     </el-container>
   </el-container>
@@ -58,7 +62,9 @@ var routeMap = {
   profile: "个人中心",
   order: "订单管理",
   baseInfo: "实验室设置/基础信息",
-  "project-setting": "实验室设置/检测项目配置"
+  "project-setting": "实验室设置/检测项目配置",
+  "order-detail":"订单管理/订单详情",
+  error:""
 };
 export default {
   //import引入的组件需要注入到对象中才能使用
@@ -83,40 +89,31 @@ export default {
   },
   //方法集合
   methods: {
-    routechange(path) {
-      try{
-        this.$router.replace(path);
-      }catch{
-        console.log(111)
-      }
-      
-    },
     getnowpath() {
+      console.log(this.$route)
       this.nowpath = this.$router.history.current.path.split("/")[
         this.$router.history.current.path.split("/").length - 1
       ];
     },
     getBreadcrumbList() {
       this.BreadcrumbList = routeMap[this.nowpath].split("/");
+      console.log(this.BreadcrumbList)
     },
     beautifyStyle() {
       this.$nextTick(() => {
         var bread = document.getElementsByClassName("el-breadcrumb__inner");
         // console.log(bread[1])
         var b = bread[bread.length - 1];
-        console.log(b)
+        // console.log(b)
         if (bread.length > 1) {
-           //找到最后一个面包屑
-          b.style.fontWeight = "bold";
-        }
-        if(b.innerHTML == '订单管理'){
+          //找到最后一个面包屑
           b.style.fontWeight = "bold";
         }
       });
     },
-    logout(){
+    logout() {
       //需要做一个守卫 相当于注销!
-      this.$router.replace({path: '/'});
+      this.$router.replace({ path: "/" });
       //replace替换原路由，作用是避免回退死循环
     }
   },
@@ -125,10 +122,10 @@ export default {
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
     //监听回退事件
-    if (window.history && window.history.pushState) {
-      history.pushState(null, null, document.URL);
-      window.addEventListener("popstate", this.logout, false);
-    }
+    // if (window.history && window.history.pushState) {
+    //   history.pushState(null, null, document.URL);
+    //   window.addEventListener("popstate", this.logout, false);
+    // }
     this.beautifyStyle();
     this.getnowpath();
     this.getBreadcrumbList();
@@ -139,7 +136,7 @@ export default {
   updated() {}, //生命周期 - 更新之后
   beforeDestroy() {}, //生命周期 - 销毁之前
   destroyed() {
-    window.removeEventListener('popstate', this.goBack, false);
+    window.removeEventListener("popstate", this.goBack, false);
   }, //生命周期 - 销毁完成
   activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
   deactivated() {} //如果有keep-alive缓存功能,当该页面撤销使这个函数会触发
@@ -157,7 +154,7 @@ export default {
 .el-header {
   position: relative;
   border-bottom: 1px solid #dbdfe4;
-  height: 70px !important;
+  height: 60px !important;
 }
 /* .name,.logout{
   float: left;
@@ -178,7 +175,7 @@ export default {
   display: inline-block;
   padding: 0 13px;
   background-color: #dddddd;
-  line-height: 33px;
+  line-height: 25px;
 }
 .el-aside {
   user-select: none;
@@ -192,16 +189,20 @@ export default {
 }
 
 .el-main {
-  min-height: 700px;
+  /* min-height: 700px; */
   background-color: #fff;
   color: #333;
-  text-align: center;
-  line-height: 160px;
+  /* text-align: center; */
+  padding: 20px 0 0;
+  overflow-y: auto;
+  height: 700px;
 }
-.el-container,
 .main {
   overflow: hidden;
   height: 100%;
+}
+.el-container{
+  overflow: hidden;
 }
 li[role="menuitem"] {
   width: 242px;
@@ -227,5 +228,8 @@ li[role="menuitem"] {
 }
 .bold {
   font-weight: bold;
+}
+.el-breadcrumb{
+  padding: 0 20px;
 }
 </style>
