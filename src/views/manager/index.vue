@@ -4,7 +4,8 @@
     <el-aside width="242px">
       <el-col :span="24">
         <!-- <h5>自定义颜色</h5> -->
-        <div class="logo"></div>
+          <img class="logo" src="../../assets/logo1.png" alt="">
+
         <el-menu
           :default-active="nowpath"
           class="el-menu-vertical-demo"
@@ -39,17 +40,21 @@
       <el-header>
         <div class="controls">
           <span class="name">Abin</span>
-          <img class="logout" @click="logout" src="../../assets/psw.png" alt />
+          <i @click="logout" class="el-icon-switch-button"></i>
+          <!-- <img class="logout" @click="logout" src="../../assets/psw.png" alt /> -->
         </div>
       </el-header>
       <el-main>
         <el-breadcrumb separator=">">
-          <el-breadcrumb-item v-for="(item,index) in this.BreadcrumbList" :to="item=='订单管理'&&index==0?'order':''" :key="index">{{item}}</el-breadcrumb-item>
+          <el-breadcrumb-item
+            v-for="(item,index) in this.BreadcrumbList"
+            :to="item=='订单管理'&&index==0?'order':''"
+            :key="index"
+          >{{item}}</el-breadcrumb-item>
         </el-breadcrumb>
         <keep-alive exclude="订单管理">
           <router-view />
         </keep-alive>
-        
       </el-main>
     </el-container>
   </el-container>
@@ -63,8 +68,7 @@ var routeMap = {
   order: "订单管理",
   baseInfo: "实验室设置/基础信息",
   "project-setting": "实验室设置/检测项目配置",
-  "order-detail":"订单管理/订单详情",
-  error:""
+  "order-detail": "订单管理/订单详情",
 };
 export default {
   //import引入的组件需要注入到对象中才能使用
@@ -96,6 +100,11 @@ export default {
       ];
     },
     getBreadcrumbList() {
+      console.log(this.nowpath)
+      if(!routeMap[this.nowpath]){
+        this.BreadcrumbList = [];
+        return 
+      }
       this.BreadcrumbList = routeMap[this.nowpath].split("/");
       // console.log(this.BreadcrumbList)
     },
@@ -113,7 +122,7 @@ export default {
     },
     logout() {
       //需要做一个守卫 相当于注销!
-      console.log(111)
+      console.log(111);
       this.$router.replace({ path: "/" });
       //replace替换原路由，作用是避免回退死循环
     }
@@ -175,7 +184,7 @@ export default {
   margin-right: 21px;
   display: inline-block;
   padding: 0 13px;
-  background-color: #dddddd;
+  background-color: rgba(221, 221, 221, 0.5);
   line-height: 25px;
 }
 .el-aside {
@@ -194,7 +203,7 @@ export default {
   background-color: #fff;
   color: #333;
   /* text-align: center; */
-  padding: 20px 0 10px;
+  padding: 20px 0 5px;
   overflow-y: auto;
   height: 700px;
 }
@@ -202,7 +211,7 @@ export default {
   overflow: hidden;
   height: 100%;
 }
-.el-container{
+.el-container {
   overflow: hidden;
 }
 li[role="menuitem"] {
@@ -212,7 +221,10 @@ li[role="menuitem"] {
 }
 
 .logo {
-  height: 100px;
+  height: 70px;
+}
+.el-menu{
+  margin-top: -70px;
 }
 .el-menu-item,
 .el-submenu__title {
@@ -230,7 +242,7 @@ li[role="menuitem"] {
 .bold {
   font-weight: bold;
 }
-.el-breadcrumb{
+.el-breadcrumb {
   padding: 0 20px;
 }
 </style>

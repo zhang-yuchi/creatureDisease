@@ -13,10 +13,11 @@
     <transport-info></transport-info>
     <!-- 样本信息 -->
     <sample-info></sample-info>
-    <!-- 检测报告 -->
-    <report></report>
     <!-- 物流信息 -->
     <logistics></logistics>
+    <!-- 检测报告 -->
+    <report></report>
+    
 </div>
 </template>
 

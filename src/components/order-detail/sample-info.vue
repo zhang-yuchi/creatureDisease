@@ -3,7 +3,13 @@
 <div class=''>
     <Ititle title="样本信息"></Ititle>
     <wrap>
-        
+        <div class="tip"><span class="title">样本及临床说明:</span>猪出现发热(达40-42°C),心跳加快,呼吸困难,部分咳嗽,眼,鼻有浆液性或粘液性脓性分泌物,皮肤发绀,淋巴结 肾肠胃粘膜明显出血症状</div>
+        <div class="content">
+            <span class="title">采样图片:</span>
+            <div class="pic-box">
+                <img src="../../assets/test/test.jpg" alt="">
+            </div>
+        </div>
     </wrap>
 </div>
 </template>
@@ -52,5 +58,28 @@ deactivated() {}, //如果有keep-alive缓存功能,当该页面撤销使这个�
 }
 </script>
 <style scoped>
-
+.title{
+    display: inline-block;
+    width: 8em;
+    text-align: right;
+    margin-right: 20px;
+}
+.tip{
+    font-size: 14px;
+}
+.content{
+    margin-top: 19px;
+    overflow: hidden;
+}
+.content .title,.content .pic-box {
+    float: left;
+}
+.content .title{
+    margin-top: 10px;
+    font-size: 14px;
+}
+.pic-box img{
+    border-radius: 4px;
+    height: 104px;
+}
 </style>

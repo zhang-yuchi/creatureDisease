@@ -13,7 +13,7 @@
           <span class="row-content">四川省德阳市中江县</span>
         </div>
         <div class="row-item">
-          <span class="row-title length5">详细地址:</span>
+          <span class="row-title length6">详细地址:</span>
           <span class="row-content">东北镇白梨村十二社</span>
         </div>
         <div class="row-item last">
