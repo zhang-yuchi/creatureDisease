@@ -5,15 +5,15 @@
     <wrap>
       <div class="row">
         <div class="row-item">
-          <span class="row-title length5">送检单位:</span>
+          <span class="row-title length6">送检单位:</span>
           <span class="row-content">四川省奉献农业有限公司</span>
         </div>
         <div class="row-item">
-          <span class="row-title length4">所在地区:</span>
+          <span class="row-title length6">所在地区:</span>
           <span class="row-content">四川省德阳市中江县</span>
         </div>
         <div class="row-item">
-          <span class="row-title length6">详细地址:</span>
+          <span class="row-title length5">详细地址:</span>
           <span class="row-content">东北镇白梨村十二社</span>
         </div>
         <div class="row-item last">
@@ -23,7 +23,7 @@
       </div>
       <div class="row">
         <div class="row-item">
-          <span class="row-title length5">送检人电话:</span>
+          <span class="row-title length6">送检人电话:</span>
           <span class="row-content">18626452688</span>
         </div>
       </div>
@@ -74,6 +74,7 @@ export default {
   margin-bottom: 0;
 }
 .row-item {
+  vertical-align: top;
   display: inline-block;
   width: 25%;
 }

@@ -32,7 +32,10 @@
         </div>
         <div class="row-item">
           <span class="row-title length6">订单总金额:</span>
-          <span class="row-content">$<span style="color:rgb(243, 110, 99);font-weight:bold;">240.00</span>元</span>
+          <span class="row-content">
+            $
+            <span style="color:rgb(243, 110, 99);font-weight:bold;">240.00</span>元
+          </span>
         </div>
       </div>
     </wrap>
@@ -60,10 +63,7 @@ export default {
   watch: {},
   //方法集合
   methods: {
-    initStyle() {
-
-
-    }
+    initStyle() {}
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
@@ -83,37 +83,38 @@ export default {
 };
 </script>
 <style scoped>
-.row{
-    margin-bottom: 15px;
+.row {
+  margin-bottom: 15px;
 }
-.row:last-of-type{
-    margin-bottom: 0;
+.row:last-of-type {
+  margin-bottom: 0;
 }
 .row-item {
+  vertical-align: top;
   display: inline-block;
   width: 25%;
 }
-.row-content{
-    margin-left: 15px;
+.row-content {
+  margin-left: 15px;
 }
 .row-title {
   display: inline-block;
   /* width: 6em; */
   text-align: right;
 }
-.length3{
-    width: 3em;
+.length3 {
+  width: 3em;
 }
-.length4{
-    width: 4em;
+.length4 {
+  width: 4em;
 }
-.length5{
-    width: 5em;
+.length5 {
+  width: 5em;
 }
-.length6{
-    width: 6em;
+.length6 {
+  width: 6em;
 }
-.last{
-    text-align: right;
+.last {
+  text-align: right;
 }
 </style>
