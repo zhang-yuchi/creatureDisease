@@ -194,7 +194,7 @@ export default {
   background-color: #fff;
   color: #333;
   /* text-align: center; */
-  padding: 20px 0 0;
+  padding: 20px 0 10px;
   overflow-y: auto;
   height: 700px;
 }
