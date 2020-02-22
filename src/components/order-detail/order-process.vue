@@ -34,11 +34,23 @@ export default {
   //监控data中的数据变化
   watch: {},
   //方法集合
-  methods: {},
+  methods: {
+      initStyle(){
+          this.$nextTick(()=>{
+              //兼容IE
+              var box = document.querySelectorAll('.is-horizontal')
+              for(let i = 0;i<box.length-1;i++){
+                  box[i].style.width = "20%";
+              }
+          })
+      }
+  },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
-  mounted() {},
+  mounted() {
+      this.initStyle()
+  },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
   beforeUpdate() {}, //生命周期 - 更新之前
@@ -50,4 +62,7 @@ export default {
 };
 </script>
 <style scoped>
+.is-process{
+    width: 20%;
+}
 </style>

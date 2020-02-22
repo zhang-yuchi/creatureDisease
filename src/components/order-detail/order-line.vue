@@ -2,7 +2,8 @@
 <template>
 <div class=''>
     <Ititle title="订单明细"></Ititle>
-    <wrap></wrap>
+    <wrap>
+    </wrap>
 </div>
 </template>
 
