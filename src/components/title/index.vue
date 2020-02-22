@@ -1,24 +1,33 @@
 <!--  -->
 <template>
-<div class=''>
-    <!-- <title title="实验室">123</title> -->
-    <Iform></Iform>
+<div class='title' :class="hasBottom?'hasborder':''">
+    {{this.title}}
 </div>
 </template>
 
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-import Iform from '../../components/form'
+
 export default {
 //import引入的组件需要注入到对象中才能使用
-components: {
-    Iform,
+components: {},
+props:{
+    title:{
+        type:String,
+        required:true,
+    },
+    hasBottom:{
+        type:Boolean,
+        required:false,
+        default:false,
+    },
+
 },
 data() {
 //这里存放数据
 return {
-    
+
 };
 },
 //监听属性 类似于data概念
@@ -48,5 +57,22 @@ deactivated() {}, //如果有keep-alive缓存功能,当该页面撤销使这个�
 }
 </script>
 <style scoped>
-
+.title{
+    padding: 20px 30px 15px;
+    font-weight:bold;
+    position: relative;
+}
+.hasborder{
+    border-bottom: 1px solid #DBDFE4;
+}
+.title::before{
+    content:"";
+    width:5px;
+    height: 20px;
+    position: absolute;
+    top: 19px;
+    left: 20px;
+    display: block;
+    background-color: #0584D7;
+}
 </style>

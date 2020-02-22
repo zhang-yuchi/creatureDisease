@@ -1,12 +1,8 @@
 <!--  -->
 <template>
   <div class>
-    <withTab
-      @handleTabChange="tabChange"
-    ></withTab>
-    <withSearch
-      @handlesearch = "toSearch"
-    ></withSearch>
+    <withTab :tabArray="orderTabArray" @handleTabChange="tabChange"></withTab>
+    <withSearch @handlesearch="toSearch"></withSearch>
     <with-table />
   </div>
 </template>
@@ -14,20 +10,28 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-import withTab from '../../components/order/withTab.vue'
-import withSearch from '../../components/order/search'
-import withTable from '../../components/order/withTable'
+import withTab from "../../components/order/withTab.vue";
+import withSearch from "../../components/order/search";
+import withTable from "../../components/order/withTable";
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {
     withTab,
     withSearch,
-    withTable,
+    withTable
   },
   data() {
     //这里存放数据
     return {
-
+      orderTabArray: [
+        "所有订单",
+        "待付款",
+        "待寄样",
+        "运输中",
+        "检测中",
+        "已完成",
+        "已取消"
+      ]
     };
   },
   //监听属性 类似于data概念
@@ -36,19 +40,15 @@ export default {
   watch: {},
   //方法集合
   methods: {
-    tabChange(obj){
-      console.log(obj)
+    tabChange(obj) {
+      console.log(obj);
     },
-    toSearch({time,content}){
-
-    }
+    toSearch({ time, content }) {}
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
-  mounted() {
-    
-  },
+  mounted() {},
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
   beforeUpdate() {}, //生命周期 - 更新之前
@@ -60,5 +60,4 @@ export default {
 };
 </script>
 <style scoped>
-
 </style>

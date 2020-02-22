@@ -39,7 +39,7 @@
       <el-header>
         <div class="controls">
           <span class="name">Abin</span>
-          <img class="logout" src="../../assets/psw.png" alt />
+          <img class="logout" @click="logout" src="../../assets/psw.png" alt />
         </div>
       </el-header>
       <el-main>
@@ -90,14 +90,14 @@ export default {
   //方法集合
   methods: {
     getnowpath() {
-      console.log(this.$route)
+      // console.log(this.$route)
       this.nowpath = this.$router.history.current.path.split("/")[
         this.$router.history.current.path.split("/").length - 1
       ];
     },
     getBreadcrumbList() {
       this.BreadcrumbList = routeMap[this.nowpath].split("/");
-      console.log(this.BreadcrumbList)
+      // console.log(this.BreadcrumbList)
     },
     beautifyStyle() {
       this.$nextTick(() => {
@@ -113,6 +113,7 @@ export default {
     },
     logout() {
       //需要做一个守卫 相当于注销!
+      console.log(111)
       this.$router.replace({ path: "/" });
       //replace替换原路由，作用是避免回退死循环
     }
