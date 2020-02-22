@@ -125,4 +125,11 @@ export default {
 };
 </script>
 <style scoped>
+.loginbtn{
+  background-color: #318FF9;
+}
+.loginbtn:hover{
+  background-color: #0484D6;
+  transition: background-color 0.3s
+}
 </style>
