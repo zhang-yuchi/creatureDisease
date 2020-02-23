@@ -6,7 +6,9 @@
       @handleTabChange="tabChange"
       left="40"
     ></withTab>
-      <withTable></withTable>
+      <withTable
+      :list="this.list"
+      ></withTable>
   </div>
 </template>
 
@@ -15,7 +17,7 @@
 //例如：import 《组件名称》 from '《组件路径》';
 import withTab from "../../components/order/withTab.vue";
 import withTable from "../../components/order/withTable2";
-
+import { getOnsaleList } from '../../network'
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {
@@ -26,7 +28,7 @@ export default {
     //这里存放数据
     return {
       settingTabArray:["已上架","未上架"],
-      data:[]
+      list:[]
     };
   },
   //监听属性 类似于data概念
@@ -43,7 +45,13 @@ export default {
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
-  mounted() {},
+  mounted() {
+    getOnsaleList()
+    .then(res=>{
+      console.log(res)
+      
+    })
+  },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
   beforeUpdate() {}, //生命周期 - 更新之前

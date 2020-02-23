@@ -1,6 +1,6 @@
 <!-- 检测项目配置表格 -->
 <template>
-<div class="table">
+  <div class="table">
     <el-table
       :data="tableData"
       style="width: 100%;"
@@ -77,33 +77,33 @@
 //例如：import 《组件名称》 from '《组件路径》';
 import baseInfoVue from "../../views/manager/baseInfo.vue";
 export default {
-//import引入的组件需要注入到对象中才能使用
-components: {},
-data() {
-//这里存放数据
-return {
-tableData: [
-        {
-          id: "201906012345",
-          name: "王小虎",
-          address: "四川分县农业有限公司",
-          money: 1280,
-          time: "2019/12/20 12:20:58",
-          transport: "1316328914",
-          phone: "18702896918",
-          state: "待付款"
-        }
-      ],
+  //import引入的组件需要注入到对象中才能使用
+  components: {},
+  props: {
+    list: {
+      type: Array,
+      default: []
+    }
+  },
+  data() {
+    //这里存放数据
+    return {
+      tableData: [],
       loading: false
-};
-},
-//监听属性 类似于data概念
-computed: {},
-//监控data中的数据变化
-watch: {},
-//方法集合
-methods: {
- cellStyle() {
+    };
+  },
+  //监听属性 类似于data概念
+  computed: {},
+  //监控data中的数据变化
+  watch: {
+    list(newValue) {
+      console.log(newValue)
+      this.tableData = newValue;
+    }
+  },
+  //方法集合
+  methods: {
+    cellStyle() {
       return {
         padding: "7px 0"
       };
@@ -125,13 +125,14 @@ methods: {
       this.$nextTick(() => {
         var tr_cell = document.querySelector("tr .cell");
         tr_cell.style.paddingLeft = 20 + "px";
-        var times = Object.keys(this.tableData[0]).length;
+        // var times = Object.keys(this.tableData[0]).length;
+        var times = 8 //列数为8
         var firstitem = document.querySelectorAll(
           ".el-table__row .cell:first-of-type"
         );
+        // console.log(firstitem)
         for (let index in firstitem) {
           if (index % times == 0) {
-              console.log(firstitem[index])
             firstitem[index].style.paddingLeft = "20px";
           }
         }
@@ -140,24 +141,22 @@ methods: {
         document.querySelector(".el-table__header").style.width = "100%";
       });
     }
-},
-//生命周期 - 创建完成（可以访问当前this实例）
-created() {
-
-},
-//生命周期 - 挂载完成（可以访问DOM元素）
-mounted() {
-    this.initTable()
-},
-beforeCreate() {}, //生命周期 - 创建之前
-beforeMount() {}, //生命周期 - 挂载之前
-beforeUpdate() {}, //生命周期 - 更新之前
-updated() {}, //生命周期 - 更新之后
-beforeDestroy() {}, //生命周期 - 销毁之前
-destroyed() {}, //生命周期 - 销毁完成
-activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
-deactivated() {}, //如果有keep-alive缓存功能,当该页面撤销使这个函数会触发
-}
+  },
+  //生命周期 - 创建完成（可以访问当前this实例）
+  created() {},
+  //生命周期 - 挂载完成（可以访问DOM元素）
+  mounted() {
+    this.initTable();
+  },
+  beforeCreate() {}, //生命周期 - 创建之前
+  beforeMount() {}, //生命周期 - 挂载之前
+  beforeUpdate() {}, //生命周期 - 更新之前
+  updated() {}, //生命周期 - 更新之后
+  beforeDestroy() {}, //生命周期 - 销毁之前
+  destroyed() {}, //生命周期 - 销毁完成
+  activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
+  deactivated() {} //如果有keep-alive缓存功能,当该页面撤销使这个函数会触发
+};
 </script>
 <style scoped>
 .el-table__header {

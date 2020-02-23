@@ -18,7 +18,9 @@ components: {
 data() {
 //这里存放数据
 return {
-    
+    formdata:{
+        
+    }
 };
 },
 //监听属性 类似于data概念

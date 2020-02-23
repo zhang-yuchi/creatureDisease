@@ -42,6 +42,7 @@
 //例如：import 《组件名称》 from '《组件路径》';
 import myInput from "../../components/input/input";
 import logintemplate from "../../components/logintemplate";
+import {Login} from '../../network'
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {
@@ -101,10 +102,30 @@ export default {
     },
     login() {
       this.isLoading = true;
-      console.log(this.form);
+      // console.log(this.form);
+      const SUCCESS = 1
+      const SUCCESS_MSG = "响应成功"
       //一系列验证之后
-      // console.log(this.$router)
-      this.$router.replace('/manager')
+      Login({
+          username:this.form.username,
+          password:this.form.password
+      })
+      .then((res)=>{
+          console.log(res)
+          if(res.status == 1){
+            sessionStorage.setItem('token',res.data)
+            this.$router.push('/manager')
+          }else{
+            this.$message.error(res.data.message)
+          }
+      })
+      .catch((err)=>{
+        
+      })
+      .finally(()=>{
+        this.isLoading = false
+      })
+      // this.$router.replace('/manager')
     },
     changePsw() {
       this.$router.push("step1");
