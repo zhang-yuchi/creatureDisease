@@ -25,7 +25,7 @@
           </el-menu-item>
           <el-submenu index="setting" class="submenu">
             <template slot="title">
-              <i class="el-icon-setting"></i>
+              <i class="el-icon-setting logout"></i>
               <span>实验室设置</span>
             </template>
             <el-menu-item-group>
@@ -52,7 +52,7 @@
             :key="index"
           >{{item}}</el-breadcrumb-item>
         </el-breadcrumb>
-        <keep-alive exclude="订单管理">
+        <keep-alive >
           <router-view />
         </keep-alive>
       </el-main>
@@ -219,7 +219,9 @@ li[role="menuitem"] {
   box-sizing: border-box;
   text-align: left;
 }
-
+.logout{
+  cursor: pointer;
+}
 .logo {
   height: 70px;
 }

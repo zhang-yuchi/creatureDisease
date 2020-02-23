@@ -159,9 +159,6 @@ export default {
         district:[{required:true,validator:validateNull,trigger:"blur"}],
         receiverAddress:[{required:true,validator:validateNull,trigger:"blur"}],
         phone:[{required:true,validator:validateNull,trigger:"blur"}],
-        // pass: [{ validator: validatePass, trigger: "blur" }],
-        // checkPass: [{ validator: validatePass2, trigger: "blur" }],
-        // age: [{ validator: checkAge, trigger: "blur" }]
       },
       formloading:true,
     };
@@ -253,7 +250,8 @@ export default {
   updated() {}, //生命周期 - 更新之后
   beforeDestroy() {}, //生命周期 - 销毁之前
   destroyed() {}, //生命周期 - 销毁完成
-  activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
+  activated() {
+  }, //如果页面有keep-alive缓存功能，这个函数会触发
   deactivated() {} //如果有keep-alive缓存功能,当该页面撤销使这个函数会触发
 };
 </script>

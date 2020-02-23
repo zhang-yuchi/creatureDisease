@@ -21,6 +21,7 @@ export default {
     withSearch,
     withTable
   },
+  name:"order",
   data() {
     //这里存放数据
     return {

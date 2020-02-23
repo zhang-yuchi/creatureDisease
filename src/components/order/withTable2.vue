@@ -9,39 +9,39 @@
       :header-cell-style="headerStyle"
       v-loading="loading"
     >
-      <el-table-column label="序号" width="150" style="padding:30px;">
+      <el-table-column label="序号" width="120" style="padding:30px;">
         <template slot-scope="scope">
-          <span style="height:40px">{{ scope.row.id }}</span>
+          <span style="height:40px">{{ scope.row.index }}</span>
         </template>
       </el-table-column>
       <el-table-column label="商品编号" width="150">
         <template slot-scope="scope">
-          <span>{{ scope.row.phone }}</span>
+          <span>{{ scope.row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="商品名称" width="150">
+      <el-table-column label="商品名称" width="200">
         <template slot-scope="scope">
-          <span>{{ scope.row.transport }}</span>
+          <span>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
       <el-table-column label="疫病种类名称" width="180">
         <template slot-scope="scope">
-          <span>{{ scope.row.time }}</span>
+          <span>{{ scope.row.diseaseName }}</span>
         </template>
       </el-table-column>
       <el-table-column label="供应价格" width="100">
         <template slot-scope="scope">
-          <span>${{ scope.row.money }}</span>
+          <span>￥{{ scope.row.price }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="库存" width="200">
+      <el-table-column label="库存" width="150">
         <template slot-scope="scope">
-          <span>{{ scope.row.address }}</span>
+          <span>{{ scope.row.inventory }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="下架时间" width="90">
+      <el-table-column label="上架时间" width="150">
         <template slot-scope="scope">
-          <span>{{ scope.row.state }}</span>
+          <span>{{ scope.row.createTime }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作">
@@ -68,7 +68,7 @@
       </el-table-column>
       <slot name="operator"></slot>
     </el-table>
-    <el-pagination background layout="prev, pager, next" :hide-on-single-page="true" :total="1000"></el-pagination>
+    <el-pagination background layout="prev, pager, next" :hide-on-single-page="true" :total="this.list.length"></el-pagination>
   </div>
 </template>
 
@@ -83,6 +83,9 @@ export default {
     list: {
       type: Array,
       default: []
+    },
+    isloading:{
+      type:Boolean,
     }
   },
   data() {
@@ -97,8 +100,11 @@ export default {
   //监控data中的数据变化
   watch: {
     list(newValue) {
-      console.log(newValue)
+      // console.log(newValue)
       this.tableData = newValue;
+    },
+    isloading(newValue){
+      this.loading = newValue
     }
   },
   //方法集合
@@ -110,12 +116,12 @@ export default {
     },
     headerStyle() {
       return {
-        backgroundColor: "#DBDFE4",
+        backgroundColor: "#FAFAFA",
         color: "#333333"
       };
     },
     handleDetail(index, row) {
-      this.$router.push("order-detail");
+      // this.$router.push("order-detail");
     },
     handleCheck(index, row) {
       console.log(index, row);

@@ -105,7 +105,7 @@ export default {
     },
     headerStyle() {
       return {
-        backgroundColor: "#DBDFE4",
+        backgroundColor: "#FAFAFA",
         color: "#333333"
       };
     },

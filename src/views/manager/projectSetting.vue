@@ -1,14 +1,8 @@
 <!--  -->
 <template>
   <div class>
-      <withTab
-      :tabArray="settingTabArray"
-      @handleTabChange="tabChange"
-      left="40"
-    ></withTab>
-      <withTable
-      :list="this.list"
-      ></withTable>
+    <withTab :tabArray="settingTabArray" @handleTabChange="tabChange" left="40"></withTab>
+    <withTable :list="this.list" :isloading="this.isloading"></withTable>
   </div>
 </template>
 
@@ -17,18 +11,19 @@
 //例如：import 《组件名称》 from '《组件路径》';
 import withTab from "../../components/order/withTab.vue";
 import withTable from "../../components/order/withTable2";
-import { getOnsaleList } from '../../network'
+import { getOnsaleList, getOffsaleList, errorHandle } from "../../network";
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {
     withTab,
-    withTable,
+    withTable
   },
   data() {
     //这里存放数据
     return {
-      settingTabArray:["已上架","未上架"],
-      list:[]
+      settingTabArray: ["已上架", "未上架"],
+      list: [],
+      isloading: false
     };
   },
   //监听属性 类似于data概念
@@ -39,18 +34,56 @@ export default {
   methods: {
     tabChange(obj) {
       console.log(obj);
+      if (obj.label == "已上架") {
+        this.getNewList();
+      } else {
+        this.getSecondList();
+      }
     },
-    toSearch({ time, content }) {}
+    createList(item, index) {
+      var listItem = {};
+      // console.log(listItem)
+      listItem.index = index + 1;
+      listItem.id = item.repertory.id;
+      listItem.name = item.commodity.name;
+      listItem.diseaseName = item.diseaseType.name;
+      listItem.price = item.repertory.price;
+      listItem.inventory = item.repertory.inventory;
+      listItem.createTime = item.repertory.createTime;
+      return listItem;
+    },
+    getNewList() {
+      this.isloading = true;
+      getOnsaleList()
+        .then(res => {
+          //处理列表并传给子组件
+          let temp = res.data; //生产环境接口
+          // let temp = res._root_//mock接口时需要改变这里
+
+          var list = temp.map((item, index) => {
+            return this.createList(item,index)
+          });
+          // console.log(list)
+          this.list = list;
+        })
+        .catch(err => {
+          console.log(err);
+          errorHandle();
+        })
+        .finally(() => {
+          this.isloading = false;
+        });
+    },
+    getSecondList() {
+      // console.log(111)
+      this.list = [];
+    }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
-    getOnsaleList()
-    .then(res=>{
-      console.log(res)
-      
-    })
+    this.getNewList();
   },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
