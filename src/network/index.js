@@ -3,11 +3,11 @@ let isDev = process.env.NODE_ENV == 'development'
 import router from '../router'
 import el from 'element-ui'
 import qs from 'qs'
-isDev = false
+// isDev = false
 const baseURL = isDev ? "http://rap2.taobao.org:38080/app/mock/245259" : "http://ruankun.xyz:8821/disease/"
 const service = axios.create({
     baseURL,
-
+    
 })
 service.interceptors.request.use((config) => {
     var token = sessionStorage.getItem('token')

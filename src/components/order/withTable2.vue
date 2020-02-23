@@ -2,7 +2,7 @@
 <template>
   <div class="table">
     <el-table
-      :data="tableData"
+      :data="showList"
       style="width: 100%;"
       height="450"
       :cell-style="cellStyle"
@@ -68,7 +68,7 @@
       </el-table-column>
       <slot name="operator"></slot>
     </el-table>
-    <el-pagination background layout="prev, pager, next" :hide-on-single-page="true" :total="this.list.length"></el-pagination>
+    <el-pagination background layout="prev, pager, next" :hide-on-single-page="true" @current-change="pageChange" :current-page="this.offset+1" :total="this.list.length"></el-pagination>
   </div>
 </template>
 
@@ -91,8 +91,11 @@ export default {
   data() {
     //这里存放数据
     return {
-      tableData: [],
-      loading: false
+      tableData: this.list,
+      loading: false,
+      showList:[],
+      offset:0,
+      maxpage:10,
     };
   },
   //监听属性 类似于data概念
@@ -100,8 +103,8 @@ export default {
   //监控data中的数据变化
   watch: {
     list(newValue) {
-      // console.log(newValue)
       this.tableData = newValue;
+      this.getShowList()
     },
     isloading(newValue){
       this.loading = newValue
@@ -146,6 +149,22 @@ export default {
         document.querySelector(".el-table__body").style.width = "100%";
         document.querySelector(".el-table__header").style.width = "100%";
       });
+    },
+    getShowList(){
+      this.showList = []
+      for(let i = this.offset*this.maxpage;i<this.offset*this.maxpage+this.maxpage;i++){
+
+        if(i>=this.tableData.length){
+          break
+        }
+        this.showList.push(this.tableData[i])
+
+      }
+    },
+    pageChange(page){
+      console.log(page)
+      this.offset = page - 1
+      this.getShowList()
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
@@ -153,6 +172,7 @@ export default {
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
     this.initTable();
+    this.getShowList()
   },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
