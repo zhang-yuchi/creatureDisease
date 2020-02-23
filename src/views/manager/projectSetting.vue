@@ -57,12 +57,13 @@ export default {
       getOnsaleList()
         .then(res => {
           //处理列表并传给子组件
-          let temp = res.data; //生产环境接口
-          // let temp = res._root_//mock接口时需要改变这里
-
-          var list = temp.map((item, index) => {
-            return this.createList(item,index)
-          });
+          let temp = res.data;
+          var list = [];
+          if (temp.length > 0) {
+            list = temp.map((item, index) => {
+              return this.createList(item, index);
+            });
+          }
           // console.log(list)
           this.list = list;
         })
@@ -75,8 +76,26 @@ export default {
         });
     },
     getSecondList() {
-      // console.log(111)
-      this.list = [];
+      this.isloading = true;
+      getOffsaleList()
+        .then(res => {
+          //处理列表并传给子组件
+          let temp = res.data;
+          var list = [];
+          if (temp.length > 0) {
+            list = temp.map((item, index) => {
+              return this.createList(item, index);
+            });
+          }
+          // console.log(list)
+          this.list = list;
+        })
+        .catch(err => {
+          errorHandle();
+        })
+        .finally(() => {
+          this.isloading = false;
+        });
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）

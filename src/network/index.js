@@ -3,7 +3,7 @@ let isDev = process.env.NODE_ENV == 'development'
 import router from '../router'
 import el from 'element-ui'
 import qs from 'qs'
-// isDev = false
+isDev = false
 const baseURL = isDev ? "http://rap2.taobao.org:38080/app/mock/245259" : "http://ruankun.xyz:8821/disease/"
 const service = axios.create({
     baseURL,
@@ -72,7 +72,7 @@ export const getOnsaleList = () => {
     return service.get('/laboratory/item/onsale')
 }
 export const getOffsaleList = () => {
-    return service.get('/laboratory/item.offsale')
+    return service.get('/laboratory/item/offsale')
 }
 export const getUserInfo = ()=>{
     return service.get('/user/info')
