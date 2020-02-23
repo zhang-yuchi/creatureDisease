@@ -2,10 +2,10 @@
 <template>
   <div class="profile">
     <div class="window">
-      <el-card class="box-card">
+      <el-card class="box-card" v-loading="isloading">
         <div class="text item">
           <span class="item-text">手机号</span>
-          <span class="item-text">18702896918</span>
+          <span class="item-text">{{phone}}</span>
           <el-link type="primary" @click="phoneVisible = true" style="color:#0584D7;">修改</el-link>
         </div>
         <el-dialog class="form-dialog" title="修改手机号码" :visible.sync="phoneVisible">
@@ -24,8 +24,8 @@
         </el-dialog>
         <div class="text item">
           <span class="item-text">用户名</span>
-          <span class="item-text">阿斌</span>
-          <el-link type="primary" style="color:#0584D7;"  @click="nameVisible = true">修改</el-link>
+          <span class="item-text">{{userName}}</span>
+          <el-link type="primary" style="color:#0584D7;" @click="nameVisible = true">修改</el-link>
         </div>
         <el-dialog class="form-dialog" title="修改用户名" :visible.sync="nameVisible">
           <el-form class="form" :model="name">
@@ -60,10 +60,9 @@
             <el-button type="primary" @click="pswVisible = false">确 定</el-button>
           </div>
         </el-dialog>
-
         <div class="text item">
           <span class="item-text">注册日期</span>
-          <span class="item-text">2020/02/02</span>
+          <span class="item-text">{{createTime}}</span>
         </div>
       </el-card>
     </div>
@@ -73,7 +72,7 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-
+import { getUserInfo,errorHandle } from "../../network";
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {},
@@ -83,19 +82,23 @@ export default {
       phoneVisible: false,
       phone: {
         num: "",
-        check:"",
+        check: ""
       },
       nameVisible: false,
-      name:{
-          name:"",
+      name: {
+        name: ""
       },
-      pswVisible:false,
-      psw:{
-          num:"",
-          newNum:"",
-          check:"",
+      pswVisible: false,
+      psw: {
+        num: "",
+        newNum: "",
+        check: ""
       },
-      formLabelWidth: "120px"
+      userName: "",
+      phone: "",
+      createTime: "",
+      formLabelWidth: "120px",
+      isloading: false
     };
   },
   //监听属性 类似于data概念
@@ -104,12 +107,29 @@ export default {
   watch: {},
   //方法集合
   methods: {
-    changePhone() {}
+    changePhone() {},
+    getUser() {
+      this.isloading = true;
+      getUserInfo()
+        .then(res => {
+          (this.userName = res.data.userName),
+            (this.phone = res.data.phone),
+            (this.createTime = res.data.createTime);
+        })
+        .catch(()=>{
+          errorHandle()
+        })
+        .finally(() => {
+          this.isloading = false;
+        });
+    }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
-  mounted() {},
+  mounted() {
+    this.getUser()
+  },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
   beforeUpdate() {}, //生命周期 - 更新之前
@@ -141,9 +161,9 @@ export default {
   margin-right: 200px;
   color: #666666;
 }
-.form{
-    width: 70%;
-    /* display: inline-block; */
-    margin: 0 auto;
+.form {
+  width: 70%;
+  /* display: inline-block; */
+  margin: 0 auto;
 }
 </style>
