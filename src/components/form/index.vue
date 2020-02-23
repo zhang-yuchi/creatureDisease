@@ -12,7 +12,7 @@
         class="demo-ruleForm"
         v-loading="formloading"
       >
-        <el-form-item label="实验室名称" prop="laboratory" :required="true">
+        <el-form-item label="实验室名称" prop="laboratory">
           <el-input type="text" v-model="ruleForm.laboratory" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="公司名称" prop="company">
@@ -34,7 +34,7 @@
             @change="handleChange"
           ></el-cascader>
         </el-form-item>
-        <el-form-item label="详细地址" prop="address" required>
+        <el-form-item label="详细地址" prop="address">
           <el-input v-model="ruleForm.address" placeholder="请输入内容"></el-input>
         </el-form-item>
         <el-form-item label="联系电话" prop="contactNum">
@@ -87,18 +87,18 @@
         class="demo-ruleForm"
         v-loading="formloading"
       >
-        <el-form-item label="收货人" prop="receiver" required>
+        <el-form-item label="收货人" prop="receiver">
           <el-input v-model="ruleForm.receiver" placeholder="请输入收货人姓名"></el-input>
         </el-form-item>
-        <el-form-item label="所在地区" prop="district" required>
+        <el-form-item label="所在地区" prop="district">
           <el-cascader v-model="ruleForm.province" style="margin-right:10px;width:173px" :options="options" @change="handleChange"></el-cascader>
           <el-cascader v-model="ruleForm.city" style="margin-right:10px;width:172px" :options="options" @change="handleChange"></el-cascader>
           <el-cascader v-model="ruleForm.district" style="width:172px" :options="options" @change="handleChange"></el-cascader>
         </el-form-item>
-        <el-form-item label="详细地址" prop="receiverAddress" required>
+        <el-form-item label="详细地址" prop="receiverAddress">
           <el-input v-model="ruleForm.receiverAddress" placeholder="请输入收货详细地址"></el-input>
         </el-form-item>
-        <el-form-item label="手机号码" prop="phone" required>
+        <el-form-item label="手机号码" prop="phone">
           <el-input v-model="ruleForm.phone" placeholder="请输入手机号"></el-input>
         </el-form-item>
 
@@ -153,12 +153,12 @@ export default {
         options:[],
       },
       rules: {
-        laboratory:[{validator:validateNull,trigger:"blur"}],
-        address:[{validator:validateNull,trigger:"blur"}],
-        receiver:[{validator:validateNull,trigger:"blur"}],
-        district:[{validator:validateNull,trigger:"blur"}],
-        receiverAddress:[{validator:validateNull,trigger:"blur"}],
-        phone:[{validator:validateNull,trigger:"blur"}],
+        laboratory:[{required:true,validator:validateNull,trigger:"blur"}],
+        address:[{required:true,validator:validateNull,trigger:"blur"}],
+        receiver:[{required:true,validator:validateNull,trigger:"blur"}],
+        district:[{required:true,validator:validateNull,trigger:"blur"}],
+        receiverAddress:[{required:true,validator:validateNull,trigger:"blur"}],
+        phone:[{required:true,validator:validateNull,trigger:"blur"}],
         // pass: [{ validator: validatePass, trigger: "blur" }],
         // checkPass: [{ validator: validatePass2, trigger: "blur" }],
         // age: [{ validator: checkAge, trigger: "blur" }]
@@ -237,7 +237,7 @@ export default {
     getLaboratory()
     .then(res=>{
       console.log(res)
-      this.ruleForm = res
+      this.ruleForm = res.data
       this.formloading = false
     })
     .catch(()=>{
