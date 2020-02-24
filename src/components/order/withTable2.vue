@@ -206,7 +206,7 @@ export default {
       },
       formLabelWidth: "120px",
       windowloading: false,
-      detailVisible: true,
+      detailVisible: false,
       singleForm: {
         name: "",
         id: "",
@@ -267,7 +267,6 @@ export default {
             item.commodity.deletectionInstruction;
           this.singleForm.samplingInstruction =
             item.commodity.samplingInstruction;
-          console.log(time);
         })
         .finally(() => {
           this.windowloading = false;
