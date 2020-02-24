@@ -26,7 +26,10 @@
         errorMsg="请输入四位验证码"
         :err="this.checkerr"
         @rulecheck="checkNum"
+        v-if="needCheck"
+        :checkUrl="checkUrl"
       ></myInput>
+      <!-- <img :src="checkUrl" alt /> -->
     </div>
     <div slot="login">
       <el-button type="primary" @click="login" :loading="isLoading" class="loginbtn">登录</el-button>
@@ -42,12 +45,13 @@
 //例如：import 《组件名称》 from '《组件路径》';
 import myInput from "../../components/input/input";
 import logintemplate from "../../components/logintemplate";
-import {Login} from '../../network'
+import { Login, needCheck, getCheck } from "../../network";
+
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {
     myInput,
-    logintemplate,
+    logintemplate
   },
   data() {
     //这里存放数据
@@ -62,17 +66,41 @@ export default {
       accounterr: false,
       accountErrMsg: "",
       checkerr: false,
-      isLoading: false
+      isLoading: false,
+      needCheck: false,
+      checkUrl: ""
     };
   },
   //监听属性 类似于data概念
   computed: {},
   //监控data中的数据变化
-  watch: {},
+  watch: {
+    
+  },
   //方法集合
   methods: {
+    ifCheck() {
+      needCheck()
+        .then(res => {
+          this.needCheck = res.data;
+        })
+        .catch(() => {
+          this.$message.error("网络不畅,请稍后重试!");
+        })
+        .then(() => {
+          if (this.needCheck) {
+            //需要验证码
+            getCheck().then(data => {
+              let blob = data.data;
+              let src = window.URL.createObjectURL(blob);
+              this.checkUrl = src;
+            });
+            // console.log(this.checkUrl)
+          }
+        });
+    },
     checkNum(value) {
-      console.log(value);
+      // console.log(value);
       this.form.check = value;
       if (value.length !== 4) {
         this.checkerr = true;
@@ -103,28 +131,30 @@ export default {
     login() {
       this.isLoading = true;
       // console.log(this.form);
-      const SUCCESS = 1
-      const SUCCESS_MSG = "响应成功"
+      const SUCCESS = 1;
+      const SUCCESS_MSG = "响应成功";
       //一系列验证之后
+      
       Login({
-          username:this.form.username,
-          password:this.form.password
+        verifyCode:this.form.check,
+        username:this.form.username,
+        password:this.form.password,
       })
-      .then((res)=>{
-          console.log(res)
-          if(res.status == 1){
-            sessionStorage.setItem('token',res.data)
-            this.$router.push('/manager')
-          }else{
-            this.$message.error(res.data.message)
+        .then(res => {
+          if (res.status == 1) {
+            sessionStorage.setItem("token", res.data);
+            this.$router.push("/manager");
+          } else {
+            this.$message.error(res.data.message);
+            this.ifCheck()
           }
-      })
-      .catch((err)=>{
-        
-      })
-      .finally(()=>{
-        this.isLoading = false
-      })
+        })
+        .catch(err => {
+          console.log(err);
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
       // this.$router.replace('/manager')
     },
     changePsw() {
@@ -134,7 +164,10 @@ export default {
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
-  mounted() {},
+  mounted() {
+    this.needCheck = this.ifCheck();
+
+  },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
   beforeUpdate() {}, //生命周期 - 更新之前
@@ -146,11 +179,11 @@ export default {
 };
 </script>
 <style scoped>
-.loginbtn{
-  background-color: #318FF9;
+.loginbtn {
+  background-color: #318ff9;
 }
-.loginbtn:hover{
-  background-color: #0484D6;
-  transition: background-color 0.3s
+.loginbtn:hover {
+  background-color: #0484d6;
+  transition: background-color 0.3s;
 }
 </style>

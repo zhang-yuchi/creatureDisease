@@ -5,7 +5,6 @@
       <el-col :span="24">
         <!-- <h5>自定义颜色</h5> -->
           <img class="logo" src="../../assets/logo1.png" alt="">
-
         <el-menu
           :default-active="nowpath"
           class="el-menu-vertical-demo"
@@ -39,7 +38,7 @@
     <el-container>
       <el-header>
         <div class="controls">
-          <span class="name">Abin</span>
+          <span class="name">{{this.$store.state.username}}</span>
           <i @click="logout" class="el-icon-switch-button"></i>
           <!-- <img class="logout" @click="logout" src="../../assets/psw.png" alt /> -->
         </div>
@@ -122,7 +121,6 @@ export default {
     },
     logout() {
       //需要做一个守卫 相当于注销!
-      console.log(111);
       this.$router.replace({ path: "/" });
       //replace替换原路由，作用是避免回退死循环
     }

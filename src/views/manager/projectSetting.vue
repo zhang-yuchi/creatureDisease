@@ -2,7 +2,12 @@
 <template>
   <div class>
     <withTab :tabArray="settingTabArray" @handleTabChange="tabChange" left="40"></withTab>
-    <withTable :list="this.list" :isloading="this.isloading"></withTable>
+    <withTable
+      :list="this.list"
+      :state="this.state"
+      :isloading="this.isloading"
+      @requestNewList="sendNewList"
+    ></withTable>
   </div>
 </template>
 
@@ -12,6 +17,7 @@
 import withTab from "../../components/order/withTab.vue";
 import withTable from "../../components/order/withTable2";
 import { getOnsaleList, getOffsaleList, errorHandle } from "../../network";
+import moment from "moment";
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {
@@ -23,7 +29,8 @@ export default {
     return {
       settingTabArray: ["已上架", "未上架"],
       list: [],
-      isloading: false
+      isloading: false,
+      state: 0
     };
   },
   //监听属性 类似于data概念
@@ -33,7 +40,6 @@ export default {
   //方法集合
   methods: {
     tabChange(obj) {
-      console.log(obj);
       if (obj.label == "已上架") {
         this.getNewList();
       } else {
@@ -42,18 +48,19 @@ export default {
     },
     createList(item, index) {
       var listItem = {};
-      // console.log(listItem)
       listItem.index = index + 1;
       listItem.id = item.repertory.id;
       listItem.name = item.commodity.name;
       listItem.diseaseName = item.diseaseType.name;
-      listItem.price = item.repertory.price;
+      listItem.price = item.repertory.price.toFixed(2);
       listItem.inventory = item.repertory.inventory;
-      listItem.createTime = item.repertory.createTime;
+      let time = moment(item.repertory.createTime).format("YYYY-MM-DD");
+      listItem.createTime = time;
       return listItem;
     },
     getNewList() {
       this.isloading = true;
+      this.state = 0;
       getOnsaleList()
         .then(res => {
           //处理列表并传给子组件
@@ -68,7 +75,6 @@ export default {
           this.list = list;
         })
         .catch(err => {
-          console.log(err);
           errorHandle();
         })
         .finally(() => {
@@ -77,6 +83,7 @@ export default {
     },
     getSecondList() {
       this.isloading = true;
+      this.state = 1;
       getOffsaleList()
         .then(res => {
           //处理列表并传给子组件
@@ -96,6 +103,14 @@ export default {
         .finally(() => {
           this.isloading = false;
         });
+    },
+    sendNewList() {
+      if (this.state === 0) {
+        //处于已上架状态
+        this.getNewList();
+      } else {
+        this.getSecondList();
+      }
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）

@@ -72,7 +72,7 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-import { getUserInfo,errorHandle } from "../../network";
+import { getUserInfo, errorHandle } from "../../network";
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {},
@@ -115,9 +115,13 @@ export default {
           (this.userName = res.data.userName),
             (this.phone = res.data.phone),
             (this.createTime = res.data.createTime);
+            this.$store.commit({
+              type:"changeUsername",
+              name:this.userName
+            })
         })
-        .catch(()=>{
-          errorHandle()
+        .catch(() => {
+          errorHandle();
         })
         .finally(() => {
           this.isloading = false;
@@ -128,7 +132,7 @@ export default {
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
-    this.getUser()
+    this.getUser();
   },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前

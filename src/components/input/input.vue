@@ -16,6 +16,7 @@
     />
     <div class="msg">{{isErr?errMsg:""}}</div>
     <!-- <div class="stack"></div> -->
+    <img :src="checkUrl" class="checking" alt="">
   </div>
 </template>
 
@@ -38,7 +39,8 @@ export default {
     type: String,
     placeholder: String,
     rule: String,
-    err: Boolean
+    err: Boolean,
+    checkUrl:String,
   },
   data() {
     //这里存放数据
@@ -67,6 +69,9 @@ export default {
     },
     errorMsg(newVal) {
       this.errMsg = newVal;
+    },
+    checkUrl(newValue){
+      this.checkUrl = newValue
     }
   },
   //方法集合
@@ -108,6 +113,7 @@ export default {
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
+    console.log(this.checkUrl)
     var url = "";
     // console.log(this.$props.icon)
     // this.icon_src = require(this.$props.icon)
@@ -190,5 +196,10 @@ export default {
 }
 .error {
   border-color: #df1c1c !important;
+}
+.checking{
+  position: absolute;
+  right: 20px;
+  height: 35px;
 }
 </style>
