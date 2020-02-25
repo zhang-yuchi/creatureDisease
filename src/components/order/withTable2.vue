@@ -46,7 +46,7 @@
       </el-table-column>
       <el-table-column v-if="changeState==1" label="下架时间" width="150">
         <template slot-scope="scope">
-          <span>{{ scope.row.createTime }}</span>
+          <span>{{ scope.row.updateTime }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作">
@@ -257,7 +257,7 @@ export default {
           this.singleForm.id = item.repertory.id;
           this.singleForm.name = item.commodity.name;
           this.singleForm.diseaseName = item.diseaseType.name;
-          this.singleForm.price = item.repertory.price.toFixed(2);
+          this.singleForm.price = item.repertory.price;
           this.singleForm.inventory = item.repertory.inventory;
           let time = moment(item.repertory.createTime).format(
             "YYYY-MM-DD hh:mm:ss"
@@ -330,7 +330,7 @@ export default {
               type: "success",
               message: "上架成功!"
             });
-            this.$emit("requestNewList"); //请求新的列表
+            this.$emit("requestnewList"); //请求新的列表
           });
         })
         .catch(() => {
@@ -352,7 +352,7 @@ export default {
               type: "success",
               message: "下架成功!"
             });
-            this.$emit("requestNewList"); //请求新的列表
+            this.$emit("requestnewList"); //请求新的列表
           });
         })
         .catch(() => {
@@ -371,14 +371,13 @@ export default {
       //编辑商品
       editLabItem(query)
         .then(res => {
-          console.log(res);
           if (res.status == 1) {
             this.$message({
               message: "编辑成功",
               type: "success"
             });
             this.EditFormVisible = false;
-            this.$emit("requestNewList");
+            this.$emit("requestnewList");
           } else {
             this.$message({
               message: "编辑失败" + res.message
@@ -447,7 +446,7 @@ export default {
   color: #333;
 }
 .text-content {
-  width: 290px;
+  width: 280px;
   display: inline-block;
   vertical-align: top;
 }

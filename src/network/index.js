@@ -3,7 +3,6 @@ let isDev = process.env.NODE_ENV == 'development'
 import router from '../router'
 import el from 'element-ui'
 import qs from 'qs'
-import Axios from 'axios'
 isDev = false
 const baseURL = isDev ? "http://rap2.taobao.org:38080/app/mock/245259" : "http://ruankun.xyz:8821/disease/"
 const service = axios.create({
@@ -12,13 +11,14 @@ const service = axios.create({
 })
 service.interceptors.request.use((config) => {
     var token = sessionStorage.getItem('token')
-    // if(config.method === 'post'){
-    // config.data = qs.stringify(config.data)
+    // console.log(config.data)
+    // if(config.method === 'get'){
+    //     console.log(111)
+    //     config.data.hashTime = new Date()
+    //     console.log(config)
     // }
     if (!token) {
-        // return
         if (config.url == '/lab/token') {}
-        // this.$router.replace('/login')
 
     } else {
 
@@ -31,8 +31,6 @@ service.interceptors.request.use((config) => {
     }else{
         config.data = qs.stringify(config.data)
     }
-    console.log(config)
-
     return config
 })
 service.interceptors.response.use((res) => {
@@ -48,6 +46,7 @@ service.interceptors.response.use((res) => {
         //     message:"服务器错误,请刷新或者重新登录",
         //     type:"error"
         // })
+        
         return res
     }
 })
@@ -60,9 +59,16 @@ export const errorHandle = () => {
         }
     })
 }
-
+function getRandom(url){
+    return url + "?t="+Math.random()
+}
+function appendRandom(url){
+    return url + "&t="+Math.random()
+}
 //文件上传
+//图片上传
 export const ImgUploadUrl = baseURL + "/file/image"
+//pdf上传
 export const PdfUploadUrl = baseURL + "/file/pdf"
 
 //下面写接口
@@ -73,30 +79,30 @@ export const Login = (parmas) => {
 }
 //是否需要获取验证码
 export const needCheck = () => {
-    return service.get("/lab/verifycode/need")
+    return service.get(getRandom("/lab/verifycode/need"))
 }
 //获取验证码
 export const getCheck = () => {
     return axios({
-        url: baseURL + "/lab/verifycode",
+        url: baseURL + getRandom("/lab/verifycode"),
         method: "get",
         responseType: "blob"
     })
 }
 //获取实验室信息
 export const getLaboratory = () => {
-    return service.get('/laboratory')
+    return service.get(getRandom('/laboratory'))
 }
 export const modifyLaboratory = (params) => {
     return service.post('/laboratory', params)
 }
 //获取已上架列表
 export const getOnsaleList = () => {
-    return service.get('/laboratory/item/onsale')
+    return service.get(getRandom('/laboratory/item/onsale'))
 }
 //获取未上架列表
 export const getOffsaleList = () => {
-    return service.get('/laboratory/item/offsale')
+    return service.get(getRandom('/laboratory/item/offsale'))
 }
 //上架商品
 export const onSaleItem = (parmas) => {
@@ -115,7 +121,7 @@ export const editLabItem = (parmas) => {
 }
 //查看单个物品
 export const getSingleItem = (parmas) => {
-    return service.get(`/laboratory/item/${parmas.id}`, {
+    return service.get(appendRandom(`/laboratory/item/${parmas.id}`), {
         params: {
             repertoryId: parmas.id
         }
@@ -123,12 +129,24 @@ export const getSingleItem = (parmas) => {
 }
 export const getImage = (params) => {
     // console.log(id)
-    return service.get('/file/pic/' + params.id)
+    return service.get(getRandom('/file/pic/' + params.id))
 }
 export const getPdf = (id) => {
-    return service.get('/file/pdf/' + id)
+    return service.get(getRandom('/file/pdf/' + id))
 }
 //获取用户信息
 export const getUserInfo = () => {
-    return service.get('/user/info')
+    return service.get(getRandom('/user/info'))
+}
+//修改密码
+export const modifyPassword = (params) => {
+    return service.post('/user/password',params)
+}
+//修改手机号
+export const modifyPhone = (params) => {
+    return service.post('/user/phone',params)
+}
+//修改用户名
+export const modifyUsername = (params) => {
+    return service.post('/user/username',params)
 }

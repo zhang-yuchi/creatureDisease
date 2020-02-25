@@ -6,7 +6,7 @@
       :list="this.list"
       :state="this.state"
       :isloading="this.isloading"
-      @requestNewList="sendNewList"
+      @requestnewList="sendNewList"
     ></withTable>
   </div>
 </template>
@@ -52,8 +52,9 @@ export default {
       listItem.id = item.repertory.id;
       listItem.name = item.commodity.name;
       listItem.diseaseName = item.diseaseType.name;
-      listItem.price = item.repertory.price.toFixed(2);
+      listItem.price = item.repertory.price;
       listItem.inventory = item.repertory.inventory;
+      listItem.updateTime = item.commodity.updateTime
       let time = moment(item.repertory.createTime).format("YYYY-MM-DD");
       listItem.createTime = time;
       return listItem;
@@ -63,6 +64,7 @@ export default {
       this.state = 0;
       getOnsaleList()
         .then(res => {
+          console.log(res)
           //处理列表并传给子组件
           let temp = res.data;
           var list = [];
