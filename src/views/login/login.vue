@@ -28,6 +28,7 @@
         @rulecheck="checkNum"
         v-if="needCheck"
         :checkUrl="checkUrl"
+        @repeatcheck="OnceCheck"
       ></myInput>
       <!-- <img :src="checkUrl" alt /> -->
     </div>
@@ -74,14 +75,13 @@ export default {
   //监听属性 类似于data概念
   computed: {},
   //监控data中的数据变化
-  watch: {
-    
-  },
+  watch: {},
   //方法集合
   methods: {
     ifCheck() {
       needCheck()
         .then(res => {
+          console.log(res);
           this.needCheck = res.data;
         })
         .catch(() => {
@@ -134,23 +134,26 @@ export default {
       const SUCCESS = 1;
       const SUCCESS_MSG = "响应成功";
       //一系列验证之后
-      
+
       Login({
-        verifyCode:this.form.check,
-        username:this.form.username,
-        password:this.form.password,
+        verifyCode: this.form.check,
+        username: this.form.username,
+        password: this.form.password
       })
         .then(res => {
           if (res.status == 1) {
             sessionStorage.setItem("token", res.data);
             this.$router.push("/manager");
           } else {
-            this.$message.error(res.data.message);
-            this.ifCheck()
+            // this.$message.error(res.data.message);
+            this.ifCheck();
           }
         })
         .catch(err => {
-          console.log(err);
+          this.$message({
+            message: "服务器错误,请稍后重试",
+            type: "error"
+          });
         })
         .finally(() => {
           this.isLoading = false;
@@ -159,14 +162,18 @@ export default {
     },
     changePsw() {
       this.$router.push("step1");
+    },
+    OnceCheck() {
+      //进行一次校验
+      this.ifCheck();
     }
   },
+
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
-    this.needCheck = this.ifCheck();
-
+    this.OnceCheck();
   },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前

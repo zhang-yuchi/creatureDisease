@@ -3,7 +3,7 @@
   <div class>
     <withTab :tabArray="orderTabArray" @handleTabChange="tabChange"></withTab>
     <withSearch @handlesearch="toSearch"></withSearch>
-    <with-table />
+    <with-table :isloading="isloading" :list="list" />
   </div>
 </template>
 
@@ -13,7 +13,8 @@
 import withTab from "../../components/order/withTab.vue";
 import withSearch from "../../components/order/search";
 import withTable from "../../components/order/withTable";
-
+import { getOrderList, errorHandle } from "../../network/index";
+import moment from "moment";
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {
@@ -21,7 +22,7 @@ export default {
     withSearch,
     withTable
   },
-  name:"order",
+  name: "order",
   data() {
     //这里存放数据
     return {
@@ -33,7 +34,11 @@ export default {
         "检测中",
         "已完成",
         "已取消"
-      ]
+      ],
+      isloading: false,
+      totalElements: 0,
+      currentPage: 0,
+      list: []
     };
   },
   //监听属性 类似于data概念
@@ -45,13 +50,60 @@ export default {
     tabChange(obj) {
       console.log(obj);
     },
-    toSearch({ time, content }) {}
+    toSearch() {
+      //filter
+    },
+    formatListToTable(item) {
+      let single = {};
+      const stateMap = {
+        "0": "已取消",
+        "1": "待付款",
+        "2": "待寄样",
+        "3": "运输中",
+        "4": "检测中",
+        "5": "已完成",
+        "6": "退款中"
+      };
+      single.orderId = item.order_sn;
+      single.phoneNum = 123456;
+      single.logisticsNum = item.logistics_sn ? item.logistics_sn : "暂无";
+      single.updateTime = moment(item.updateTime).format("YYYY/MM/DD hh:mm:ss");
+      single.price = item.payable;
+      single.to = item.company;
+      single.state = stateMap[item.status];
+      this.list.push(single);
+    }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
-
+    this.isloading = true;
+    getOrderList(this.currentPage)
+      .then(res => {
+        console.log(res)
+        if (res.status === 1) {
+          const result = res.data;
+          const list = result.result;
+          this.totalElements = result.totalElements;
+          this.currentPage = result.currentPage;
+          list.map(item => {
+            // console.log(item)
+            this.formatListToTable(item);
+          });
+        } else {
+          this.$message({
+            message: res.message,
+            type: "error"
+          });
+        }
+      })
+      .catch(()=>{
+        errorHandle()
+      })
+      .finally(() => {
+        this.isloading = false;
+      });
   },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前

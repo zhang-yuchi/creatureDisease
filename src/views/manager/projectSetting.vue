@@ -54,7 +54,7 @@ export default {
       listItem.diseaseName = item.diseaseType.name;
       listItem.price = item.repertory.price;
       listItem.inventory = item.repertory.inventory;
-      listItem.updateTime = item.commodity.updateTime
+      listItem.updateTime = moment(item.commodity.updateTime).format("YYYY-MM-DD")
       let time = moment(item.repertory.createTime).format("YYYY-MM-DD");
       listItem.createTime = time;
       return listItem;

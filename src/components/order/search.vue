@@ -26,24 +26,30 @@ export default {
     return {
       startTime: "",
       endTime: "",
-      options: [{
-          value: 'id',
-          label: '订单编号'
-        }, {
-          value: 'phone',
-          label: '手机号'
-        }, {
-          value: 'transport',
-          label: '运单号'
-        }, {
-          value: 'money',
-          label: '订单金额'
-        }, {
-          value: 'company',
-          label: '送检单位'
-        }],
-        searchSelect: '订单编号',
-        input:"",
+      options: [
+        {
+          value: "id",
+          label: "订单编号"
+        },
+        {
+          value: "phone",
+          label: "手机号"
+        },
+        {
+          value: "transport",
+          label: "运单号"
+        },
+        {
+          value: "money",
+          label: "订单金额"
+        },
+        {
+          value: "company",
+          label: "送检单位"
+        }
+      ],
+      searchSelect: "订单编号",
+      input: ""
     };
   },
   //监听属性 类似于data概念
@@ -51,15 +57,25 @@ export default {
   //监控data中的数据变化
   watch: {},
   //方法集合
-  methods: {},
+  methods: {
+    initStyle() {
+      this.$nextTick(() => {
+        initSearchInput();
+      });
+      function initSearchInput() {
+        var input = document.querySelectorAll(".el-input__inner");
+        for (let i = 0; i < input.length; i++) {
+          input[i].style.height = 35 + "px";
+        }
+      }
+    }
+    
+  },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
-      var input = document.querySelectorAll('.el-input__inner')
-      for(let i = 0;i<input.length;i++){
-          input[i].style.height = 35+"px"
-      }
+    this.initStyle();
   },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
@@ -76,8 +92,8 @@ export default {
   padding: 10px 20px 0 20px;
   text-align: left;
 }
-.el-input__inner{
-    height: 35px;
+.el-input__inner {
+  height: 35px;
 }
 .sperator {
   color: #979797;
@@ -86,20 +102,20 @@ export default {
   font-size: 8px;
 }
 .tips {
-    margin-right: 8px;
+  margin-right: 8px;
   color: #333;
 }
-.holder{
-    display: inline-block;
-    width: 30px;
+.holder {
+  display: inline-block;
+  width: 30px;
 }
-.searchinput{
-    margin-left: 20px;
-    width: 220px;
+.searchinput {
+  margin-left: 20px;
+  width: 220px;
 }
-.query{
-    margin-left: 20px;
-    background-color: rgb(5, 132, 215);
-    padding: 9px 25px;
+.query {
+  margin-left: 20px;
+  background-color: rgb(5, 132, 215);
+  padding: 9px 25px;
 }
 </style>

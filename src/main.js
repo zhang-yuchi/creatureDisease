@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import "babel-polyfill"
+import "./assets/css/fontsize.css"
 // import iView from 'iview';
 // import 'iview/dist/styles/iview.css';
 /*配置element-ui  如果后期需要减小体积可以将这块内容移至js文件中*/

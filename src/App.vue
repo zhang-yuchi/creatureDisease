@@ -9,7 +9,7 @@
     height: 100%;
   }
   body,html{
-    font-family: "思源黑体 CN Regular";
+    font-family: "noto_sans_sc_regularregular";
     height: 100%;
   }
 </style>

@@ -17,22 +17,19 @@ const routes = [{
       },
       {
         path: "index",
-        name: "登录页",
+        name: "中移动物疫检平台",
         component: () => import('../views/login/login')
       },
       {
         path: "step1",
-        name: "changePsw01",
         component: () => import('../views/login/changePsw')
       },
       {
         path: "step2",
-        name: "changePsw02",
         component: () => import('../views/login/checkPsw')
       },
       {
         path: "success",
-        name: "changePsw03",
         component: () => import('../views/login/success')
       },
     ]
@@ -87,8 +84,12 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   //路由守卫
-
+  
   next()
 })
-
+router.afterEach((to,from,next) => {
+  if(to.name){
+    document.title = to.name
+  }
+})
 export default router

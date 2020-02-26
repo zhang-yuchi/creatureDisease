@@ -36,16 +36,16 @@ service.interceptors.request.use((config) => {
 service.interceptors.response.use((res) => {
     //做全局处理
     let data = isDev ? res : res.data
-
+    
 
     const SUCCESS_STATUS = isDev ? 200 : 1
     if (data.status === SUCCESS_STATUS) {
         return res.data
     } else {
-        // el.Message({
-        //     message:"服务器错误,请刷新或者重新登录",
-        //     type:"error"
-        // })
+        el.Message({
+            message:res.data.message,
+            type:"error"
+        })
         
         return res
     }
@@ -93,6 +93,7 @@ export const getCheck = () => {
 export const getLaboratory = () => {
     return service.get(getRandom('/laboratory'))
 }
+//修改实验室信息
 export const modifyLaboratory = (params) => {
     return service.post('/laboratory', params)
 }
@@ -121,16 +122,18 @@ export const editLabItem = (parmas) => {
 }
 //查看单个物品
 export const getSingleItem = (parmas) => {
-    return service.get(appendRandom(`/laboratory/item/${parmas.id}`), {
+    return service.get(getRandom(`/laboratory/item/${parmas.id}`), {
         params: {
             repertoryId: parmas.id
         }
     })
 }
+//通过id获取图片url
 export const getImage = (params) => {
     // console.log(id)
     return service.get(getRandom('/file/pic/' + params.id))
 }
+//通过id获取pdf的url
 export const getPdf = (id) => {
     return service.get(getRandom('/file/pdf/' + id))
 }
@@ -146,7 +149,54 @@ export const modifyPassword = (params) => {
 export const modifyPhone = (params) => {
     return service.post('/user/phone',params)
 }
+export const getPhoneCode = (params)=>{
+    return service.get(getRandom('/lab/phonecode'),{
+        params:{
+            verifyCode:params.verifyCode,
+            phone:params.phone
+        }
+    })
+}   
 //修改用户名
 export const modifyUsername = (params) => {
     return service.post('/user/username',params)
+}
+//订单
+//获取订单列表(初始化)
+export const getOrderList = (page) => {
+    return service.get(getRandom('/order/list/fiter'),{
+        params:{
+            pageNum:page,
+            pageSize:10
+        }
+    })
+}
+//过滤订单列表
+export const filterOrderList = (params) => {
+    return service.get(getRandom('/order/list/fiter'),{
+        params:{
+            pageNum:params.id,
+            pageSize:10
+        }
+    })
+}
+//订单编号查找和订单号查找
+export const searchOrderList = () => {
+    return service.get(getRandom('/order/search'))
+}
+//取消订单
+export const cannelOrderList = () => {
+    return service.get(getRandom('/order/cancel'))
+}
+//完成订单
+export const finishOrderList = () => {
+    return service.get(getRandom('/order/complete/'))
+}
+//返回订单详细信息
+export const singleOrderList = (orderSn) => {
+    return service.get(getRandom('/order/detail/'+orderSn))
+}
+//确认收样
+export const sureOrderList = () => {
+    return service.get(getRandom('/order/list/fiter'))
 }

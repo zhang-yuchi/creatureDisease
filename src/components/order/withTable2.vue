@@ -226,6 +226,7 @@ export default {
     list(newValue) {
       this.tableData = newValue;
       this.getShowList();
+      this.initTable()
     },
     isloading(newValue) {
       this.loading = newValue;
@@ -286,15 +287,18 @@ export default {
         tr_cell.style.paddingLeft = 20 + "px";
         // var times = Object.keys(this.tableData[0]).length;
         var times = 8; //列数为8
+        // console.log(tr_cell)
         var firstitem = document.querySelectorAll(
-          ".el-table__row .cell:first-of-type"
+          ".el-table__row td"
         );
+        // console.log(firstitem)
         // console.log(firstitem)
         for (let index in firstitem) {
           if (index % times == 0) {
-            firstitem[index].style.paddingLeft = "20px";
+            firstitem[index].style.paddingLeft = "10px";
           }
         }
+
         //IE兼容
         document.querySelector(".el-table__body").style.width = "100%";
         document.querySelector(".el-table__header").style.width = "100%";

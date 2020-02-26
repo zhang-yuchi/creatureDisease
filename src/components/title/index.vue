@@ -1,6 +1,6 @@
 <!--  -->
 <template>
-<div class='title' :class="hasBottom?'hasborder':''">
+<div class='main-title' :class="hasBottom?'hasborder':''">
     {{this.title}}
 </div>
 </template>
@@ -57,7 +57,7 @@ deactivated() {}, //如果有keep-alive缓存功能,当该页面撤销使这个�
 }
 </script>
 <style scoped>
-.title{
+.main-title{
     padding: 20px 30px 15px;
     font-weight:bold;
     position: relative;
@@ -65,7 +65,7 @@ deactivated() {}, //如果有keep-alive缓存功能,当该页面撤销使这个�
 .hasborder{
     border-bottom: 1px solid #DBDFE4;
 }
-.title::before{
+.main-title::before{
     content:"";
     width:5px;
     height: 20px;

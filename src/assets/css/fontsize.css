@@ -1,0 +1,7 @@
+@font-face {
+    font-family: 'noto_sans_sc_regularregular';
+    src: url('notosanssc-regular-webfont.woff2') format('woff2'),
+         url('notosanssc-regular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}

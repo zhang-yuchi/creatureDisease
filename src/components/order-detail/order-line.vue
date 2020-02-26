@@ -4,10 +4,18 @@
     <Ititle title="订单明细"></Ititle>
     <wrap>
       <el-table :data="tableData" style="width: 100%">
-        <el-table-column prop="date" label="名称"></el-table-column>
-        <el-table-column prop="name" label="单价"></el-table-column>
-        <el-table-column prop="address" label="数量"></el-table-column>
-        <el-table-column prop="money" label="应付金额"></el-table-column>
+        <el-table-column prop="name" label="名称"></el-table-column>
+        <el-table-column prop="price" label="单价">
+          <template slot-scope="scope">
+            <span>￥{{ scope.row.price }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="count" label="数量"></el-table-column>
+        <el-table-column prop="payable" label="应付金额">
+          <template slot-scope="scope">
+            <span style="margin-left: 10px">￥{{ scope.row.payable }}</span>
+          </template>
+        </el-table-column>
       </el-table>
     </wrap>
   </div>
@@ -24,30 +32,33 @@ export default {
     Ititle,
     wrap
   },
+  props: {
+    list: Array,
+
+  },
   data() {
     //这里存放数据
     return {
-      tableData: [
-        {
-          date: "非洲猪瘟抗体检测",
-          name: "￥128.00",
-          address: "1",
-          money:"￥128.00"
-        },
-      ]
+      tableData: []
     };
   },
   //监听属性 类似于data概念
   computed: {},
   //监控data中的数据变化
-  watch: {},
+  watch: {
+    list(newValue) {
+      this.initStyle();
+      this.tableData = newValue;
+    },
+
+  },
   //方法集合
   methods: {
     initStyle() {
       this.$nextTick(() => {
         var header = document.querySelector(".el-table__header");
         var body = document.querySelector(".el-table__body");
-        header.style.borderBottom = "1px solid #DBDFE4"
+        header.style.borderBottom = "1px solid #DBDFE4";
         header.style.backgroundColor = "#FAFAFA";
         header.style.width = "100%";
         body.style.width = "100%";
@@ -59,6 +70,7 @@ export default {
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
     this.initStyle();
+    console.log();
   },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前

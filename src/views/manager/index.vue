@@ -51,7 +51,7 @@
             :key="index"
           >{{item}}</el-breadcrumb-item>
         </el-breadcrumb>
-        <keep-alive >
+        <keep-alive exclude="orderdetail">
           <router-view />
         </keep-alive>
       </el-main>

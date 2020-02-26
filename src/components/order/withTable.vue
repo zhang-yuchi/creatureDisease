@@ -11,32 +11,32 @@
     >
       <el-table-column label="订单号" width="150" style="padding:30px;">
         <template slot-scope="scope">
-          <span style="height:40px">{{ scope.row.id }}</span>
+          <span style="height:40px">{{ scope.row.orderId }}</span>
         </template>
       </el-table-column>
       <el-table-column label="手机号" width="150">
         <template slot-scope="scope">
-          <span>{{ scope.row.phone }}</span>
+          <span>{{ scope.row.phoneNum }}</span>
         </template>
       </el-table-column>
       <el-table-column label="运单号" width="150">
         <template slot-scope="scope">
-          <span>{{ scope.row.transport }}</span>
+          <span>{{ scope.row.logisticsNum }}</span>
         </template>
       </el-table-column>
       <el-table-column label="下单时间" width="180">
         <template slot-scope="scope">
-          <span>{{ scope.row.time }}</span>
+          <span>{{ scope.row.updateTime }}</span>
         </template>
       </el-table-column>
       <el-table-column label="订单金额" width="100">
         <template slot-scope="scope">
-          <span>${{ scope.row.money }}</span>
+          <span>￥{{ scope.row.price }}</span>
         </template>
       </el-table-column>
       <el-table-column label="送检单位" width="200">
         <template slot-scope="scope">
-          <span>{{ scope.row.address }}</span>
+          <span>{{ scope.row.to }}</span>
         </template>
       </el-table-column>
       <el-table-column label="订单状态" width="90">
@@ -57,12 +57,19 @@
             style="color:#0584D7"
             type="primary"
             @click="handleCheck(scope.$index, scope.row)"
+            v-if="scope.row.state=='运输中'"
           >确认收货</el-link>
         </template>
       </el-table-column>
       <slot name="operator"></slot>
     </el-table>
-    <el-pagination background layout="prev, pager, next" :hide-on-single-page="true" :total="1000"></el-pagination>
+    <el-pagination
+      background
+      layout="prev, pager, next"
+      :hide-on-single-page="true"
+      :current-page="this.currentPage+1"
+      :total="this.totalElements"
+    ></el-pagination>
   </div>
 </template>
 
@@ -74,28 +81,37 @@ import baseInfoVue from "../../views/manager/baseInfo.vue";
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {},
+  props: {
+    isloading: Boolean,
+    list: Array,
+    currentPage: Number,
+    totalElements: Number
+  },
   data() {
     //这里存放数据
     return {
-      tableData: [
-        {
-          id: "201906012345",
-          name: "王小虎",
-          address: "四川分县农业有限公司",
-          money: 1280,
-          time: "2019/12/20 12:20:58",
-          transport: "1316328914",
-          phone: "18702896918",
-          state: "待付款"
-        }
-      ],
-      loading: false
+      tableData: [],
+      loading: this.isloading //表单加载状态
     };
   },
   //监听属性 类似于data概念
   computed: {},
   //监控data中的数据变化
-  watch: {},
+  watch: {
+    isloading(newValue) {
+      this.loading = newValue;
+    },
+    list(newValue) {
+      this.initTable()//动态渲染,样式丢失
+      this.tableData = newValue;
+    },
+    totalElements(newValue) {
+      this.totalElements = newValue; //可能不行
+    },
+    currentPage(newValue) {
+      this.newValue = newValue;
+    }
+  },
   //方法集合
   methods: {
     cellStyle() {
@@ -110,7 +126,14 @@ export default {
       };
     },
     handleDetail(index, row) {
-      this.$router.push("order-detail");
+      console.log(row)
+      this.$router.push({
+        name:"订单详情",
+        params:{
+          orderSn:row.orderId
+        }
+      })
+      // this.$router.push("order-detail");
     },
     handleCheck(index, row) {
       console.log(index, row);
@@ -120,12 +143,14 @@ export default {
       this.$nextTick(() => {
         var tr_cell = document.querySelector("tr .cell");
         tr_cell.style.paddingLeft = 20 + "px";
-        var times = Object.keys(this.tableData[0]).length;
+        var column = 8
+        var times = column;
         var firstitem = document.querySelectorAll(
-          ".el-table__row .cell:first-of-type"
+          ".el-table__row .cell"
         );
         for (let index in firstitem) {
           if (index % times == 0) {
+            // console.log(index)
             firstitem[index].style.paddingLeft = "20px";
           }
         }

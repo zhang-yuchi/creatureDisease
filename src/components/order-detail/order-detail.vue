@@ -33,7 +33,7 @@
         <div class="row-item">
           <span class="row-title length6">订单总金额:</span>
           <span class="row-content">
-            $
+            ￥
             <span style="color:rgb(243, 110, 99);font-weight:bold;">240.00</span>元
           </span>
         </div>

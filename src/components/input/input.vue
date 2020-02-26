@@ -16,7 +16,7 @@
     />
     <div class="msg">{{isErr?errMsg:""}}</div>
     <!-- <div class="stack"></div> -->
-    <img :src="checkUrl" class="checking" alt="">
+    <img :src="checkUrl" class="checking" @click="checkOnce" alt="">
   </div>
 </template>
 
@@ -107,6 +107,9 @@ export default {
       this.resetHidden = false;
       this.value = "";
       this.isErr = false;
+    },
+    checkOnce(){
+      this.$emit("repeatcheck")
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
@@ -201,5 +204,6 @@ export default {
   position: absolute;
   right: 20px;
   height: 35px;
+  cursor: pointer;
 }
 </style>
