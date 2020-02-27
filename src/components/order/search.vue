@@ -6,18 +6,18 @@
     <span class="sperator">一</span>
     <el-date-picker v-model="endTime" type="datetime" placeholder="请输入结束时间"></el-date-picker>
     <span class="holder"></span>
-    <el-select v-model="searchSelect" placeholder="请选择">
+    <el-select v-model="searchSelect" @change="selectChange" placeholder="请选择">
       <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
     </el-select>
     <el-input v-model="input" class="searchinput" placeholder="请输入搜索内容"></el-input>
-    <el-button type="primary" class="query">查询</el-button>
+    <el-button type="primary" @click="handleSearch" class="query">查询</el-button>
   </div>
 </template>
 
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-
+import moment from 'moment'
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {},
@@ -28,7 +28,7 @@ export default {
       endTime: "",
       options: [
         {
-          value: "id",
+          value: "orderSn",
           label: "订单编号"
         },
         {
@@ -36,11 +36,11 @@ export default {
           label: "手机号"
         },
         {
-          value: "transport",
+          value: "logisticsSn",
           label: "运单号"
         },
         {
-          value: "money",
+          value: "payable",
           label: "订单金额"
         },
         {
@@ -49,6 +49,7 @@ export default {
         }
       ],
       searchSelect: "订单编号",
+      defaultValue:"orderSn",
       input: ""
     };
   },
@@ -68,8 +69,30 @@ export default {
           input[i].style.height = 35 + "px";
         }
       }
+    },
+    handleSearch(){
+      if((this.startTime&&!this.endTime)||(!this.startTime&&this.endTime)){
+        this.$message({
+          message:"日期需成对输入才会生效",
+          type:"warning"
+        })
+        this.startTime = ""
+        this.endTime = ""
+      }else if(this.startTime&&this.endTime){
+        this.startTime = moment(this.startTime,'YYYY-MM-DD hh:mm:ss').valueOf()/1000
+        this.endTime = moment(this.endTime,'YYYY-MM-DD hh:mm:ss').valueOf()/1000
+      }
+
+      this.$emit("handlesearch",{
+        startTime:this.startTime,
+        endTime:this.endTime,
+        searchValue:this.input,
+        key:this.defaultValue,
+      })
+    },
+    selectChange(value){
+      this.defaultValue = value
     }
-    
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
@@ -100,6 +123,9 @@ export default {
   font-weight: bold;
   margin: 0 5px;
   font-size: 8px;
+}
+.el-select{
+  width:170px;
 }
 .tips {
   margin-right: 8px;

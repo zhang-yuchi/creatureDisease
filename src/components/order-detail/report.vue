@@ -29,6 +29,9 @@ export default {
     Ititle,
     wrap
   },
+  props:{
+    state:String,
+  },
   data() {
     //这里存放数据
     return {
@@ -49,7 +52,11 @@ export default {
   //监听属性 类似于data概念
   computed: {},
   //监控data中的数据变化
-  watch: {},
+  watch: {
+    state(newValue){
+      this.state = newValue
+    }
+  },
   //方法集合
   methods: {
     handleChange(file, fileList) {

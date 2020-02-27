@@ -1,8 +1,13 @@
 <!-- 检测中   完成订单和取消订单按钮 -->
 <template>
   <div class="control">
-    <el-button style="line-height:10px;"  type="primary">完成订单</el-button>
-    <el-button style="line-height:10px;" >取消订单</el-button>
+    <div v-if="state=='4'">
+      <el-button style="line-height:10px;" type="primary">完成订单</el-button>
+      <el-button style="line-height:10px;">取消订单</el-button>
+    </div>
+    <div v-if="state=='3'">
+      <el-button style="line-height:10px;" type="primary">确认收样</el-button>
+    </div>
   </div>
 </template>
 
@@ -12,6 +17,9 @@
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {},
+  props:{
+    state:String
+  },
   data() {
     //这里存放数据
     return {};
@@ -19,7 +27,11 @@ export default {
   //监听属性 类似于data概念
   computed: {},
   //监控data中的数据变化
-  watch: {},
+  watch: {
+    state(newValue){
+      this.state = newValue
+    }
+  },
   //方法集合
   methods: {},
   //生命周期 - 创建完成（可以访问当前this实例）
@@ -37,8 +49,8 @@ export default {
 };
 </script>
 <style scoped>
-.control{
-    padding: 20px;
-    text-align: right;
+.control {
+  padding: 20px;
+  text-align: right;
 }
 </style>

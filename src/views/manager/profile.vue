@@ -158,7 +158,7 @@ export default {
   //方法集合
   methods: {
     changePhone() {
-      console.log(this.phoneForm.num);
+
     },
     changePsw() {},
     getVerifyCode() {
@@ -221,6 +221,7 @@ export default {
             type: "changeUsername",
             name: this.userName
           });
+          sessionStorage.setItem("username",this.userName)
         })
         .catch(() => {
           errorHandle();

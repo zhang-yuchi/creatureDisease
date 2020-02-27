@@ -4,6 +4,7 @@
     <img class="icon" :src="icon_src" alt="没有icon" />
     <img class="reset" src="../../assets/reset.png" @click="reset" v-if="resetHidden" alt />
     <input
+      autocomplete="off"
       class="inner-input"
       :class="isErr?'error':''"
       :placeholder="this.$props.placeholder"
@@ -16,7 +17,7 @@
     />
     <div class="msg">{{isErr?errMsg:""}}</div>
     <!-- <div class="stack"></div> -->
-    <img :src="checkUrl" class="checking" @click="checkOnce" alt="">
+    <img :src="checkUrl" class="checking" @click="checkOnce" alt />
   </div>
 </template>
 
@@ -40,7 +41,7 @@ export default {
     placeholder: String,
     rule: String,
     err: Boolean,
-    checkUrl:String,
+    checkUrl: String
   },
   data() {
     //这里存放数据
@@ -70,8 +71,8 @@ export default {
     errorMsg(newVal) {
       this.errMsg = newVal;
     },
-    checkUrl(newValue){
-      this.checkUrl = newValue
+    checkUrl(newValue) {
+      this.checkUrl = newValue;
     }
   },
   //方法集合
@@ -108,15 +109,15 @@ export default {
       this.value = "";
       this.isErr = false;
     },
-    checkOnce(){
-      this.$emit("repeatcheck")
+    checkOnce() {
+      this.$emit("repeatcheck");
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
-    console.log(this.checkUrl)
+    console.log(this.checkUrl);
     var url = "";
     // console.log(this.$props.icon)
     // this.icon_src = require(this.$props.icon)
@@ -155,7 +156,7 @@ export default {
 .input {
   position: relative;
   overflow: hidden;
-  padding: 10px 0;
+  padding: 10px 0 0;
   width: 100%;
 }
 .input input {
@@ -200,10 +201,16 @@ export default {
 .error {
   border-color: #df1c1c !important;
 }
-.checking{
+.checking {
   position: absolute;
   right: 20px;
   height: 35px;
   cursor: pointer;
+}
+input:-webkit-autofill,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  box-shadow: 0 0 0px 1000px white inset;
+  /* border: 1px solid #ccc !important; */
 }
 </style>

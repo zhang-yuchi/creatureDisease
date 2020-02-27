@@ -38,7 +38,7 @@
     <el-container>
       <el-header>
         <div class="controls">
-          <span class="name">{{this.$store.state.username}}</span>
+          <span class="name">{{username}}</span>
           <i @click="logout" class="el-icon-switch-button"></i>
           <!-- <img class="logout" @click="logout" src="../../assets/psw.png" alt /> -->
         </div>
@@ -77,11 +77,14 @@ export default {
     return {
       nowpath: "",
       BreadcrumbList: [],
-      routePath: this.$router.history.current.path
+      routePath: this.$router.history.current.path,
+      username:sessionStorage.getItem('username')?sessionStorage.getItem('username'):this.$store.state.username
     };
   },
   //监听属性 类似于data概念
-  computed: {},
+  computed: {
+    
+  },
   //监控data中的数据变化
   watch: {
     $route(to, from) {
@@ -224,7 +227,7 @@ li[role="menuitem"] {
   height: 70px;
 }
 .el-menu{
-  margin-top: -70px;
+  margin-top: -40px;
 }
 .el-menu-item,
 .el-submenu__title {

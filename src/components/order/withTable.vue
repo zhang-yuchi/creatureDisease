@@ -128,8 +128,8 @@ export default {
     handleDetail(index, row) {
       console.log(row)
       this.$router.push({
-        name:"订单详情",
-        params:{
+        path:"order-detail",
+        query:{
           orderSn:row.orderId
         }
       })

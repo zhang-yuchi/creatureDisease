@@ -16,7 +16,7 @@
     <!-- 物流信息 -->
     <logistics :logistics="logistics"></logistics>
     <!-- 检测报告 -->
-    <report :report="report"></report>
+    <report :report="report" v-if="state=='4'||state=='5'"></report>
   </div>
 </template>
 
@@ -32,7 +32,7 @@ import sampleInfo from "../../components/order-detail/sample-info";
 import report from "../../components/order-detail/report";
 import logistics from "../../components/order-detail/logistics";
 import { errorHandle, singleOrderList } from "../../network";
-
+import moment from 'moment'
 export default {
   //import引入的组件需要注入到对象中才能使用
   name: "orderdetail",
@@ -51,12 +51,11 @@ export default {
     return {
       state: "",
       orderDetail: {}, //订单信息
-      orderProcess: [], //订单进度
+      orderProcess: {}, //订单进度
       commodities: [], //订单明细
       sendMsg: {}, //送检消息
       sample: {}, //样本信息
       logistics: {}, //物流信息
-
       report: {}, //检测报告
 
       isloading: false
@@ -72,17 +71,65 @@ export default {
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
-    const orderSn = this.$route.params.orderSn;
+    const orderSn = this.$route.query.orderSn;
+    const stateMap = {
+        "0": "已取消",
+        "1": "待付款",
+        "2": "待寄样",
+        "3": "运输中",
+        "4": "检测中",
+        "5": "已完成",
+        "6": "退款中"
+      };
     // console.log(this.$route)
     this.isloading = true;
     singleOrderList(orderSn)
       .then(res => {
         console.log(res);
+        const details = res.data
+        // 订单信息
+        var tempInfo = Object.assign({},details.info,{
+          status:stateMap[details.info.status]
+        })
+        for(let key in tempInfo){
+          if(!tempInfo[key]){
+            tempInfo[key] = "暂无"
+          }
+        }
+        this.orderDetail = tempInfo
+        console.log(this.orderDetail)
         //状态分析
         this.state = res.data.info.status
         //订单明细
         this.commodities = res.data.commodities;
         //样本信息
+
+        //订单进度
+        var list = res.data.statuses.sort((a,b)=>{
+          return parseInt(a.type<b.type)
+        }).map((item)=>{
+          item.time = moment(item).format('YYYY/MM/DD hh:mm:ss')
+          return item
+        })
+        .filter((item)=>{
+          return item.type!=="0"
+        })
+        var obj = {}
+        list.map(item=>{
+          obj[item.type] = item.time
+        })
+        let arr = Object.keys(obj)
+        // console.log(arr)
+        let maxNum = arr[arr.length-1]
+        // console.log(maxNum)
+        obj.maxSize = maxNum
+        this.orderProcess = obj
+        //样本信息
+
+        // 物流快递
+
+        // 检测报告
+        
       })
       .finally(() => {
         this.isloading = false;

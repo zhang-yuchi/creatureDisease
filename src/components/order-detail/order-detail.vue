@@ -6,35 +6,35 @@
       <div class="row">
         <div class="row-item">
           <span class="row-title length5">订单编号:</span>
-          <span class="row-content">201907260741</span>
+          <span class="row-content">{{orderDetail.order_sn}}</span>
         </div>
         <div class="row-item">
           <span class="row-title length4">微信号:</span>
-          <span class="row-content">sdffdi08</span>
+          <span class="row-content">{{orderDetail.wechat}}</span>
         </div>
         <div class="row-item">
-          <span class="row-title length6">微信昵称:</span>
-          <span class="row-content">夏木</span>
+          <span class="row-title length6">姓名:</span>
+          <span class="row-content">{{orderDetail.name}}</span>
         </div>
         <div class="row-item last">
           <span class="row-title">手机号:</span>
-          <span class="row-content">18736564567</span>
+          <span class="row-content">{{orderDetail.phone}}</span>
         </div>
       </div>
       <div class="row">
         <div class="row-item">
           <span class="row-title length5">支付方式:</span>
-          <span class="row-content">微信</span>
+          <span class="row-content">{{orderDetail.pay_type}}</span>
         </div>
         <div class="row-item">
           <span class="row-title length4">状态:</span>
-          <span class="row-content" style="color:#0584D7;font-weight:bold;">检测中</span>
+          <span class="row-content" style="color:#0584D7;font-weight:bold;">{{orderDetail.status}}</span>
         </div>
         <div class="row-item">
           <span class="row-title length6">订单总金额:</span>
           <span class="row-content">
             ￥
-            <span style="color:rgb(243, 110, 99);font-weight:bold;">240.00</span>元
+            <span style="color:rgb(243, 110, 99);font-weight:bold;">{{orderDetail.payable}}</span>元
           </span>
         </div>
       </div>
@@ -53,6 +53,9 @@ export default {
     Ititle,
     wrap
   },
+  props:{
+    orderDetail:Object,
+  },
   data() {
     //这里存放数据
     return {};
@@ -60,7 +63,11 @@ export default {
   //监听属性 类似于data概念
   computed: {},
   //监控data中的数据变化
-  watch: {},
+  watch: {
+    orderDetail(newValue){
+      this.orderDetail = newValue
+    }
+  },
   //方法集合
   methods: {
     initStyle() {}

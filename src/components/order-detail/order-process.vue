@@ -3,12 +3,12 @@
   <div class>
     <Ititle title="订单进度"></Ititle>
     <wrap>
-      <el-steps :active="4">
-        <el-step title="提交订单" description="2020/01/10 10:23:56"></el-step>
-        <el-step title="完成付款" description="2020/01/10 10:27:06"></el-step>
-        <el-step title="寄出样品" description="2020/01/10 10:27:06"></el-step>
-        <el-step title="确认收样" description="2020/01/10 10:27:06"></el-step>
-        <el-step title="完成订单" description="2020/01/10 10:27:06"></el-step>
+      <el-steps :active="parseInt(orderProcess.maxSize)">
+        <el-step title="提交订单" :description="orderProcess['1']?orderProcess['1']:''"></el-step>
+        <el-step title="完成付款" :description="orderProcess['2']?orderProcess['2']:''"></el-step>
+        <el-step title="寄出样品" :description="orderProcess['3']?orderProcess['3']:''"></el-step>
+        <el-step title="确认收样" :description="orderProcess['4']?orderProcess['4']:''"></el-step>
+        <el-step title="完成订单" :description="orderProcess['5']?orderProcess['5']:''"></el-step>
       </el-steps>
     </wrap>
   </div>
@@ -29,10 +29,17 @@ export default {
     //这里存放数据
     return {};
   },
+  props:{
+    orderProcess:Object,
+  },
   //监听属性 类似于data概念
   computed: {},
   //监控data中的数据变化
-  watch: {},
+  watch: {
+    orderProcess(newValue){
+      this.orderProcess = newValue
+    }
+  },
   //方法集合
   methods: {
       initStyle(){

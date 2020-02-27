@@ -163,12 +163,9 @@ export const modifyUsername = (params) => {
 }
 //订单
 //获取订单列表(初始化)
-export const getOrderList = (page) => {
+export const getOrderList = (params) => {
     return service.get(getRandom('/order/list/fiter'),{
-        params:{
-            pageNum:page,
-            pageSize:10
-        }
+        params:params
     })
 }
 //过滤订单列表

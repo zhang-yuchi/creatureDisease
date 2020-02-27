@@ -38,7 +38,12 @@ export default {
       isloading: false,
       totalElements: 0,
       currentPage: 0,
-      list: []
+      list: [],
+      state: "",
+      startTime: "",
+      endTime: "",
+      key: "orderSn",
+      searchValue: ""
     };
   },
   //监听属性 类似于data概念
@@ -47,11 +52,18 @@ export default {
   watch: {},
   //方法集合
   methods: {
-    tabChange(obj) {
-      console.log(obj);
+    tabChange(status) {
+      this.state = status;
+      this.getList()
     },
-    toSearch() {
+    toSearch(searchDetail) {
       //filter
+      console.log(searchDetail);
+      this.startTime = searchDetail.startTime;
+      this.endTime = searchDetail.endTime;
+      this.key = searchDetail.key;
+      this.searchValue = searchDetail.searchValue;
+      this.getList();
     },
     formatListToTable(item) {
       let single = {};
@@ -72,38 +84,57 @@ export default {
       single.to = item.company;
       single.state = stateMap[item.status];
       this.list.push(single);
+    },
+    getList() {
+      this.isloading = true;
+      this.list = [];
+      var params = {
+        pageSize: 10,
+        pageNum: this.currentPage
+      };
+      if (this.startTime && this.endTime) {
+        params = Object.assign({}, params, {
+          startTime: this.startTime,
+          endTime: this.endTime
+        });
+      }
+      if (this.searchValue) {
+        params[this.key] = this.searchValue;
+      }
+      if(this.state){
+        params.status = this.state
+      }
+      getOrderList(params)
+        .then(res => {
+          // console.log(res)
+          if (res.status === 1) {
+            const result = res.data;
+            const list = result.result;
+            this.totalElements = result.totalElements;
+            this.currentPage = result.currentPage;
+            list.map(item => {
+              this.formatListToTable(item);
+            });
+          } else {
+            // this.$message({
+            //   message: res.message,
+            //   type: "error"
+            // });
+          }
+        })
+        .catch(() => {
+          errorHandle();
+        })
+        .finally(() => {
+          this.isloading = false;
+        });
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
-    this.isloading = true;
-    getOrderList(this.currentPage)
-      .then(res => {
-        console.log(res)
-        if (res.status === 1) {
-          const result = res.data;
-          const list = result.result;
-          this.totalElements = result.totalElements;
-          this.currentPage = result.currentPage;
-          list.map(item => {
-            // console.log(item)
-            this.formatListToTable(item);
-          });
-        } else {
-          this.$message({
-            message: res.message,
-            type: "error"
-          });
-        }
-      })
-      .catch(()=>{
-        errorHandle()
-      })
-      .finally(() => {
-        this.isloading = false;
-      });
+    this.getList();
   },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
