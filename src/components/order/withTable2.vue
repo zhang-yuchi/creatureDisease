@@ -91,18 +91,18 @@
     ></el-pagination>
     <el-dialog title="编辑商品" :visible.sync="EditFormVisible">
       <div class="tips">
-        <span class="item-title">商品编号</span>
+        <span class="item-title">商品编号:</span>
         {{editForm.id}}
       </div>
       <div class="tips" style="margin-bottom:10px;">
-        <span class="item-title">商品名称</span>
+        <span class="item-title">商品名称:</span>
         {{editForm.name}}
       </div>
       <el-form :model="editForm">
-        <el-form-item label="供货价格" :label-width="formLabelWidth">
+        <el-form-item label="供货价格:" :label-width="'72px'">
           <el-input v-model="editForm.price" placeholder="请输入供货价格" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="库存" :label-width="formLabelWidth">
+        <el-form-item label="库存:" :label-width="'72px'">
           <el-input v-model.number="editForm.inventory" placeholder="请输入库存数量" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
@@ -276,7 +276,7 @@ export default {
     handleCheck(index, row) {
       this.editForm.name = row.name;
       this.editForm.id = row.id;
-      this.editForm.price = row.price.toFixed(2);
+      this.editForm.price = row.price;
       this.editForm.inventory = row.inventory;
       this.EditFormVisible = true;
       // this.$router.go(0)
@@ -304,7 +304,7 @@ export default {
         document.querySelector(".el-table__header").style.width = "100%";
 
         //修改弹窗样式
-        initDg()  
+        initDg(3)  
       });
     },
     getShowList() {
@@ -420,9 +420,9 @@ export default {
 <style scoped>
 .item-title {
   display: inline-block;
-  width: 108px;
+  width: 5em;
   padding-right: 12px;
-  text-align: right;
+  /* text-align: right; */
   line-height: 40px;
 }
 .el-table__header {
@@ -447,7 +447,7 @@ export default {
 }
 .detail-name {
   display: inline-block;
-  width: 7em;
+  width: 88px;
   text-align: right;
   margin-right: 10px;
   font-weight: bold;

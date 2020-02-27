@@ -80,6 +80,9 @@ export default {
 }
 .row-content {
   margin-left: 15px;
+  display: inline-block;
+  width: 180px;
+  vertical-align: top;
 }
 .row-title {
   display: inline-block;
@@ -100,5 +103,8 @@ export default {
 }
 .last {
   text-align: right;
+}
+.last .row-content{
+  text-align: left;
 }
 </style>

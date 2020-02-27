@@ -110,7 +110,8 @@ export default {
       this.totalElements = newValue; //可能不行
     },
     currentPage(newValue) {
-      this.newValue = newValue;
+      console.log(newValue)
+      this.currentPage = newValue;
     }
   },
   //方法集合

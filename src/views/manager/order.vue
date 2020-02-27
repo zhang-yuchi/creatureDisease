@@ -3,7 +3,7 @@
   <div class>
     <withTab :tabArray="orderTabArray" @handleTabChange="tabChange"></withTab>
     <withSearch @handlesearch="toSearch"></withSearch>
-    <with-table :isloading="isloading" :list="list" :totalElements="totalElements" @pagechange="pagechange" />
+    <with-table :isloading="isloading" :list="list" :currentPage="currentPage" :totalElements="totalElements" @pagechange="pagechange" />
   </div>
 </template>
 
@@ -54,6 +54,7 @@ export default {
   methods: {
     tabChange(status) {
       this.state = status;
+      this.currentPage = 0
       this.getList()
     },
     toSearch(searchDetail) {
