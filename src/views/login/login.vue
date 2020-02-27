@@ -145,7 +145,7 @@ export default {
             sessionStorage.setItem("token", res.data);
             this.$router.push("/manager");
           } else {
-            // this.$message.error(res.data.message);
+            this.$message.error(res.data.message);
             this.ifCheck();
           }
         })

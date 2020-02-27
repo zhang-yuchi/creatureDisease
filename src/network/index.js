@@ -42,10 +42,10 @@ service.interceptors.response.use((res) => {
     if (data.status === SUCCESS_STATUS) {
         return res.data
     } else {
-        el.Message({
-            message:res.data.message,
-            type:"error"
-        })
+        // el.Message({
+        //     message:res.data.message,
+        //     type:"error"
+        // })
         
         return res
     }

@@ -65,6 +65,7 @@
     </el-table>
     <el-pagination
       background
+      @current-change="pagechange"
       layout="prev, pager, next"
       :hide-on-single-page="true"
       :current-page="this.currentPage+1"
@@ -102,7 +103,7 @@ export default {
       this.loading = newValue;
     },
     list(newValue) {
-      this.initTable()//动态渲染,样式丢失
+      this.initTable(); //动态渲染,样式丢失
       this.tableData = newValue;
     },
     totalElements(newValue) {
@@ -114,6 +115,9 @@ export default {
   },
   //方法集合
   methods: {
+    pagechange(cur){
+      this.$emit('pagechange',cur)
+    },
     cellStyle() {
       return {
         padding: "7px 0"
@@ -126,13 +130,13 @@ export default {
       };
     },
     handleDetail(index, row) {
-      console.log(row)
+      console.log(row);
       this.$router.push({
-        path:"order-detail",
-        query:{
-          orderSn:row.orderId
+        path: "order-detail",
+        query: {
+          orderSn: row.orderId
         }
-      })
+      });
       // this.$router.push("order-detail");
     },
     handleCheck(index, row) {
@@ -143,11 +147,9 @@ export default {
       this.$nextTick(() => {
         var tr_cell = document.querySelector("tr .cell");
         tr_cell.style.paddingLeft = 20 + "px";
-        var column = 8
+        var column = 8;
         var times = column;
-        var firstitem = document.querySelectorAll(
-          ".el-table__row .cell"
-        );
+        var firstitem = document.querySelectorAll(".el-table__row .cell");
         for (let index in firstitem) {
           if (index % times == 0) {
             // console.log(index)
@@ -158,7 +160,8 @@ export default {
         document.querySelector(".el-table__body").style.width = "100%";
         document.querySelector(".el-table__header").style.width = "100%";
       });
-    }
+    },
+    
   },
 
   //生命周期 - 创建完成（可以访问当前this实例）

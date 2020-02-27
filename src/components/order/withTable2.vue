@@ -100,7 +100,7 @@
       </div>
       <el-form :model="editForm">
         <el-form-item label="供货价格" :label-width="formLabelWidth">
-          <el-input v-model.number="editForm.price" placeholder="请输入供货价格" autocomplete="off"></el-input>
+          <el-input v-model="editForm.price" placeholder="请输入供货价格" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="库存" :label-width="formLabelWidth">
           <el-input v-model.number="editForm.inventory" placeholder="请输入库存数量" autocomplete="off"></el-input>
@@ -150,8 +150,7 @@
         <span class="text-content mulit-row">{{singleForm.deletectionInstruction}}</span>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="detailVisible = false">取 消</el-button>
-        <el-button type="primary" @click="detailVisible = false">确 定</el-button>
+        <el-button type="primary" @click="detailVisible = false">关闭</el-button>
       </span>
     </el-dialog>
   </div>
@@ -162,6 +161,7 @@
 //例如：import 《组件名称》 from '《组件路径》';
 import baseInfoVue from "../../views/manager/baseInfo.vue";
 import moment from "moment";
+import { initDg } from '../../assets/utils'
 import {
   editLabItem,
   errorHandle,
@@ -258,7 +258,7 @@ export default {
           this.singleForm.id = item.repertory.id;
           this.singleForm.name = item.commodity.name;
           this.singleForm.diseaseName = item.diseaseType.name;
-          this.singleForm.price = item.repertory.price;
+          this.singleForm.price = item.repertory.price.toFixed(2);
           this.singleForm.inventory = item.repertory.inventory;
           let time = moment(item.repertory.createTime).format(
             "YYYY-MM-DD hh:mm:ss"
@@ -276,7 +276,7 @@ export default {
     handleCheck(index, row) {
       this.editForm.name = row.name;
       this.editForm.id = row.id;
-      this.editForm.price = row.price;
+      this.editForm.price = row.price.toFixed(2);
       this.editForm.inventory = row.inventory;
       this.EditFormVisible = true;
       // this.$router.go(0)
@@ -302,6 +302,9 @@ export default {
         //IE兼容
         document.querySelector(".el-table__body").style.width = "100%";
         document.querySelector(".el-table__header").style.width = "100%";
+
+        //修改弹窗样式
+        initDg()  
       });
     },
     getShowList() {
@@ -369,9 +372,10 @@ export default {
       this.btnloading = true;
       let query = {
         id: this.editForm.id,
-        price: this.editForm.price,
+        price: parseFloat(this.editForm.price),
         inventory: this.editForm.inventory
       };
+      // console.log(query)
       //编辑商品
       editLabItem(query)
         .then(res => {

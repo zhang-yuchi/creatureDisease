@@ -3,7 +3,7 @@
   <div class>
     <withTab :tabArray="orderTabArray" @handleTabChange="tabChange"></withTab>
     <withSearch @handlesearch="toSearch"></withSearch>
-    <with-table :isloading="isloading" :list="list" />
+    <with-table :isloading="isloading" :list="list" :totalElements="totalElements" @pagechange="pagechange" />
   </div>
 </template>
 
@@ -58,7 +58,6 @@ export default {
     },
     toSearch(searchDetail) {
       //filter
-      console.log(searchDetail);
       this.startTime = searchDetail.startTime;
       this.endTime = searchDetail.endTime;
       this.key = searchDetail.key;
@@ -80,7 +79,7 @@ export default {
       single.phoneNum = 123456;
       single.logisticsNum = item.logistics_sn ? item.logistics_sn : "暂无";
       single.updateTime = moment(item.updateTime).format("YYYY/MM/DD hh:mm:ss");
-      single.price = item.payable;
+      single.price = item.payable.toFixed(2);
       single.to = item.company;
       single.state = stateMap[item.status];
       this.list.push(single);
@@ -106,7 +105,7 @@ export default {
       }
       getOrderList(params)
         .then(res => {
-          // console.log(res)
+          console.log(res)
           if (res.status === 1) {
             const result = res.data;
             const list = result.result;
@@ -128,6 +127,10 @@ export default {
         .finally(() => {
           this.isloading = false;
         });
+    },
+    pagechange(cur){
+      this.currentPage = cur - 1
+      this.getList()
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
