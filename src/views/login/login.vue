@@ -103,7 +103,6 @@ export default {
         });
     },
     checkNum(value) {
-      // console.log(value);
       this.form.check = value;
       if (value.length !== 4) {
         this.checkerr = true;

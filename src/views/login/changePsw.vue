@@ -4,7 +4,7 @@
     <div slot="name">忘记密码</div>
     <div slot="form">
       <myinput type="phone" placeholder="请输入你的手机号" :formValue="this.form.phone"></myinput>
-      <myinput type="check" placeholder="请输入验证码" :formValue="this.form.check"></myinput>
+      <myinput type="check" placeholder="请输入验证码" errorMsg="请输入四位验证码" @rulecheck="checkNum" :formValue="this.form.check"></myinput>
     </div>
     <div slot="login">
       <el-button type="primary" @click="next" :loading="isLoading" class="loginbtn">下一步</el-button>
@@ -48,6 +48,9 @@ export default {
     back() {
       //清空redux中的缓存
       this.$router.push("index");
+    },
+    checkNum(value){
+      console.log(value)
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）

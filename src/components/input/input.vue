@@ -52,8 +52,8 @@ export default {
       icon_src: "",
       isErr: false,
       errMsg: this.$props.errorMsg,
-      img:"",
-      activeImg:"",
+      img: "",
+      activeImg: ""
     };
   },
   //监听属性 类似于data概念
@@ -91,7 +91,7 @@ export default {
       //   }
     },
     borderChange() {
-      this.icon_src = this.activeImg
+      this.icon_src = this.activeImg;
       this.borderColor = "#0784D8";
       if (!this.value) {
         this.resetHidden = false;
@@ -99,7 +99,7 @@ export default {
       }
       this.resetHidden = true;
       // console.log(this.activeImg)
-      
+
       // console.log(this.icon_src)
     },
     cancel() {
@@ -108,7 +108,7 @@ export default {
       }
       //颜色控制 最基本功能
       this.borderColor = "#979797";
-      this.icon_src = this.img
+      this.icon_src = this.img;
       // console.log(this.icon_src)
     },
     reset() {
@@ -125,25 +125,25 @@ export default {
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
     var url = "";
-    var activeUrl = ""
+    var activeUrl = "";
     // console.log(this.$props.icon)
     // this.icon_src = require(this.$props.icon)
     switch (this.$props.type) {
       case "password":
         url = "/psw.png";
-        activeUrl = "/psw-active.png"
+        activeUrl = "/psw-active.png";
         break;
       case "username":
         url = "/account.png";
-        activeUrl = "/account-active.png"
+        activeUrl = "/account-active.png";
         break;
       case "check":
         url = "/checkicon.png";
-        activeUrl = "/checkicon-active.png"
+        activeUrl = "/checkicon-active.png";
         break;
       case "phone":
         url = "/phone.png";
-        activeUrl = "/phone-active.png"
+        activeUrl = "/phone-active.png";
         break;
       default:
         break;
@@ -151,7 +151,7 @@ export default {
     // var url = "/psw.png"
 
     this.img = require("../../assets" + url);
-    this.activeImg = require('../../assets' + activeUrl)
+    this.activeImg = require("../../assets" + activeUrl);
     this.icon_src = this.img;
     // console.log(this.img)
     // console.log(this.activeImg)
