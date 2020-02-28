@@ -1,30 +1,30 @@
 <!-- 送检消息 -->
 <template>
-  <div class>
+  <div class v-loading="isloading">
     <Ititle title="送检消息"></Ititle>
     <wrap>
       <div class="row">
         <div class="row-item">
           <span class="row-title length6">送检单位:</span>
-          <span class="row-content">四川省奉献农业有限公司</span>
+          <span class="row-content">{{msg.company}}</span>
         </div>
         <div class="row-item">
           <span class="row-title length6">所在地区:</span>
-          <span class="row-content">四川省德阳市中江县</span>
+          <span class="row-content">{{msg.location}}</span>
         </div>
         <div class="row-item">
           <span class="row-title length6">详细地址:</span>
-          <span class="row-content">东北镇白梨村十二社</span>
+          <span class="row-content">{{msg.receiverAddress}}</span>
         </div>
         <div class="row-item last">
           <span class="row-title">送检人:</span>
-          <span class="row-content">冯仁基</span>
+          <span class="row-content">{{msg.receiver}}</span>
         </div>
       </div>
       <div class="row">
         <div class="row-item">
           <span class="row-title length6">送检人电话:</span>
-          <span class="row-content">18626452688</span>
+          <span class="row-content">{{msg.phone}}</span>
         </div>
       </div>
     </wrap>
@@ -36,15 +36,19 @@
 //例如：import 《组件名称》 from '《组件路径》';
 import Ititle from "../../components/title/index";
 import wrap from "./wrap";
+import { getLaboratory } from '../../network'
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {
     Ititle,
-    wrap
+    wrap,
   },
   data() {
     //这里存放数据
-    return {};
+    return {
+      isloading:false,
+      msg:{}
+    };
   },
   //监听属性 类似于data概念
   computed: {},
@@ -55,7 +59,17 @@ export default {
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
-  mounted() {},
+  mounted() {
+    this.isloading = true
+    getLaboratory()
+    .then(res=>{
+      console.log(res.data)
+      this.msg = Object.assign({},res.data,{})
+    })
+    .finally(()=>{
+      this.isloading = false
+    })
+  },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
   beforeUpdate() {}, //生命周期 - 更新之前

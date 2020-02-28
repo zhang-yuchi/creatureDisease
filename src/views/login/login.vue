@@ -84,7 +84,7 @@ export default {
     ifCheck() {
       needCheck()
         .then(res => {
-          console.log(res);
+          // console.log(res);
           this.needCheck = res.data;
         })
         .catch(() => {
