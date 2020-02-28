@@ -304,7 +304,7 @@ export default {
         document.querySelector(".el-table__header").style.width = "100%";
 
         //修改弹窗样式
-        initDg(3)  
+        initDg()  
       });
     },
     getShowList() {

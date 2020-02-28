@@ -3,7 +3,14 @@
   <div class>
     <withTab :tabArray="orderTabArray" @handleTabChange="tabChange"></withTab>
     <withSearch @handlesearch="toSearch"></withSearch>
-    <with-table :isloading="isloading" :list="list" :currentPage="currentPage" :totalElements="totalElements" @pagechange="pagechange" />
+    <with-table
+      :isloading="isloading"
+      :list="list"
+      @refresh="refreshList"
+      :currentPage="currentPage"
+      :totalElements="totalElements"
+      @pagechange="pagechange"
+    />
   </div>
 </template>
 
@@ -54,8 +61,8 @@ export default {
   methods: {
     tabChange(status) {
       this.state = status;
-      this.currentPage = 0
-      this.getList()
+      this.currentPage = 0;
+      this.getList();
     },
     toSearch(searchDetail) {
       //filter
@@ -101,12 +108,12 @@ export default {
       if (this.searchValue) {
         params[this.key] = this.searchValue;
       }
-      if(this.state){
-        params.status = this.state
+      if (this.state) {
+        params.status = this.state;
       }
       getOrderList(params)
         .then(res => {
-          console.log(res)
+          console.log(res);
           if (res.status === 1) {
             const result = res.data;
             const list = result.result;
@@ -129,9 +136,12 @@ export default {
           this.isloading = false;
         });
     },
-    pagechange(cur){
-      this.currentPage = cur - 1
-      this.getList()
+    pagechange(cur) {
+      this.currentPage = cur - 1;
+      this.getList();
+    },
+    refreshList() {
+      this.getList();
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
@@ -146,7 +156,11 @@ export default {
   updated() {}, //生命周期 - 更新之后
   beforeDestroy() {}, //生命周期 - 销毁之前
   destroyed() {}, //生命周期 - 销毁完成
-  activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
+  activated() {
+    if (this.$route.params.needFresh) {
+      this.getList();
+    }
+  }, //如果页面有keep-alive缓存功能，这个函数会触发
   deactivated() {} //如果有keep-alive缓存功能,当该页面撤销使这个函数会触发
 };
 </script>

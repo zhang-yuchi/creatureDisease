@@ -1,12 +1,29 @@
 <!-- 检测中   完成订单和取消订单按钮 -->
 <template>
   <div class="control">
-    <div v-if="state=='4'">
-      <el-button style="line-height:10px;" type="primary">完成订单</el-button>
-      <el-button style="line-height:10px;">取消订单</el-button>
-    </div>
     <div v-if="state=='3'">
-      <el-button style="line-height:10px;" type="primary">确认收样</el-button>
+      <el-button
+        style="line-height:10px;"
+        @click="sureReceive"
+        v-loading="sureloading"
+        :disabled="disable"
+        type="primary"
+      >确认收样</el-button>
+    </div>
+    <div v-if="state=='4'">
+      <el-button
+        style="line-height:10px;"
+        @click="finishOrder"
+        v-loading="sureloading"
+        type="primary"
+        :disabled="disable"
+      >完成订单</el-button>
+      <el-button
+        style="line-height:10px;"
+        @click="cancelOrder"
+        :disabled="disable"
+        v-loading="cancelloading"
+      >取消订单</el-button>
     </div>
   </div>
 </template>
@@ -14,26 +31,112 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
+import { sureOrderList, cannelOrderList, finishOrderList } from "../../network";
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {},
-  props:{
-    state:String
+  props: {
+    state: String,
+    orderSn: String
   },
   data() {
     //这里存放数据
-    return {};
+    return {
+      sureloading: false,
+      cancelloading: false,
+      disable: false
+    };
   },
   //监听属性 类似于data概念
   computed: {},
   //监控data中的数据变化
   watch: {
-    state(newValue){
-      this.state = newValue
+    state(newValue) {
+      this.state = newValue;
+    },
+    orderSn(newValue) {
+      this.orderSn = newValue;
     }
   },
   //方法集合
-  methods: {},
+  methods: {
+    sureReceive() {
+      this.sureloading = true;
+      this.cancelloading = true;
+      this.disable = true;
+      sureOrderList(this.orderSn)
+        .then(res => {
+          // console.log(res);
+          this.$message({
+            message: "确定收样成功!",
+            type: "success"
+          });
+
+          this.$router.push({
+            name: "订单管理",
+            params: {
+              needFresh: true
+            }
+          });
+        })
+        .catch(() => {})
+        .finally(() => {
+          this.sureloading = false;
+          this.cancelloading = false;
+          this.disable = false;
+        });
+    },
+    finishOrder() {
+      this.sureloading = true;
+      this.disable = true;
+      finishOrderList(this.orderSn)
+        .then(res => {
+          // console.log(res);
+          this.$message({
+            message: "完成订单成功!",
+            type: "success"
+          });
+
+          this.$router.push({
+            name: "订单管理",
+            params: {
+              needFresh: true
+            }
+          });
+        })
+        .catch(() => {})
+        .finally(() => {
+          this.sureloading = false;
+          this.cancelloading = false;
+          this.disable = false;
+        });
+    },
+    cancelOrder() {
+      this.cancelloading = true;
+      this.disable = true;
+      cannelOrderList(this.orderSn)
+        .then(res => {
+          // console.log(res);
+          this.$message({
+            message: "取消订单成功!",
+            type: "success"
+          });
+
+          this.$router.push({
+            name: "订单管理",
+            params: {
+              needFresh: true
+            }
+          });
+        })
+        .catch(() => {})
+        .finally(() => {
+          this.sureloading = false;
+          this.cancelloading = false;
+          this.disable = false;
+        });
+    }
+  },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）

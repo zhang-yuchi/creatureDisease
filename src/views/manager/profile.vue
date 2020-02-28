@@ -9,30 +9,26 @@
           <el-link type="primary" @click="phoneVisible = true" style="color:#0584D7;">修改</el-link>
         </div>
         <el-dialog class="form-dialog" title="修改手机号码" :visible.sync="phoneVisible">
-          <el-form class="form" :model="phoneForm">
-            <el-form-item label="新手机号" :label-width="formLabelWidth">
-              <el-input v-model="phoneForm.num" placeholder="请输入新手机号" autocomplete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="验证码" :label-width="formLabelWidth">
-              <el-input v-model="phoneForm.check" autocomplete="off"></el-input>
-            </el-form-item>
-          </el-form>
+          <div class="body">
+            <span class="input-title">验证码:</span>
+            <el-input class="form-input" v-model="phoneForm.check" placeholder="请输入验证码"></el-input>
+          </div>
           <div slot="footer" class="dialog-footer">
             <el-button @click="phoneVisible = false">取 消</el-button>
             <el-button type="primary" @click="changePhone">确 定</el-button>
           </div>
         </el-dialog>
+        
         <div class="text item">
           <span class="item-text">用户名</span>
           <span class="item-text">{{userName}}</span>
           <el-link type="primary" style="color:#0584D7;" @click="nameVisible = true">修改</el-link>
         </div>
         <el-dialog class="form-dialog" title="修改用户名" :visible.sync="nameVisible">
-          <el-form class="form" :model="nameForm">
-            <el-form-item label="用户名" :label-width="formLabelWidth">
-              <el-input v-model="nameForm.name" placeholder="请输入用户名" autocomplete="off"></el-input>
-            </el-form-item>
-          </el-form>
+          <div class="body">
+            <span class="input-title">用户名:</span>
+            <el-input class="form-input" v-model="nameForm.name" placeholder="请输入用户名"></el-input>
+          </div>
           <div slot="footer" class="dialog-footer">
             <el-button @click="nameVisible = false">取 消</el-button>
             <el-button type="primary" @click="nameVisible = false">确 定</el-button>
@@ -43,24 +39,24 @@
           <span class="item-text">******</span>
           <el-link type="primary" style="color:#0584D7;" @click="pswVisible = true">修改</el-link>
         </div>
-        <el-dialog class="form-dialog"  title="修改密码" :visible.sync="pswVisible">
+        <!-- 修改密码弹窗 -->
+        <el-dialog class="form-dialog" title="修改密码" :visible.sync="pswVisible">
           <el-form class="form" :model="pswForm" :rules="rules" ref="pswForm">
-            <el-form-item label="获取验证码" :label-width="formLabelWidth">
-              <el-input v-model="checkNum" placeholder="请输入图中验证码" autocomplete="off"></el-input>
-              <img :src="checkUrl" class="checkImg" @click="changeImg" alt />
-            </el-form-item>
-            <el-form-item label="手机号" :label-width="formLabelWidth">
-              <el-input v-model="checkPhone" placeholder="请输入手机号" autocomplete="off"></el-input>
-              <el-button style="margin-top:10px;" @click="getVerifyCode">获取验证码</el-button>
-            </el-form-item>
-            <el-form-item label="验证码" :label-width="formLabelWidth">
-              <el-input v-model="pswForm.check" placeholder="请输入验证码" autocomplete="off"></el-input>
-            </el-form-item>
             <el-form-item label="新密码" :label-width="formLabelWidth" prop="psw">
-              <el-input v-model="pswForm.psw" type="password" placeholder="请输入新密码" autocomplete="off"></el-input>
+              <el-input
+                v-model="pswForm.psw"
+                type="password"
+                placeholder="请输入新密码"
+                autocomplete="off"
+              ></el-input>
             </el-form-item>
             <el-form-item label="重复密码" :label-width="formLabelWidth" prop="checkpsw">
-              <el-input v-model="pswForm.checkpsw" type="password" placeholder="请再次输入新密码" autocomplete="off"></el-input>
+              <el-input
+                v-model="pswForm.checkpsw"
+                type="password"
+                placeholder="请再次输入新密码"
+                autocomplete="off"
+              ></el-input>
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
@@ -68,6 +64,7 @@
             <el-button type="primary" @click="pswVisible = false">确 定</el-button>
           </div>
         </el-dialog>
+
         <div class="text item">
           <span class="item-text">注册日期</span>
           <span class="item-text">{{createTime}}</span>
@@ -91,7 +88,7 @@ import {
 } from "../../network";
 import moment from "moment";
 import Myinput from "../../components/input/input";
-import { initDg } from '../../assets/utils'
+import { initDg } from "../../assets/utils";
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {
@@ -139,17 +136,6 @@ export default {
       createTime: "",
       formLabelWidth: "120px",
       isloading: false,
-      checkUrl: "",
-      checkPhone: "",
-      checkNum: "",
-      rules: {
-          psw: [
-            { validator: validatePass, trigger: 'blur' }
-          ],
-          checkpsw: [
-            { validator: validatePass2, trigger: 'blur' }
-          ],
-        }
     };
   },
   //监听属性 类似于data概念
@@ -158,9 +144,7 @@ export default {
   watch: {},
   //方法集合
   methods: {
-    changePhone() {
-
-    },
+    changePhone() {},
     changePsw() {},
     getVerifyCode() {
       var obj = {
@@ -195,9 +179,9 @@ export default {
             type: "error"
           });
         })
-        .finally(()=>{
+        .finally(() => {
           this.getCheckImg();
-        })
+        });
     },
     changeImg() {
       this.getCheckImg();
@@ -222,7 +206,7 @@ export default {
             type: "changeUsername",
             name: this.userName
           });
-          sessionStorage.setItem("username",this.userName)
+          sessionStorage.setItem("username", this.userName);
         })
         .catch(() => {
           errorHandle();
@@ -239,6 +223,9 @@ export default {
     this.getUser();
     this.getCheckImg();
     initDg();
+    this.$nextTick(() => {
+      console.log(document.querySelectorAll(".el-dialog")[0].childNodes[1]);
+    });
   },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
@@ -280,5 +267,13 @@ export default {
   position: absolute;
   right: 0px;
   cursor: pointer;
+}
+.input-title {
+  display: inline-block;
+  width: 60px;
+}
+.form-input {
+  display: inline-block;
+  width: 435px;
 }
 </style>

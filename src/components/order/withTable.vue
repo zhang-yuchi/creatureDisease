@@ -78,7 +78,7 @@
 import baseInfoVue from "../../views/manager/baseInfo.vue";
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-
+import { sureOrderList } from "../../network";
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {},
@@ -110,14 +110,14 @@ export default {
       this.totalElements = newValue; //可能不行
     },
     currentPage(newValue) {
-      console.log(newValue)
+      // console.log(newValue);
       this.currentPage = newValue;
     }
   },
   //方法集合
   methods: {
-    pagechange(cur){
-      this.$emit('pagechange',cur)
+    pagechange(cur) {
+      this.$emit("pagechange", cur);
     },
     cellStyle() {
       return {
@@ -142,7 +142,36 @@ export default {
     },
     handleCheck(index, row) {
       console.log(index, row);
+      console.log(row.orderId);
       // this.$router.go(0)
+      this.$confirm("请确认你已收到样本", "", {
+        confirmButtonText: "收到了",
+        cancelButtonText: "没收到",
+        type: "warning"
+      })
+        .then(() => {
+          sureOrderList(row.orderId)
+            .then(res => {
+              console.log(res);
+              this.$message({
+                type: "success",
+                message: "确认收货成功!"
+              });
+              this.$emit("refresh")
+            })
+            .catch(() => {
+              this.$message({
+                message: "网络超时",
+                type: "error"
+              });
+            });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消"
+          });
+        });
     },
     initTable() {
       this.$nextTick(() => {
@@ -161,8 +190,7 @@ export default {
         document.querySelector(".el-table__body").style.width = "100%";
         document.querySelector(".el-table__header").style.width = "100%";
       });
-    },
-    
+    }
   },
 
   //生命周期 - 创建完成（可以访问当前this实例）

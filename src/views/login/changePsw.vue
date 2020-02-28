@@ -7,7 +7,7 @@
       <myinput type="check" placeholder="请输入验证码" errorMsg="请输入四位验证码" @rulecheck="checkNum" :formValue="this.form.check"></myinput>
     </div>
     <div slot="login">
-      <el-button type="primary" @click="next" :loading="isLoading" class="loginbtn">下一步</el-button>
+      <el-button type="primary" @click="next" :loading="isLoading"  class="loginbtn">下一步</el-button>
     </div>
     <div slot="changestate">
       <el-link class="pswbtn" type="info" @click="back">返回登录</el-link>
@@ -50,7 +50,7 @@ export default {
       this.$router.push("index");
     },
     checkNum(value){
-      console.log(value)
+      
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）

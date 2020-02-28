@@ -40,10 +40,11 @@ export default {
   //方法集合
   methods: {
     tabChange(obj) {
-      if (obj.label == "已上架") {
-        this.getNewList();
-      } else {
+      console.log(obj)
+      if (obj == "1") {
         this.getSecondList();
+      } else {
+        this.getNewList();
       }
     },
     createList(item, index) {
@@ -73,7 +74,7 @@ export default {
               return this.createList(item, index);
             });
           }
-          // console.log(list)
+          console.log(list)
           this.list = list;
         })
         .catch(err => {
@@ -109,8 +110,10 @@ export default {
     sendNewList() {
       if (this.state === 0) {
         //处于已上架状态
+        console.log(1)
         this.getNewList();
       } else {
+        console.log(2)
         this.getSecondList();
       }
     }

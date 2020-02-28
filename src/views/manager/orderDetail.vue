@@ -2,7 +2,7 @@
 <template>
   <div class v-loading="isloading">
     <!-- 检测中按钮 -->
-    <check-control :state="state" v-if="state=='3'||state=='4'"></check-control>
+    <check-control :state="state" :orderSn="orderNo" v-if="state=='3'||state=='4'"></check-control>
     <!-- 订单信息 -->
     <order-detail :orderDetail="orderDetail"></order-detail>
     <!-- 订单进度 -->
@@ -50,6 +50,7 @@ export default {
     //这里存放数据
     return {
       state: "",
+      orderNo:"",
       orderDetail: {}, //订单信息
       orderProcess: {}, //订单进度
       commodities: [], //订单明细
@@ -87,6 +88,7 @@ export default {
       .then(res => {
         console.log(res);
         const details = res.data
+        // console.log(details.order_sn)
         // 订单信息
         var tempInfo = Object.assign({},details.info,{
           status:stateMap[details.info.status]
@@ -96,8 +98,10 @@ export default {
             tempInfo[key] = "暂无"
           }
         }
+        this.orderNo = tempInfo.order_sn
         this.orderDetail = tempInfo
-        console.log(this.orderDetail)
+        // console.log(this.orderNo)
+        // console.log(this.orderDetail)
         //状态分析
         this.state = res.data.info.status
         //订单明细

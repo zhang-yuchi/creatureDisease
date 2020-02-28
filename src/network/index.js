@@ -3,7 +3,7 @@ let isDev = process.env.NODE_ENV == 'development'
 import router from '../router'
 import el from 'element-ui'
 import qs from 'qs'
-isDev = false
+// isDev = false
 const baseURL = isDev ? "http://rap2.taobao.org:38080/app/mock/245259" : "http://ruankun.xyz:8821/disease/"
 const service = axios.create({
     baseURL,
@@ -182,18 +182,18 @@ export const searchOrderList = () => {
     return service.get(getRandom('/order/search'))
 }
 //取消订单
-export const cannelOrderList = () => {
-    return service.get(getRandom('/order/cancel'))
+export const cannelOrderList = (orderSn) => {
+    return service.get(getRandom(`/order/cancel/${orderSn}`))
 }
 //完成订单
-export const finishOrderList = () => {
-    return service.get(getRandom('/order/complete/'))
+export const finishOrderList = (orderSn) => {
+    return service.get(getRandom(`/order/complete/${orderSn}`))
 }
 //返回订单详细信息
 export const singleOrderList = (orderSn) => {
     return service.get(getRandom('/order/detail/'+orderSn))
 }
 //确认收样
-export const sureOrderList = () => {
-    return service.get(getRandom('/order/list/fiter'))
+export const sureOrderList = (orderSn) => {
+    return service.get(getRandom(`/order/receive/${orderSn}`))
 }
