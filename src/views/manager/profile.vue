@@ -3,27 +3,63 @@
   <div class="profile">
     <div class="window">
       <el-card class="box-card" v-loading="isloading">
+        <!-- 手机 -->
         <div class="text item">
           <span class="item-text">手机号</span>
           <span class="item-text">{{phone}}</span>
           <el-link type="primary" @click="phoneVisible = true" style="color:#0584D7;">修改</el-link>
         </div>
+
+        <!-- 手机对话框--验证码 -->
         <el-dialog class="form-dialog" title="修改手机号码" :visible.sync="phoneVisible">
           <div class="body">
-            <span class="input-title">验证码:</span>
-            <el-input class="form-input" v-model="phoneForm.check" placeholder="请输入验证码"></el-input>
+            <div class="row">
+              <span class="input-title">验证码:</span>
+              <el-input class="form-input" v-model="phoneForm.check" placeholder="请输入验证码"></el-input>
+              <div class="get-msg">获取验证码</div>
+            </div>
           </div>
           <div slot="footer" class="dialog-footer">
             <el-button @click="phoneVisible = false">取 消</el-button>
             <el-button type="primary" @click="changePhone">确 定</el-button>
           </div>
         </el-dialog>
-        
+
+        <!-- 手机对话框--修改手机号 -->
+        <el-dialog class="form-dialog" title="修改手机号码" :visible.sync="phoneBoxVisible">
+          <div class="body">
+            <div class="row">
+              <span class="input-title" style="text-align:right;">新手机号:</span>
+              <el-input
+                style="margin-left:10px;"
+                class="form-input"
+                v-model="pswForm.psw"
+                placeholder="请输入新手机号"
+              ></el-input>
+            </div>
+            <div class="row">
+              <span class="input-title">验证码:</span>
+              <el-input
+                class="form-input"
+                style="margin-left:10px;"
+                v-model="pswForm.checkpsw"
+                placeholder="请输入验证码"
+              ></el-input>
+            </div>
+          </div>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="phoneBoxVisible = false">取 消</el-button>
+            <el-button type="primary" @click="submitPhone">确 定</el-button>
+          </div>
+        </el-dialog>
+        <!-- 用户名 -->
         <div class="text item">
           <span class="item-text">用户名</span>
           <span class="item-text">{{userName}}</span>
           <el-link type="primary" style="color:#0584D7;" @click="nameVisible = true">修改</el-link>
         </div>
+
+        <!-- 修改用户名弹窗 -->
         <el-dialog class="form-dialog" title="修改用户名" :visible.sync="nameVisible">
           <div class="body">
             <span class="input-title">用户名:</span>
@@ -34,31 +70,53 @@
             <el-button type="primary" @click="nameVisible = false">确 定</el-button>
           </div>
         </el-dialog>
+        <!-- 密码 -->
         <div class="text item">
           <span class="item-text">密码</span>
           <span class="item-text">******</span>
-          <el-link type="primary" style="color:#0584D7;" @click="pswVisible = true">修改</el-link>
+          <el-link type="primary" style="color:#0584D7;" @click="pswBoxVisible = true">修改</el-link>
         </div>
+        <!-- 修改密码--获取验证码 -->
+        <el-dialog class="form-dialog" title="修改密码" :visible.sync="pswBoxVisible">
+          <div class="body">
+            <div class="row">
+              <span class="input-title">验证码:</span>
+              <el-input
+                class="form-input"
+                style="margin-left:10px;"
+                v-model="pswBox.check"
+                placeholder="请输入验证码"
+              ></el-input>
+              <div class="get-msg">获取验证码</div>
+            </div>
+          </div>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="pswBoxVisible = false">取 消</el-button>
+            <el-button type="primary" @click="pswNextStep">确 定</el-button>
+          </div>
+        </el-dialog>
         <!-- 修改密码弹窗 -->
         <el-dialog class="form-dialog" title="修改密码" :visible.sync="pswVisible">
-          <el-form class="form" :model="pswForm" :rules="rules" ref="pswForm">
-            <el-form-item label="新密码" :label-width="formLabelWidth" prop="psw">
+          <div class="body">
+            <div class="row">
+              <span class="input-title" style="text-align:right;">新密码:</span>
               <el-input
+                style="margin-left:10px;"
+                class="form-input"
                 v-model="pswForm.psw"
-                type="password"
                 placeholder="请输入新密码"
-                autocomplete="off"
               ></el-input>
-            </el-form-item>
-            <el-form-item label="重复密码" :label-width="formLabelWidth" prop="checkpsw">
+            </div>
+            <div class="row">
+              <span class="input-title">重复密码:</span>
               <el-input
+                class="form-input"
+                style="margin-left:10px;"
                 v-model="pswForm.checkpsw"
-                type="password"
                 placeholder="请再次输入新密码"
-                autocomplete="off"
               ></el-input>
-            </el-form-item>
-          </el-form>
+            </div>
+          </div>
           <div slot="footer" class="dialog-footer">
             <el-button @click="pswVisible = false">取 消</el-button>
             <el-button type="primary" @click="pswVisible = false">确 定</el-button>
@@ -84,7 +142,8 @@ import {
   modifyPhone,
   modifyUsername,
   getCheck,
-  getPhoneCode
+  getPhoneCode,
+  checkToken
 } from "../../network";
 import moment from "moment";
 import Myinput from "../../components/input/input";
@@ -96,29 +155,15 @@ export default {
   },
   data() {
     //这里存放数据
-    var validatePass = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请输入密码"));
-      } else {
-        if (this.pswForm.newNum !== "") {
-          this.$refs.pswForm.validateField("checkPass");
-        }
-        callback();
-      }
-    };
-    var validatePass2 = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请再次输入密码"));
-      } else if (value !== this.pswForm.psw) {
-        callback(new Error("两次输入密码不一致!"));
-      } else {
-        callback();
-      }
-    };
     return {
+      //手机验证码
       phoneVisible: false,
       phoneForm: {
-        num: "",
+        check: ""
+      },
+      phoneBoxVisible: false,
+      phoneBox: {
+        newphone: "",
         check: ""
       },
       nameVisible: false,
@@ -131,11 +176,15 @@ export default {
         checkpsw: "",
         check: ""
       },
+      pswBoxVisible: false,
+      pswBox: {
+        check: ""
+      },
       userName: "",
       phone: "",
       createTime: "",
       formLabelWidth: "120px",
-      isloading: false,
+      isloading: false
     };
   },
   //监听属性 类似于data概念
@@ -144,45 +193,15 @@ export default {
   watch: {},
   //方法集合
   methods: {
-    changePhone() {},
-    changePsw() {},
-    getVerifyCode() {
-      var obj = {
-        phone: this.checkPhone,
-        verifyCode: this.checkNum
-      };
-      if (!this.checkPhone || !this.checkNum) {
-        this.$message({
-          message: "请填写验证码和手机号获取校验码!",
-          type: "error"
-        });
-        this.getCheckImg();
-        return;
-      }
-      getPhoneCode(obj)
-        .then(res => {
-          if (res.data.CODE) {
-            this.$message({
-              message: `您的验证码为 ${res.data.CODE}`,
-              type: "success"
-            });
-          } else {
-            this.$message({
-              message: res.data.ERROR,
-              type: "error"
-            });
-          }
-        })
-        .catch(() => {
-          this.$message({
-            message: "服务器繁忙!请重试",
-            type: "error"
-          });
-        })
-        .finally(() => {
-          this.getCheckImg();
-        });
+    changePhone() {
+      this.phoneVisible = false;
+      this.phoneBoxVisible = true;
     },
+    pswNextStep(){
+      this.pswBoxVisible = false,
+      this.pswVisible = true
+    },
+    changePsw() {},
     changeImg() {
       this.getCheckImg();
     },
@@ -197,16 +216,21 @@ export default {
       this.isloading = true;
       getUserInfo()
         .then(res => {
-          (this.userName = res.data.userName),
-            (this.phone = res.data.phone),
-            (this.createTime = moment(res.data.createTime).format(
-              "YYYY/MM/DD"
-            ));
-          this.$store.commit({
-            type: "changeUsername",
-            name: this.userName
-          });
-          sessionStorage.setItem("username", this.userName);
+          console.log(res);
+          if (res.status == 1) {
+            (this.userName = res.data.userName),
+              (this.phone = res.data.phone),
+              (this.createTime = moment(res.data.createTime).format(
+                "YYYY/MM/DD"
+              ));
+            this.$store.commit({
+              type: "changeUsername",
+              name: this.userName
+            });
+            sessionStorage.setItem("username", this.userName);
+          } else {
+            errorHandle();
+          }
         })
         .catch(() => {
           errorHandle();
@@ -214,6 +238,9 @@ export default {
         .finally(() => {
           this.isloading = false;
         });
+    },
+    submitPhone() {
+      console.log(111);
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
@@ -275,5 +302,17 @@ export default {
 .form-input {
   display: inline-block;
   width: 435px;
+}
+.row {
+  margin-bottom: 16px;
+  position: relative;
+}
+.get-msg{
+  color: #0584D7;
+  position: absolute;
+  right: 20px;
+  top: 12px;
+  cursor: pointer;
+  height: 40px;
 }
 </style>
