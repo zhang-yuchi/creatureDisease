@@ -43,7 +43,7 @@ export default {
   //方法集合
   methods: {
     next() {
-        this.$router.push('step2')
+      this.$router.push("step2");
     },
     back() {
       //清空redux中的缓存

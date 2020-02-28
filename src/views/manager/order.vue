@@ -77,7 +77,7 @@ export default {
         "6": "退款中"
       };
       single.orderId = item.order_sn;
-      single.phoneNum = 123456;
+      single.phoneNum = item.phone;
       single.logisticsNum = item.logistics_sn ? item.logistics_sn : "暂无";
       single.updateTime = moment(item.updateTime).format("YYYY/MM/DD hh:mm:ss");
       single.price = item.payable.toFixed(2);

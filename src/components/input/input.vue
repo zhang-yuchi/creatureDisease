@@ -51,7 +51,9 @@ export default {
       resetHidden: false,
       icon_src: "",
       isErr: false,
-      errMsg: this.$props.errorMsg
+      errMsg: this.$props.errorMsg,
+      img:"",
+      activeImg:"",
     };
   },
   //监听属性 类似于data概念
@@ -81,7 +83,6 @@ export default {
       //表单验证
       //   console.log("in on input")
       this.$emit("rulecheck", this.value);
-
       //   if (!this.$props.rule(this.value)) {
       //     //验证失败
       //     this.isErr = true;
@@ -90,12 +91,16 @@ export default {
       //   }
     },
     borderChange() {
+      this.icon_src = this.activeImg
       this.borderColor = "#0784D8";
       if (!this.value) {
         this.resetHidden = false;
         return;
       }
       this.resetHidden = true;
+      // console.log(this.activeImg)
+      
+      // console.log(this.icon_src)
     },
     cancel() {
       if (!this.value) {
@@ -103,6 +108,8 @@ export default {
       }
       //颜色控制 最基本功能
       this.borderColor = "#979797";
+      this.icon_src = this.img
+      // console.log(this.icon_src)
     },
     reset() {
       this.resetHidden = false;
@@ -117,30 +124,37 @@ export default {
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
-    console.log(this.checkUrl);
     var url = "";
+    var activeUrl = ""
     // console.log(this.$props.icon)
     // this.icon_src = require(this.$props.icon)
     switch (this.$props.type) {
       case "password":
         url = "/psw.png";
+        activeUrl = "/psw-active.png"
         break;
       case "username":
         url = "/account.png";
+        activeUrl = "/account-active.png"
         break;
       case "check":
         url = "/checkicon.png";
+        activeUrl = "/checkicon-active.png"
         break;
       case "phone":
         url = "/phone.png";
+        activeUrl = "/phone-active.png"
         break;
       default:
         break;
     }
     // var url = "/psw.png"
 
-    var img = require("../../assets" + url);
-    this.icon_src = img;
+    this.img = require("../../assets" + url);
+    this.activeImg = require('../../assets' + activeUrl)
+    this.icon_src = this.img;
+    // console.log(this.img)
+    // console.log(this.activeImg)
   },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
@@ -165,6 +179,7 @@ export default {
   padding-left: 40px;
   padding-top: 10px;
   padding-bottom: 10px;
+  padding-right: 15px;
   width: 100%;
   border: none;
   border-bottom: 1px solid #979797;
