@@ -32,7 +32,9 @@
       ></myInput>
       <!-- <img :src="checkUrl" alt /> -->
     </div>
+
     <div slot="login">
+      <div class="total-error">{{totalError}}</div>
       <el-button type="primary" @click="login" :loading="isLoading" class="loginbtn">登录</el-button>
     </div>
     <div slot="changestate">
@@ -69,7 +71,8 @@ export default {
       checkerr: false,
       isLoading: false,
       needCheck: false,
-      checkUrl: ""
+      checkUrl: "",
+      totalError:"",
     };
   },
   //监听属性 类似于data概念
@@ -145,7 +148,7 @@ export default {
             sessionStorage.setItem("token", res.data);
             this.$router.push("/manager");
           } else {
-            this.$message.error(res.data.message);
+            this.totalError = res.data.message;
             this.ifCheck();
           }
         })
@@ -192,5 +195,12 @@ export default {
 .loginbtn:hover {
   background-color: #0484d6;
   transition: background-color 0.3s;
+}
+.total-error{
+  color: #df1c1c;
+  margin-top: -10px;
+  margin-bottom: 10px;
+  line-height: 20px;
+  height: 20px;
 }
 </style>
