@@ -4,10 +4,18 @@
     <div slot="name">忘记密码</div>
     <div slot="form">
       <myinput type="phone" placeholder="请输入你的手机号" :formValue="this.form.phone"></myinput>
-      <myinput type="check" placeholder="请输入验证码" errorMsg="请输入四位验证码" @rulecheck="checkNum" :formValue="this.form.check"></myinput>
+      <myinput
+        type="check"
+        placeholder="请输入验证码"
+        errorMsg="请输入四位验证码"
+        :err="checkErr"
+        :checkUrl="checkUrl"
+        @rulecheck="checkNum"
+        :formValue="this.form.check"
+      ></myinput>
     </div>
     <div slot="login">
-      <el-button type="primary" @click="next" :loading="isLoading"  class="loginbtn">下一步</el-button>
+      <el-button type="primary" @click="next" :loading="isLoading" class="loginbtn">下一步</el-button>
     </div>
     <div slot="changestate">
       <el-link class="pswbtn" type="info" @click="back">返回登录</el-link>
@@ -20,6 +28,7 @@
 //例如：import 《组件名称》 from '《组件路径》';
 import logintemplate from "../../components/logintemplate";
 import myinput from "../../components/input/input";
+import {getCheck } from '../../network'
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {
@@ -33,7 +42,9 @@ export default {
         phone: "",
         check: ""
       },
-      isLoading: false
+      checkUrl: "",
+      isLoading: false,
+      checkErr: false,
     };
   },
   //监听属性 类似于data概念
@@ -49,14 +60,24 @@ export default {
       //清空redux中的缓存
       this.$router.push("index");
     },
-    checkNum(value){
-      
+    checkNum(value) {
+      if (value.length !== 4) {
+        this.checkErr = true;
+      } else {
+        this.checkErr = false;
+      }
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
-  mounted() {},
+  mounted() {
+    getCheck().then(data=>{
+      let blob = data.data
+      let src = window.URL.createObjectURL(blob)
+      this.checkUrl = src
+    })
+  },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
   beforeUpdate() {}, //生命周期 - 更新之前

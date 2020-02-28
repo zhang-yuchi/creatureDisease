@@ -4,7 +4,7 @@
     <el-aside width="242px">
       <el-col :span="24">
         <!-- <h5>自定义颜色</h5> -->
-          <img class="logo" src="../../assets/logo1.png" alt="">
+        <img class="logo" src="../../assets/logo1.png" alt />
         <el-menu
           :default-active="nowpath"
           class="el-menu-vertical-demo"
@@ -67,7 +67,7 @@ var routeMap = {
   order: "订单管理",
   baseInfo: "实验室设置/基础信息",
   "project-setting": "实验室设置/检测项目配置",
-  "order-detail": "订单管理/订单详情",
+  "order-detail": "订单管理/订单详情"
 };
 export default {
   //import引入的组件需要注入到对象中才能使用
@@ -78,13 +78,13 @@ export default {
       nowpath: "",
       BreadcrumbList: [],
       routePath: this.$router.history.current.path,
-      username:sessionStorage.getItem('username')?sessionStorage.getItem('username'):this.$store.state.username
+      username: sessionStorage.getItem("username")
+        ? sessionStorage.getItem("username")
+        : this.$store.state.username
     };
   },
   //监听属性 类似于data概念
-  computed: {
-    
-  },
+  computed: {},
   //监控data中的数据变化
   watch: {
     $route(to, from) {
@@ -102,10 +102,10 @@ export default {
       ];
     },
     getBreadcrumbList() {
-      console.log(this.nowpath)
-      if(!routeMap[this.nowpath]){
+      console.log(this.nowpath);
+      if (!routeMap[this.nowpath]) {
         this.BreadcrumbList = [];
-        return 
+        return;
       }
       this.BreadcrumbList = routeMap[this.nowpath].split("/");
       // console.log(this.BreadcrumbList)
@@ -124,6 +124,7 @@ export default {
     },
     logout() {
       //需要做一个守卫 相当于注销!
+      sessionStorage.setItem("token", null);
       this.$router.replace({ path: "/" });
       //replace替换原路由，作用是避免回退死循环
     }
@@ -220,13 +221,13 @@ li[role="menuitem"] {
   box-sizing: border-box;
   text-align: left;
 }
-.logout{
+.logout {
   cursor: pointer;
 }
 .logo {
   height: 70px;
 }
-.el-menu{
+.el-menu {
   margin-top: -40px;
 }
 .el-menu-item,
