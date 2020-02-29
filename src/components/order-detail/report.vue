@@ -6,9 +6,13 @@
       <div class="upload-window">
         <el-upload
           class="upload-demo"
-          action="https://jsonplaceholder.typicode.com/posts/"
+          :action="uploadUrl"
           :on-change="handleChange"
           :file-list="fileList"
+          :on-preview="handlePreview"
+          :on-success="handleSuccess"
+          name="multipartFile"
+          :header="token"
         >
           <el-button size="small" type="primary">点击上传</el-button>
           <div slot="tip" class="el-upload__tip">只能上传png文件</div>
@@ -23,6 +27,7 @@
 //例如：import 《组件名称》 from '《组件路径》';
 import Ititle from "../../components/title/index";
 import wrap from "./wrap";
+import { PdfUploadUrl } from '../../network'
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {
@@ -37,7 +42,7 @@ export default {
     return {
       fileList: [
         {
-          name: "food.jpeg",
+          name: "fuck.jpeg",
           url:
             "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100"
         },
@@ -46,7 +51,9 @@ export default {
           url:
             "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100"
         }
-      ]
+      ],
+      uploadUrl:PdfUploadUrl,
+      token:sessionStorage.getItem('token')
     };
   },
   //监听属性 类似于data概念
@@ -60,7 +67,15 @@ export default {
   //方法集合
   methods: {
     handleChange(file, fileList) {
-      this.fileList = fileList.slice(-3);
+      console.log(file)
+      // this.fileList = fileList.slice(-3);
+    },
+    handlePreview(file){
+      console.log(file)
+      window.open(file.url)
+    },
+    handleSuccess(res){
+      console.log(res)
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）

@@ -40,7 +40,7 @@ export default {
   //方法集合
   methods: {
     tabChange(obj) {
-      console.log(obj)
+      // console.log(obj)
       if (obj == "1") {
         this.getSecondList();
       } else {
@@ -110,10 +110,9 @@ export default {
     sendNewList() {
       if (this.state === 0) {
         //处于已上架状态
-        console.log(1)
         this.getNewList();
       } else {
-        console.log(2)
+        // console.log(2)
         this.getSecondList();
       }
     }

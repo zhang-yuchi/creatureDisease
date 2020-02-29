@@ -113,7 +113,7 @@ export default {
       }
       getOrderList(params)
         .then(res => {
-          console.log(res);
+          // console.log(res);
           if (res.status === 1) {
             const result = res.data;
             const list = result.result;
@@ -128,7 +128,10 @@ export default {
             //   type: "error"
             // });
             checkToken().then(res => {
-              console.log(res);
+              // console.log(res);
+              if(res.status==1){
+                return
+              }
               if (res.data.status == -1) {
                 //token过期
                 this.$alert("身份信息过期,请重新登录!", "提示", {

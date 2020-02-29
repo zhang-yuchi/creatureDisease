@@ -21,6 +21,10 @@ const routes = [{
         component: () => import('../views/login/login')
       },
       {
+        path:"byPhone",
+        component:() => import('../views/login/byPhone')
+      },
+      {
         path: "step1",
         component: () => import('../views/login/changePsw')
       },

@@ -15,6 +15,7 @@
       :style="{borderColor:borderColor}"
       @blur="cancel"
     />
+    <verifyCode v-if="hasVerifyCode"></verifyCode>
     <div class="msg">{{isErr?errMsg:""}}</div>
     <!-- <div class="stack"></div> -->
     <img :src="checkUrl" class="checking" @click="checkOnce" alt />
@@ -24,10 +25,12 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-
+import verifyCode from '../verifycode/index'
 export default {
   //import引入的组件需要注入到对象中才能使用
-  components: {},
+  components: {
+    verifyCode
+  },
   props: {
     formValue: {
       type: String,
@@ -41,7 +44,8 @@ export default {
     placeholder: String,
     rule: String,
     err: Boolean,
-    checkUrl: String
+    checkUrl: String,
+    hasVerifyCode:Boolean
   },
   data() {
     //这里存放数据
@@ -227,5 +231,9 @@ textarea:-webkit-autofill,
 select:-webkit-autofill {
   box-shadow: 0 0 0px 1000px white inset;
   /* border: 1px solid #ccc !important; */
+}
+.get-msg{
+  top: 27px;
+  right: 0px;
 }
 </style>

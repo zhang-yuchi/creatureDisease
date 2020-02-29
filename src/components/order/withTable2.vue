@@ -225,6 +225,7 @@ export default {
   watch: {
     list(newValue) {
       this.tableData = newValue;
+      this.offset = 0
       this.getShowList();
       this.initTable()
     },

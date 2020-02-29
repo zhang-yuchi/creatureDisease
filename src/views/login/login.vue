@@ -171,7 +171,7 @@ export default {
       this.ifCheck();
     },
     loginByPhone(){
-      console.log("手机登录了")
+      this.$router.push('byPhone')
     }
   },
 

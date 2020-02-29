@@ -33,7 +33,7 @@
               <el-input
                 style="margin-left:10px;"
                 class="form-input"
-                v-model="pswForm.psw"
+                v-model="phoneBox.newphone"
                 placeholder="请输入新手机号"
               ></el-input>
             </div>
@@ -42,9 +42,10 @@
               <el-input
                 class="form-input"
                 style="margin-left:10px;"
-                v-model="pswForm.checkpsw"
+                v-model="phoneBox.check"
                 placeholder="请输入验证码"
               ></el-input>
+              <verifycode></verifycode>
             </div>
           </div>
           <div slot="footer" class="dialog-footer">
@@ -196,6 +197,13 @@ export default {
   //方法集合
   methods: {
     changePhone() {
+      if(this.phoneForm.check.length!==4){
+        this.$message({
+          message:"请输入有效的验证码!",
+          type:"error"
+        })
+        return
+      }
       this.phoneVisible = false;
       this.phoneBoxVisible = true;
     },
@@ -242,8 +250,24 @@ export default {
         });
     },
     submitPhone() {
-      console.log(111);
+      //校验
+      if(this.phoneBox.check.length!==4){
+        this.$message({
+          message:"请输入有效验证码!",
+          type:"error"
+        })
+        return
+      }
+      if(!/^1[3456789]\d{9}$/.test(this.phoneBox.newphone)){
+        this.$message({
+          message:"请输入有效手机号!",
+          type:"error"
+        })
+        return
+      }
+      console.log("成功!可以发送请求了!");
     }
+    
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
