@@ -102,7 +102,7 @@ export default {
       ];
     },
     getBreadcrumbList() {
-      console.log(this.nowpath);
+      // console.log(this.nowpath);
       if (!routeMap[this.nowpath]) {
         this.BreadcrumbList = [];
         return;

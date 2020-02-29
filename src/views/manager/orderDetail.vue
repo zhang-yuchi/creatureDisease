@@ -100,14 +100,13 @@ export default {
         }
         this.orderNo = tempInfo.order_sn
         this.orderDetail = tempInfo
-        // console.log(this.orderNo)
-        // console.log(this.orderDetail)
+
         //状态分析
         this.state = res.data.info.status
         //订单明细
         this.commodities = res.data.commodities;
         //样本信息
-
+        //无,需要另外使用接口
         //订单进度
         var list = res.data.statuses.sort((a,b)=>{
           return parseInt(a.type<b.type)
@@ -129,7 +128,10 @@ export default {
         obj.maxSize = maxNum
         this.orderProcess = obj
         //样本信息
-
+        this.sample = Object.assign({},{},{
+          images:details.images,
+          intro:""
+        })
         // 物流快递
 
         // 检测报告

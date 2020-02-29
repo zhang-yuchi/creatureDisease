@@ -65,7 +65,7 @@ export default {
       this.state = 0;
       getOnsaleList()
         .then(res => {
-          console.log(res)
+          // console.log(res)
           //处理列表并传给子组件
           let temp = res.data;
           var list = [];
@@ -74,7 +74,7 @@ export default {
               return this.createList(item, index);
             });
           }
-          console.log(list)
+          // console.log(list)
           this.list = list;
         })
         .catch(err => {

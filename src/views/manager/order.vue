@@ -20,7 +20,7 @@
 import withTab from "../../components/order/withTab.vue";
 import withSearch from "../../components/order/search";
 import withTable from "../../components/order/withTable";
-import { getOrderList, errorHandle } from "../../network/index";
+import { getOrderList, errorHandle, checkToken } from "../../network/index";
 import moment from "moment";
 export default {
   //import引入的组件需要注入到对象中才能使用
@@ -127,6 +127,18 @@ export default {
             //   message: res.message,
             //   type: "error"
             // });
+            checkToken().then(res => {
+              console.log(res);
+              if (res.data.status == -1) {
+                //token过期
+                this.$alert("身份信息过期,请重新登录!", "提示", {
+                  confirmButtonText: "确定",
+                  callback: action => {
+                    this.$router.push("/login")
+                  }
+                });
+              }
+            });
           }
         })
         .catch(() => {

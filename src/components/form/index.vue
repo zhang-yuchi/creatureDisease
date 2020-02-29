@@ -353,5 +353,6 @@ export default {
 }
 .el-upload__tip {
   color: rgba(0, 0, 0, 0.45);
+  margin-top: -20px;
 }
 </style>

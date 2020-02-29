@@ -38,6 +38,7 @@
       <el-button type="primary" @click="login" :loading="isLoading" class="loginbtn">登录</el-button>
     </div>
     <div slot="changestate">
+      <el-link class="pswbtn phonebtn" type="info" @click="loginByPhone">手机登录</el-link>
       <el-link class="pswbtn" type="info" @click="changePsw">忘记密码?</el-link>
     </div>
   </logintemplate>
@@ -168,6 +169,9 @@ export default {
     OnceCheck() {
       //进行一次校验
       this.ifCheck();
+    },
+    loginByPhone(){
+      console.log("手机登录了")
     }
   },
 
@@ -201,5 +205,8 @@ export default {
   margin-bottom: 10px;
   line-height: 20px;
   height: 20px;
+}
+.phonebtn{
+  margin-right: 10px;
 }
 </style>

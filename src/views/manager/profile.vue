@@ -16,7 +16,7 @@
             <div class="row">
               <span class="input-title">验证码:</span>
               <el-input class="form-input" v-model="phoneForm.check" placeholder="请输入验证码"></el-input>
-              <div class="get-msg">获取验证码</div>
+              <verifycode></verifycode>
             </div>
           </div>
           <div slot="footer" class="dialog-footer">
@@ -87,7 +87,7 @@
                 v-model="pswBox.check"
                 placeholder="请输入验证码"
               ></el-input>
-              <div class="get-msg">获取验证码</div>
+              <verifycode></verifycode>
             </div>
           </div>
           <div slot="footer" class="dialog-footer">
@@ -148,10 +148,12 @@ import {
 import moment from "moment";
 import Myinput from "../../components/input/input";
 import { initDg } from "../../assets/utils";
+import verifycode from '../../components/verifycode'
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {
-    Myinput
+    Myinput,
+    verifycode,
   },
   data() {
     //这里存放数据
@@ -307,12 +309,5 @@ export default {
   margin-bottom: 16px;
   position: relative;
 }
-.get-msg{
-  color: #0584D7;
-  position: absolute;
-  right: 20px;
-  top: 12px;
-  cursor: pointer;
-  height: 40px;
-}
+
 </style>
