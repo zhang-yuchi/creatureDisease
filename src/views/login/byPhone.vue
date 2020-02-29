@@ -11,7 +11,15 @@
         placeholder="请输入手机号"
         @rulecheck="checkphone"
       ></myinput>
-      <myinput type="check" placeholder="请输入验证码" :err="checkErr" :errorMsg="checkErrMsg" @rulecheck="checkRule" :hasVerifyCode="true" :formValue="form.check"></myinput>
+      <myinput
+        type="check"
+        placeholder="请输入验证码"
+        :err="checkErr"
+        :errorMsg="checkErrMsg"
+        @rulecheck="checkRule"
+        :hasVerifyCode="true"
+        :formValue="form.check"
+      ></myinput>
     </div>
     <div slot="login">
       <div class="total-error">{{totalError}}</div>
@@ -41,8 +49,8 @@ export default {
       totalError: "",
       phoneErr: false,
       phoneErrMsg: "请输入正确的手机号",
-      checkErr:false,
-      checkErrMsg:"请输入正确的验证码",
+      checkErr: false,
+      checkErrMsg: "请输入正确的验证码",
       form: {
         check: "",
         phone: ""
@@ -56,28 +64,25 @@ export default {
   //方法集合
   methods: {
     login() {
-      if(this.phoneErr||this.checkErr){
-        return
+      if (this.phoneErr || this.checkErr) {
+        return;
       }
-
-      
-
     },
     back() {
       this.$router.push("index");
     },
-    checkphone(value){
-      if(!/^1[3456789]\d{9}$/.test(value)){
-        this.phoneErr = true
-      }else{
-        this.phoneErr = false
+    checkphone(value) {
+      if (!/^1[3456789]\d{9}$/.test(value)) {
+        this.phoneErr = true;
+      } else {
+        this.phoneErr = false;
       }
     },
-    checkRule(value){
-      if(value.length!==4){
-        this.checkErr = true
-      }else{
-        this.checkErr = false
+    checkRule(value) {
+      if (value.length !== 4) {
+        this.checkErr = true;
+      } else {
+        this.checkErr = false;
       }
     }
   },
