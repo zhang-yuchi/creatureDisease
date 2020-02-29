@@ -68,7 +68,7 @@
           </div>
           <div slot="footer" class="dialog-footer">
             <el-button @click="nameVisible = false">取 消</el-button>
-            <el-button type="primary" @click="nameVisible = false">确 定</el-button>
+            <el-button type="primary" @click="userchange">确 定</el-button>
           </div>
         </el-dialog>
         <!-- 密码 -->
@@ -106,6 +106,7 @@
                 class="form-input"
                 v-model="pswForm.psw"
                 placeholder="请输入新密码"
+                type="password"
               ></el-input>
             </div>
             <div class="row">
@@ -115,12 +116,13 @@
                 style="margin-left:10px;"
                 v-model="pswForm.checkpsw"
                 placeholder="请再次输入新密码"
+                type="password"
               ></el-input>
             </div>
           </div>
           <div slot="footer" class="dialog-footer">
             <el-button @click="pswVisible = false">取 消</el-button>
-            <el-button type="primary" @click="pswVisible = false">确 定</el-button>
+            <el-button type="primary" @click="submitPsw">确 定</el-button>
           </div>
         </el-dialog>
 
@@ -149,12 +151,12 @@ import {
 import moment from "moment";
 import Myinput from "../../components/input/input";
 import { initDg } from "../../assets/utils";
-import verifycode from '../../components/verifycode'
+import verifycode from "../../components/verifycode";
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {
     Myinput,
-    verifycode,
+    verifycode
   },
   data() {
     //这里存放数据
@@ -197,19 +199,43 @@ export default {
   //方法集合
   methods: {
     changePhone() {
-      if(this.phoneForm.check.length!==4){
+      if (this.phoneForm.check.length !== 4) {
         this.$message({
-          message:"请输入有效的验证码!",
-          type:"error"
-        })
-        return
+          message: "请输入有效的验证码!",
+          type: "error"
+        });
+        return;
       }
       this.phoneVisible = false;
       this.phoneBoxVisible = true;
+      this.phoneForm.check = "";
     },
-    pswNextStep(){
-      this.pswBoxVisible = false,
-      this.pswVisible = true
+    pswNextStep() {
+      //校验
+      if (this.pswBox.check.length !== 4) {
+        this.$message({
+          message: "请输入正确验证码!",
+          type: "error"
+        });
+        return;
+      }
+      (this.pswBoxVisible = false), (this.pswVisible = true);
+    },
+    submitPsw() {
+      if(!this.pawForm.psw){
+        this.$message({
+          message: "请输入密码!",
+          type: "error"
+        });
+        return
+      }
+      if (this.pswForm.psw !== this.pswForm.checkpsw) {
+        this.$message({
+          message: "两次密码不一致!",
+          type: "error"
+        });
+        return;
+      }
     },
     changePsw() {},
     changeImg() {
@@ -251,23 +277,37 @@ export default {
     },
     submitPhone() {
       //校验
-      if(this.phoneBox.check.length!==4){
+      if (this.phoneBox.check.length !== 4) {
         this.$message({
-          message:"请输入有效验证码!",
-          type:"error"
-        })
-        return
+          message: "请输入有效验证码!",
+          type: "error"
+        });
+        return;
       }
-      if(!/^1[3456789]\d{9}$/.test(this.phoneBox.newphone)){
+      if (!/^1[3456789]\d{9}$/.test(this.phoneBox.newphone)) {
         this.$message({
-          message:"请输入有效手机号!",
-          type:"error"
-        })
-        return
+          message: "请输入有效手机号!",
+          type: "error"
+        });
+        return;
       }
       console.log("成功!可以发送请求了!");
+      this.phoneBoxVisible = false;
+      this.phoneBox.newphone = "";
+      this.phoneBox.check = "";
+    },
+    userchange() {
+      if (this.nameForm.name === "") {
+        this.$message({
+          message: "用户名不能为空!",
+          type: "error"
+        });
+        return;
+      }
+      console.log("可以修改用户名了!");
+      this.nameVisible = false;
+      this.nameForm.name = "";
     }
-    
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
@@ -276,9 +316,6 @@ export default {
     this.getUser();
     this.getCheckImg();
     initDg();
-    this.$nextTick(() => {
-      console.log(document.querySelectorAll(".el-dialog")[0].childNodes[1]);
-    });
   },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
@@ -333,5 +370,4 @@ export default {
   margin-bottom: 16px;
   position: relative;
 }
-
 </style>
