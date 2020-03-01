@@ -228,9 +228,14 @@ export const savePdf = (params)=>{
     return service.post('/report/new',params)
 }
 export const delPdf = (params) => {
-    return service.delete('/report/delbyUrl',{
+    return service.delete(getRandom('/report/delbyUrl'),{
         params:{
             url:params.url
         }
+    })
+}
+export const getLogistics = (sn)=>{
+    return service.get(getRandom('/express'),{
+        params:{number:sn}
     })
 }

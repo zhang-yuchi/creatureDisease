@@ -43,11 +43,15 @@ export default {
     Ititle,
     wrap,
   },
+  props:{
+    msg:{
+      type:Object
+    }
+  },
   data() {
     //这里存放数据
     return {
       isloading:false,
-      msg:{}
     };
   },
   //监听属性 类似于data概念
@@ -60,15 +64,7 @@ export default {
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
-    this.isloading = true
-    getLaboratory()
-    .then(res=>{
-      console.log(res.data)
-      this.msg = Object.assign({},res.data,{})
-    })
-    .finally(()=>{
-      this.isloading = false
-    })
+
   },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前

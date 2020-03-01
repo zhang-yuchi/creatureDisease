@@ -10,13 +10,13 @@
     <!-- 订单明细 -->
     <order-line :list="commodities"></order-line>
     <!-- 送检信息 -->
-    <transport-info :sendMsg="sendMsg"></transport-info>
+    <transport-info :msg="sendMsg"></transport-info>
     <!-- 样本信息 -->
     <sample-info :sample="sample"></sample-info>
     <!-- 物流信息 -->
     <logistics :logistics="logistics"></logistics>
     <!-- 检测报告 -->
-    <report :report="report" :orderId="id"  v-if="state=='4'||state=='5'"></report>
+    <report :report="report" :state="state" :orderId="id"  v-if="state=='4'||state=='5'"></report>
   </div>
 </template>
 
@@ -56,7 +56,7 @@ export default {
       commodities: [], //订单明细
       sendMsg: {}, //送检消息
       sample: {}, //样本信息
-      logistics: {}, //物流信息
+      logistics: "", //物流信息
       report: {}, //检测报告
       id:"",
       isloading: false
@@ -106,8 +106,14 @@ export default {
         this.state = res.data.info.status
         //订单明细
         this.commodities = res.data.commodities;
-        //样本信息
-        //无,需要另外使用接口
+        //送检信息
+        this.sendMsg = {
+          company:details.info.company,
+          location:details.info.province+details.info.city+details.info.district,
+          receiverAddress:details.info.address,
+          receiver:details.info.name,
+          phone:details.info.phone,
+        }
         //订单进度
         var list = res.data.statuses.sort((a,b)=>{
           return parseInt(a.type<b.type)
@@ -131,10 +137,10 @@ export default {
         //样本信息
         this.sample = Object.assign({},{},{
           images:details.images,
-          intro:""
+          intro:details.info.instruction
         })
         // 物流快递
-
+        this.logistics = details.info.logistics_sn
         // 检测报告
         this.report = details.reports
         console.log(details)

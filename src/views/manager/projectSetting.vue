@@ -1,6 +1,9 @@
 <!--  -->
 <template>
-  <div class>
+  <div class="project-setting">
+    <div class="addForm">
+      <el-button type="primary"><i class="el-icon-plus"></i></el-button>
+    </div>
     <withTab :tabArray="settingTabArray" @handleTabChange="tabChange" left="40"></withTab>
     <withTable
       :list="this.list"
@@ -8,6 +11,16 @@
       :isloading="this.isloading"
       @requestnewList="sendNewList"
     ></withTable>
+    <el-dialog class="form-dialog" title="修改用户名" :visible.sync="nameVisible">
+          <div class="body">
+            <span class="input-title">用户名:</span>
+            <el-input class="form-input" v-model="nameForm.name" placeholder="请输入用户名"></el-input>
+          </div>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="nameVisible = false">取 消</el-button>
+            <el-button type="primary" @click="nameVisible = true">确 定</el-button>
+          </div>
+        </el-dialog>
   </div>
 </template>
 
@@ -30,7 +43,11 @@ export default {
       settingTabArray: ["已上架", "未上架"],
       list: [],
       isloading: false,
-      state: 0
+      state: 0,
+      nameVisible:false,
+      nameForm:{
+        name:""
+      }
     };
   },
   //监听属性 类似于data概念
@@ -138,7 +155,30 @@ export default {
 };
 </script>
 <style scoped>
+.project-setting {
+  position: relative;
+}
 .addForm {
-  /* width: 1000px; */
+  position: absolute;
+  z-index: 20;
+  left: 20px;
+  top: 10px;
+}
+.el-button{
+  width: 50px;
+  height: 30px;
+  padding: 0;
+}
+.row {
+  margin-bottom: 16px;
+  position: relative;
+}
+.input-title {
+  display: inline-block;
+  width: 60px;
+}
+.form-input {
+  display: inline-block;
+  width: 435px;
 }
 </style>

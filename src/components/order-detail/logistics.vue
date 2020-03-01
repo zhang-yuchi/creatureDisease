@@ -3,29 +3,24 @@
   <div class>
     <Ititle title="物流信息"></Ititle>
     <wrap>
-      <div class="row">
-        <span class="title">物流公司:</span>
-        中通快递
-      </div>
-      <div class="row">
-        <span class="title">运单号码:</span>
-        94262681156
-      </div>
-      <div class="row">
+      <div v-if="hasSuccess">
+        <div class="row">
+          <span class="title">物流公司:</span>
+          {{expDetail.expName}}
+        </div>
+        <div class="row">
+          <span class="title">运单号码:</span>
+          {{expDetail.logistics}}
+        </div>
+        <div class="row">
           <div class="logistics-detail">物流追踪信息</div>
-          <div class="detail-list">
-              <span class="time">2018-04-02 17:35:39</span>
-              <span class="content">客户签收人:XXX 已签收</span>
+          <div class="detail-list" v-for="(item,index) in expDetail.list" :key="index">
+            <span class="time">{{item.time}}</span>
+            <span class="content">{{item.status}}</span>
           </div>
-          <div class="detail-list">
-              <span class="time">2018-04-02 17:35:39</span>
-              <span class="content">客户签收人:XXX 已签收</span>
-          </div>
-          <div class="detail-list">
-              <span class="time">2018-04-02 17:35:39</span>
-              <span class="content">客户签收人:XXX 已签收</span>
-          </div>
+        </div>
       </div>
+      <div v-else>暂无物流信息!</div>
     </wrap>
   </div>
 </template>
@@ -36,26 +31,56 @@
 
 import Ititle from "../../components/title/index";
 import wrap from "./wrap";
+import { getLogistics } from "../../network";
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {
     Ititle,
     wrap
   },
+  props: {
+    logistics: String
+  },
   data() {
     //这里存放数据
-    return {};
+    return {
+      hasSuccess: true,
+      expDetail: {}
+    };
   },
   //监听属性 类似于data概念
   computed: {},
   //监控data中的数据变化
-  watch: {},
+  watch: {
+    logistics(newValue) {
+      this.logistics = newValue;
+      console.log(this.logistics);
+      getLogistics(this.logistics).then(res => {
+        console.log(res);
+        this.hasSuccess = res.data.SUCCESS ? true : false;
+
+        if (this.hasSuccess) {
+          const details = res.data.SUCCESS.result;
+          const expName = details.expName;
+          const logistics = this.logistics;
+          const list = details.list;
+          this.expDetail = {
+            expName,
+            logistics,
+            list
+          };
+        }
+      });
+    }
+  },
   //方法集合
   methods: {},
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
-  mounted() {},
+  mounted() {
+    // console.log(this.logistics);
+  },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
   beforeUpdate() {}, //生命周期 - 更新之前
@@ -67,22 +92,22 @@ export default {
 };
 </script>
 <style scoped>
-.title{
-    display: inline-block;
-    width: 5em;
+.title {
+  display: inline-block;
+  width: 5em;
 }
-.row{
-    color: #333333;
-    font-size: 14px;
-    margin-bottom: 10px;
+.row {
+  color: #333333;
+  font-size: 14px;
+  margin-bottom: 10px;
 }
-.logistics-detail{
-    margin-bottom: 10px;
+.logistics-detail {
+  margin-bottom: 10px;
 }
-.detail-list{
-    margin-bottom: 10px;
+.detail-list {
+  margin-bottom: 10px;
 }
-.detail-list:last-of-type{
-    margin-bottom: 0;
+.detail-list:last-of-type {
+  margin-bottom: 0;
 }
 </style>

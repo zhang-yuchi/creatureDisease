@@ -7,7 +7,7 @@
         <span class="title">样本及临床说明:</span>
         <span
           class="tips-intro"
-        >猪出现发热(达40-42°C),心跳加快,呼吸困难,部分咳嗽,眼,鼻有浆液性或粘液性脓性分泌物,皮肤发绀,淋巴结 肾肠胃粘膜明显出血症状猪出现发热(达40-42°C),心跳加快,呼吸困难,部分咳嗽,眼,鼻有浆液性或粘液性脓性分泌物,皮肤发绀,淋巴结 肾肠胃粘膜明显出血症状</span>
+        >{{sample.intro}}</span>
       </div>
       <div class="content">
         <span class="title">采样图片:</span>
