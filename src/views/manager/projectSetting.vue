@@ -7,11 +7,7 @@
       :state="this.state"
       :isloading="this.isloading"
       @requestnewList="sendNewList"
-      v-if="isTable"
     ></withTable>
-    <div class="addForm" v-else>
-      <addForm></addForm>
-    </div>
   </div>
 </template>
 
@@ -22,22 +18,19 @@ import withTab from "../../components/order/withTab.vue";
 import withTable from "../../components/order/withTable2";
 import { getOnsaleList, getOffsaleList, errorHandle } from "../../network";
 import moment from "moment";
-import addForm from '../../components/form/addCom'
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {
     withTab,
-    withTable,
-    addForm,
+    withTable
   },
   data() {
     //这里存放数据
     return {
-      settingTabArray: ["已上架", "未上架", "新增商品"],
+      settingTabArray: ["已上架", "未上架"],
       list: [],
       isloading: false,
-      state: 0,
-      isTable: true
+      state: 0
     };
   },
   //监听属性 类似于data概念
@@ -51,8 +44,6 @@ export default {
       if (obj == "1") {
         this.isTable = true;
         this.getSecondList();
-      } else if (obj == 2) {
-        this.isTable = false;
       } else {
         this.isTable = true;
         this.getNewList();
@@ -147,7 +138,7 @@ export default {
 };
 </script>
 <style scoped>
-.addForm{
+.addForm {
   /* width: 1000px; */
 }
 </style>

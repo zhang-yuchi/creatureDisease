@@ -254,7 +254,7 @@ export default {
         .then(res => {
           console.log(res);
           if (res.status == 1) {
-            (this.userName = res.data.userName),
+            (this.userName = res.data.nickName),
               (this.phone = res.data.phone),
               (this.createTime = moment(res.data.createTime).format(
                 "YYYY/MM/DD"

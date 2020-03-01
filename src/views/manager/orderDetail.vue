@@ -16,7 +16,7 @@
     <!-- 物流信息 -->
     <logistics :logistics="logistics"></logistics>
     <!-- 检测报告 -->
-    <report :report="report" v-if="state=='4'||state=='5'"></report>
+    <report :report="report" :orderId="id"  v-if="state=='4'||state=='5'"></report>
   </div>
 </template>
 
@@ -58,7 +58,7 @@ export default {
       sample: {}, //样本信息
       logistics: {}, //物流信息
       report: {}, //检测报告
-
+      id:"",
       isloading: false
     };
   },
@@ -88,6 +88,7 @@ export default {
       .then(res => {
         console.log(res);
         const details = res.data
+        this.id = details.info.id
         // console.log(details.order_sn)
         // 订单信息
         var tempInfo = Object.assign({},details.info,{
@@ -135,7 +136,8 @@ export default {
         // 物流快递
 
         // 检测报告
-        
+        this.report = details.reports
+        console.log(details)
       })
       .finally(() => {
         this.isloading = false;

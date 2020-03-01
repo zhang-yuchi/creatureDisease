@@ -50,7 +50,7 @@
             :show-file-list="false"
             :on-success="handleLogoSuccess"
             :before-upload="beforeLogoUpload"
-            :header="token"
+            :headers="{token:token}"
             name="multipartFile"
           >
             <img v-if="logoUrl" :src="logoUrl" class="avatar" />
@@ -65,7 +65,7 @@
             :show-file-list="false"
             :on-success="handleLicenseSuccess"
             :before-upload="beforeLicenseUpload"
-            :header="token"
+            :headers="{token:token}"
             name="multipartFile"
           >
             <img v-if="licenseUrl" :src="licenseUrl" class="avatar" />

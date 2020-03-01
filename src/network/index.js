@@ -3,7 +3,7 @@ let isDev = process.env.NODE_ENV == 'development'
 import router from '../router'
 import el from 'element-ui'
 import qs from 'qs'
-// isDev = false
+isDev = false
 const baseURL = isDev ? "http://rap2.taobao.org:38080/app/mock/245259" : "http://ruankun.xyz:8821/disease/"
 const service = axios.create({
     baseURL,
@@ -223,4 +223,14 @@ export const singleOrderList = (orderSn) => {
 //确认收样
 export const sureOrderList = (orderSn) => {
     return service.get(getRandom(`/order/receive/${orderSn}`))
+}
+export const savePdf = (params)=>{
+    return service.post('/report/new',params)
+}
+export const delPdf = (params) => {
+    return service.delete('/report/delbyUrl',{
+        params:{
+            url:params.url
+        }
+    })
 }

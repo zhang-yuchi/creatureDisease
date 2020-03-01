@@ -7,12 +7,12 @@
         <el-upload
           class="upload-demo"
           :action="uploadUrl"
-          :on-change="handleChange"
           :file-list="fileList"
           :on-preview="handlePreview"
           :on-success="handleSuccess"
           name="multipartFile"
-          :header="token"
+          :headers="{token:token}"
+          :on-remove="removeFile"
         >
           <el-button size="small" type="primary">点击上传</el-button>
           <div slot="tip" class="el-upload__tip">只能上传png文件</div>
@@ -27,61 +27,105 @@
 //例如：import 《组件名称》 from '《组件路径》';
 import Ititle from "../../components/title/index";
 import wrap from "./wrap";
-import { PdfUploadUrl } from '../../network'
+import { PdfUploadUrl, savePdf ,delPdf } from "../../network";
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {
     Ititle,
     wrap
   },
-  props:{
-    state:String,
+  props: {
+    state: String,
+    report:{
+      type:Array,
+      // default:[]
+    },
+    orderId: Number
   },
   data() {
     //这里存放数据
     return {
-      fileList: [
-        {
-          name: "fuck.jpeg",
-          url:
-            "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100"
-        },
-        {
-          name: "food2.jpeg",
-          url:
-            "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100"
-        }
-      ],
-      uploadUrl:PdfUploadUrl,
-      token:sessionStorage.getItem('token')
+      fileList: [],
+      uploadUrl: PdfUploadUrl,
+      token: sessionStorage.getItem("token")
     };
   },
   //监听属性 类似于data概念
   computed: {},
   //监控data中的数据变化
   watch: {
-    state(newValue){
-      this.state = newValue
+    state(newValue) {
+      this.state = newValue;
     }
   },
   //方法集合
   methods: {
-    handleChange(file, fileList) {
-      console.log(file)
-      // this.fileList = fileList.slice(-3);
+    handlePreview(file) {
+      console.log(file);
+      window.open(file.url);
     },
-    handlePreview(file){
-      console.log(file)
-      window.open(file.url)
+    handleSuccess(res, file, fileList) {
+      console.log(res);
+      // console.log(fileList)
+      if (res.status == 1) {
+        //成功时
+        const url = res.data.url;
+        const type = "0"
+        const orderId = this.orderId
+        // console.log(file)
+        const name = file.name
+        const params = {
+          url,type,orderId,name
+        }
+        fileList[fileList.length - 1].url = url; //需要通过url来删除
+        // console.log(this.orderId);
+
+        savePdf(params)
+        .then(res=>{
+          console.log(res)
+          this.$message({
+            message:"保存成功",
+            type:"success"
+          })
+        })
+        .catch(()=>{
+          this.$message({
+            message:"保存失败!请重试",
+            type:"error"
+          })
+        })
+      } else {
+        this.$message({
+          message: res.message,
+          type: "error"
+        });
+      }
+      // console.log(fileList);
     },
-    handleSuccess(res){
-      console.log(res)
+    removeFile(file) {
+      console.log(file);
+      const params = {
+        url:file.url
+      }
+      console.log(params)
+      delPdf(params)
+      .then(res=>{
+        console.log(res)
+      })
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
-  mounted() {},
+  mounted() {
+    this.report.map((item,index)=>{
+      var file = {
+        name:"检测报告"+(index+1),
+        url:item
+      }
+      this.fileList.push(file)
+    })
+  },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
   beforeUpdate() {}, //生命周期 - 更新之前
@@ -93,11 +137,11 @@ export default {
 };
 </script>
 <style scoped>
-.upload-window{
-    width: 30%;
+.upload-window {
+  width: 30%;
 }
-.el-upload__tip{
-    color: #666;
-    font-size: 14px;
+.el-upload__tip {
+  color: #666;
+  font-size: 14px;
 }
 </style>
