@@ -55,16 +55,16 @@
         </el-dialog>
         <!-- 用户名 -->
         <div class="text item">
-          <span class="item-text">用户名</span>
-          <span class="item-text">{{userName}}</span>
+          <span class="item-text">昵称</span>
+          <span class="item-text">{{nickName}}</span>
           <el-link type="primary" style="color:#0584D7;" @click="nameVisible = true">修改</el-link>
         </div>
 
         <!-- 修改用户名弹窗 -->
-        <el-dialog class="form-dialog" title="修改用户名" :visible.sync="nameVisible">
+        <el-dialog class="form-dialog" title="修改昵称" :visible.sync="nameVisible">
           <div class="body">
-            <span class="input-title">用户名:</span>
-            <el-input class="form-input" v-model="nameForm.name" placeholder="请输入用户名"></el-input>
+            <span class="input-title">昵称:</span>
+            <el-input class="form-input" v-model="nameForm.name" placeholder="请输入昵称"></el-input>
           </div>
           <div slot="footer" class="dialog-footer">
             <el-button @click="nameVisible = false">取 消</el-button>
@@ -146,7 +146,8 @@ import {
   modifyUsername,
   getCheck,
   getPhoneCode,
-  checkToken
+  checkToken,
+  modifyNickName
 } from "../../network";
 import moment from "moment";
 import Myinput from "../../components/input/input";
@@ -186,6 +187,7 @@ export default {
         check: ""
       },
       userName: "",
+      nickName: "",
       phone: "",
       createTime: "",
       formLabelWidth: "120px",
@@ -252,10 +254,11 @@ export default {
       this.isloading = true;
       getUserInfo()
         .then(res => {
-          console.log(res);
+          console.log(res.data)
           if (res.status == 1) {
-            (this.userName = res.data.nickName),
+            (this.userName = res.data.userName),
               (this.phone = res.data.phone),
+              (this.nickName = res.data.nickName),
               (this.createTime = moment(res.data.createTime).format(
                 "YYYY/MM/DD"
               ));
@@ -305,6 +308,11 @@ export default {
         return;
       }
       console.log("可以修改用户名了!");
+      //调用
+      const params = {"nickName": this.nameForm.name};
+      modifyNickName(params).then((res) => {
+        this.nickName = (res.status == 1)? params.nickName: this.nickName
+      });
       this.nameVisible = false;
       this.nameForm.name = "";
     }
