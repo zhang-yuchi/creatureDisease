@@ -153,8 +153,9 @@ export default {
             const pswReg = /密码/
             const checkReg = /验证码/
             if(accountReg.test(err)){
+              console.log(err)
               this.accounterr = true
-              this.accountErrorMsg = err
+              this.accountErrMsg = err
             }else if(pswReg.test(err)){
               this.pswerr = true
               this.pswErrMsg = err
