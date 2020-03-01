@@ -251,3 +251,9 @@ export const getLogistics = (sn)=>{
         params:{number:sn}
     })
 }
+export const getCommodity = ()=>{
+    return service.post('/commodity/list')
+}
+export const addCommodity = (params) => {
+    return service.post('/repertory/new',params)
+}
