@@ -93,6 +93,32 @@
           <el-cascader v-model="ruleForm.city" style="margin-right:10px;width:172px" :options="options" @change="handleChange"></el-cascader>
           <el-cascader v-model="ruleForm.district" style="width:172px" :options="options" @change="handleChange"></el-cascader>
         </el-form-item>-->
+        <el-form-item label="所在地区" prop="district">
+          <el-select style="width:32%;margin-right:10px;" v-model="value" placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+          <el-select style="width:32%;margin-right:10px;" v-model="value" placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+          <el-select style="width:32%;" v-model="value" placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="详细地址" prop="receiverAddress">
           <el-input v-model="ruleForm.receiverAddress" placeholder="请输入收货详细地址"></el-input>
         </el-form-item>
@@ -154,8 +180,25 @@ export default {
         province: "",
         city: "",
         district: "",
-        options: []
+        
       },
+      options: [{
+          value: '选项1',
+          label: '黄金糕'
+        }, {
+          value: '选项2',
+          label: '双皮奶'
+        }, {
+          value: '选项3',
+          label: '蚵仔煎'
+        }, {
+          value: '选项4',
+          label: '龙须面'
+        }, {
+          value: '选项5',
+          label: '北京烤鸭'
+        }],
+        value: '',
       rules: {
         laboratory: [
           { required: true, validator: validateNull, trigger: "blur" }
@@ -190,15 +233,14 @@ export default {
         if (valid) {
           // alert("submit!");
           console.log(this.ruleForm);
-          modifyLaboratory(this.ruleForm)
-          .then((res)=>{
+          modifyLaboratory(this.ruleForm).then(res => {
             // console.log(res)
             this.$message({
-              type:"success",
-              message:"保存成功!"
-            })
-            this.initData()
-          })
+              type: "success",
+              message: "保存成功!"
+            });
+            this.initData();
+          });
         } else {
           // console.log("error submit!!");
           this.$message({
@@ -281,7 +323,7 @@ export default {
         })
         .catch(() => {
           //单独处理错误
-          errorHandle()
+          errorHandle();
         })
         .then(() => {
           getImage({ id: this.ruleForm.logo }).then(res => {

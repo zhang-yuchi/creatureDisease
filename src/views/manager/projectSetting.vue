@@ -226,6 +226,9 @@ export default {
             this.options.push(obj);
           });
         })
+        .catch(()=>{
+          errorHandle()
+        })
         .finally(() => {
           this.optionsloading = false;
         });
@@ -253,7 +256,7 @@ export default {
         return
       }
       this.addForm.price = parseFloat(this.addForm.price).toFixed(2)
-      console.log(this.addForm)
+      // console.log(this.addForm)
       addCommodity(this.addForm)
       .then(res=>{
         console.log(res)
@@ -276,6 +279,9 @@ export default {
             type:"error"
           })
         }
+      })
+      .catch(()=>{
+        errorHandle()
       })
     }
   },

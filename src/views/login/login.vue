@@ -23,7 +23,7 @@
         type="check"
         placeholder="请输入验证码"
         :formValue="form.check"
-        errorMsg="请输入四位验证码"
+        :errorMsg="checkErrMsg"
         :err="this.checkerr"
         @rulecheck="checkNum"
         v-if="needCheck"
@@ -34,7 +34,6 @@
     </div>
 
     <div slot="login">
-      <div class="total-error">{{totalError}}</div>
       <el-button type="primary" @click="login" :loading="isLoading" class="loginbtn">登录</el-button>
     </div>
     <div slot="changestate">
@@ -73,7 +72,7 @@ export default {
       isLoading: false,
       needCheck: false,
       checkUrl: "",
-      totalError:"",
+      checkErrMsg:""
     };
   },
   //监听属性 类似于data概念
@@ -107,6 +106,7 @@ export default {
       this.form.check = value;
       if (value.length !== 4) {
         this.checkerr = true;
+        this.checkErrMsg = "请输入四位验证码"
       } else {
         this.checkerr = false;
       }
@@ -148,7 +148,20 @@ export default {
             sessionStorage.setItem("token", res.data);
             this.$router.push("/manager");
           } else {
-            this.totalError = res.data.message;
+            const err = res.data.message;
+            const accountReg = /用户/
+            const pswReg = /密码/
+            const checkReg = /验证码/
+            if(accountReg.test(err)){
+              this.accounterr = true
+              this.accountErrorMsg = err
+            }else if(pswReg.test(err)){
+              this.pswerr = true
+              this.pswErrMsg = err
+            }else{
+              this.checkerr = true
+              this.checkErrMsg = err
+            }
             this.ifCheck();
           }
         })

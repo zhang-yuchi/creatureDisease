@@ -31,7 +31,7 @@
 
 import Ititle from "../../components/title/index";
 import wrap from "./wrap";
-import { getLogistics } from "../../network";
+import { getLogistics, errorHandle } from "../../network";
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {
@@ -70,7 +70,11 @@ export default {
             list
           };
         }
-      });
+      })
+      .catch(()=>{
+        errorHandle()
+      })
+      ;
     }
   },
   //方法集合
@@ -109,5 +113,12 @@ export default {
 }
 .detail-list:last-of-type {
   margin-bottom: 0;
+}
+.content{
+  margin-left: 10px;
+  display: inline-block;
+  width: 70%;
+  line-height: 18px;
+  vertical-align: top;
 }
 </style>
