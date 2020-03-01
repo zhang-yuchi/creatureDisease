@@ -7,7 +7,6 @@ isDev = false
 const baseURL = isDev ? "http://rap2.taobao.org:38080/app/mock/245259" : "http://ruankun.xyz:8821/disease/"
 const service = axios.create({
     baseURL,
-
 })
 service.interceptors.request.use((config) => {
     var token = sessionStorage.getItem('token')
@@ -176,6 +175,7 @@ export const modifyPassword = (params) => {
 export const modifyPhone = (params) => {
     return service.post('/user/phone', params)
 }
+// 手机号码获取验证码
 export const getPhoneCode = (params) => {
     return service.get(getRandom('/lab/phonecode'), {
         params: {
@@ -184,9 +184,21 @@ export const getPhoneCode = (params) => {
         }
     })
 }
+// 新的手机号码获取手机验证码
+export const getNewPhoneCode = (params) => {
+    return service.get(getRandom('/lab/newphone/phonecode'), {
+        params: {
+            phone: params.phone
+        }
+    })
+}
 //修改用户名
 export const modifyUsername = (params) => {
     return service.post('/user/username', params)
+}
+
+export const modifyNickName = (params) => {
+    return service.post('/user/nickname', params)
 }
 //订单
 //获取订单列表(初始化)
