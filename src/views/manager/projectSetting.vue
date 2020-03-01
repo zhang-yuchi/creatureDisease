@@ -7,7 +7,11 @@
       :state="this.state"
       :isloading="this.isloading"
       @requestnewList="sendNewList"
+      v-if="isTable"
     ></withTable>
+    <div class="addForm" v-else>
+      <addForm></addForm>
+    </div>
   </div>
 </template>
 
@@ -18,19 +22,22 @@ import withTab from "../../components/order/withTab.vue";
 import withTable from "../../components/order/withTable2";
 import { getOnsaleList, getOffsaleList, errorHandle } from "../../network";
 import moment from "moment";
+import addForm from '../../components/form/addCom'
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {
     withTab,
-    withTable
+    withTable,
+    addForm,
   },
   data() {
     //这里存放数据
     return {
-      settingTabArray: ["已上架", "未上架"],
+      settingTabArray: ["已上架", "未上架", "新增商品"],
       list: [],
       isloading: false,
-      state: 0
+      state: 0,
+      isTable: true
     };
   },
   //监听属性 类似于data概念
@@ -42,8 +49,12 @@ export default {
     tabChange(obj) {
       // console.log(obj)
       if (obj == "1") {
+        this.isTable = true;
         this.getSecondList();
+      } else if (obj == 2) {
+        this.isTable = false;
       } else {
+        this.isTable = true;
         this.getNewList();
       }
     },
@@ -55,7 +66,9 @@ export default {
       listItem.diseaseName = item.diseaseType.name;
       listItem.price = item.repertory.price.toFixed(2);
       listItem.inventory = item.repertory.inventory;
-      listItem.updateTime = moment(item.commodity.updateTime).format("YYYY-MM-DD")
+      listItem.updateTime = moment(item.commodity.updateTime).format(
+        "YYYY-MM-DD"
+      );
       let time = moment(item.repertory.createTime).format("YYYY-MM-DD");
       listItem.createTime = time;
       return listItem;
@@ -134,4 +147,7 @@ export default {
 };
 </script>
 <style scoped>
+.addForm{
+  /* width: 1000px; */
+}
 </style>
