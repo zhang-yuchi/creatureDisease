@@ -3,30 +3,12 @@ let isDev = process.env.NODE_ENV == 'development'
 import router from '../router'
 import el from 'element-ui'
 import qs from 'qs'
-isDev = false
+// isDev = false
 const baseURL = isDev ? "http://rap2.taobao.org:38080/app/mock/245259" : "http://ruankun.xyz:8821/disease/"
 const service = axios.create({
     baseURL,
 })
 service.interceptors.request.use((config) => {
-    var token = sessionStorage.getItem('token')
-    // console.log(config.data)
-    // if(config.method === 'get'){
-    //     console.log(111)
-    //     config.data.hashTime = new Date()
-    //     console.log(config)
-    // }
-
-    // checkToken()
-    // .then((res)=>{
-    //     console.log(res)
-    // })
-    if (!token) {
-        if (config.url == '/lab/token') {}
-
-    } else {
-
-    }
     config.headers = Object.assign({}, config.headers, {
         token: sessionStorage.getItem('token')
     })
@@ -35,26 +17,15 @@ service.interceptors.request.use((config) => {
     } else {
         config.data = qs.stringify(config.data)
     }
-    // service.get('/lab/token/expire')
-    // .then(()=>{
-    // console.log(service.get('/lab/token/expire'))
-    // })
     return config
 })
 service.interceptors.response.use((res) => {
     //做全局处理
     let data = isDev ? res : res.data
-
-
     const SUCCESS_STATUS = isDev ? 200 : 1
     if (data.status === SUCCESS_STATUS) {
         return res.data
     } else {
-        // el.Message({
-        //     message:res.data.message,
-        //     type:"error"
-        // })
-
         return res
     }
 })
@@ -73,10 +44,16 @@ export const errorHandle = () => {
             }
         })
         .catch(() => {
-            this.$message({
-                message: "服务器错误",
-                type: "error"
-            });
+            // console.log(router)
+            if (router.history.current.path.indexOf('/manager') !== -1) {
+                console.log(111)
+                router.push('500')
+            } else {
+                el.Message({
+                    message:"网络错误,请稍后重试",
+                    type:"error"
+                })
+            }
         });
 }
 
@@ -271,16 +248,16 @@ export const getGecoding = (address) => {
     })
 }
 //忘记密码修改接口
-export const mdfLabPsw = (params)=>{
-    return service.post('/lab/password',params)
+export const mdfLabPsw = (params) => {
+    return service.post('/lab/password', params)
 }
 //手机登录
-export const loginByPhone = (params)=>{
-    return service.post('/lab/phone/token',params)
+export const loginByPhone = (params) => {
+    return service.post('/lab/phone/token', params)
 }
 //校验验证码是否正确
 export const vaildCode = (params) => {
-    return service.get('/lab/phonecode/expire',{
+    return service.get('/lab/phonecode/expire', {
         params,
     })
 }

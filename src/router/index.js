@@ -72,6 +72,11 @@ const routes = [{
         component: () => import("../views/manager/projectSetting")
       },
       {
+        path:"500",
+        name:"服务器错误",
+        component:()=>import('../components/notFound/500')
+      },
+      {
         path:"*",
         name:"error",
         component:()=>import('../components/notFound/404')
