@@ -3,9 +3,30 @@
   <logintemplate>
     <div slot="name">忘记密码</div>
     <div slot="form">
-      <myinput type="check" placeholder="请输入验证码" ></myinput>
-      <myinput type="password" placeholder="密码长度在6-16位之间" ></myinput>
-      <myinput type="password" placeholder="请再次输入密码" ></myinput>
+      <myinput
+        type="check"
+        :formValue="form.check"
+        :err="checkErr"
+        :errorMsg="checkErrMsg"
+        @rulecheck="inputcheck"
+        placeholder="请输入验证码"
+      ></myinput>
+      <myinput
+        type="password"
+        :formValue="form.psw"
+        :err="pswErr"
+        :errorMsg="pswErrMsg"
+        @rulecheck="inputpsw"
+        placeholder="密码长度在6-16位之间"
+      ></myinput>
+      <myinput
+        type="password"
+        :formValue="form.checkpsw"
+        :err="pswcheckErr"
+        :errorMsg="pswcheckErrMsg"
+        @rulecheck="inputpswcheck"
+        placeholder="请再次输入密码"
+      ></myinput>
     </div>
     <div slot="login">
       <el-button type="primary" @click="sure" :loading="isLoading" class="loginbtn">下一步</el-button>
@@ -22,6 +43,7 @@
 //例如：import 《组件名称》 from '《组件路径》';
 import logintemplate from "../../components/logintemplate";
 import myinput from "../../components/input/input";
+import { mdfLabPsw } from "../../network";
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {
@@ -31,7 +53,18 @@ export default {
   data() {
     //这里存放数据
     return {
-      isLoading: false
+      isLoading: false,
+      checkErr: false,
+      pswErr: false,
+      pswcheckErr: false,
+      checkErrMsg: "",
+      pswErrMsg: "",
+      pswcheckErrMsg: "",
+      form: {
+        check: "",
+        psw: "",
+        checkpsw: ""
+      }
     };
   },
   //监听属性 类似于data概念
@@ -44,7 +77,55 @@ export default {
       this.$router.push("index");
     },
     sure() {
-      this.$router.push("success");
+      if (this.checkErr || this.pswErr || this.pswcheckErr) {
+        return;
+      }
+      mdfLabPsw({
+        phoneCode: this.form.check,
+        newPwd: this.form.checkpsw
+      }).then(res => {
+        // console.log(res);
+        if (res.data.SUCCESS) {
+          this.$router.push("success");
+        }else{
+          const psw = /密码/
+          const check = /验证/
+          if(check.test(res.data.ERROR)){
+            this.checkErr = true
+            this.checkErrMsg = res.data.ERROR
+          }else{
+            this.pswErr = true
+            this.pswErrMsg = res.data.ERROR
+          }
+        }
+      });
+    },
+    inputcheck(value) {
+      this.form.check = value;
+      if (value.length !== 4) {
+        this.checkErr = true;
+        this.checkErrMsg = "请输入正确的验证码";
+      } else {
+        this.checkErr = false;
+      }
+    },
+    inputpsw(value) {
+      this.form.psw = value;
+      if (value.length < 6 || value.length > 16) {
+        this.pswErr = true;
+        this.pswErrMsg = "请输入长度正确的密码";
+      } else {
+        this.pswErr = false;
+      }
+    },
+    inputpswcheck(value) {
+      this.form.checkpsw = value;
+      if (value !== this.form.psw) {
+        this.pswcheckErr = true;
+        this.pswcheckErrMsg = "两次输入的密码不同!";
+      } else {
+        this.pswcheckErr = false;
+      }
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）

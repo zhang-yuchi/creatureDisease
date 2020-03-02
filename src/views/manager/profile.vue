@@ -16,7 +16,7 @@
             <div class="row">
               <span class="input-title">验证码:</span>
               <el-input class="form-input" v-model="phoneForm.check" placeholder="请输入验证码"></el-input>
-              <verifycode></verifycode>
+              <verifycode @sendverify="sendToMdfPhone" :givecheckmsg="checkPhoneRight"></verifycode>
             </div>
           </div>
           <div slot="footer" class="dialog-footer">
@@ -45,7 +45,7 @@
                 v-model="phoneBox.check"
                 placeholder="请输入验证码"
               ></el-input>
-              <verifycode></verifycode>
+              <verifycode @sendverify="sendTONewPhone" :givecheckmsg="changePhoneRight"></verifycode>
             </div>
           </div>
           <div slot="footer" class="dialog-footer">
@@ -88,7 +88,7 @@
                 v-model="pswBox.check"
                 placeholder="请输入验证码"
               ></el-input>
-              <verifycode></verifycode>
+              <verifycode @sendverify="sendToMdfPsw" :givecheckmsg="checkPswRight"></verifycode>
             </div>
           </div>
           <div slot="footer" class="dialog-footer">
@@ -147,7 +147,9 @@ import {
   getCheck,
   getPhoneCode,
   checkToken,
-  modifyNickName
+  modifyNickName,
+  vaildCode,
+  getNewPhoneCode
 } from "../../network";
 import moment from "moment";
 import Myinput from "../../components/input/input";
@@ -163,6 +165,9 @@ export default {
     //这里存放数据
     return {
       //手机验证码
+      checkPhoneRight: false,
+      checkPswRight: false,
+      changePhoneRight: false,
       phoneVisible: false,
       phoneForm: {
         check: ""
@@ -180,7 +185,7 @@ export default {
       pswForm: {
         psw: "",
         checkpsw: "",
-        check: ""
+        // check: ""
       },
       pswBoxVisible: false,
       pswBox: {
@@ -200,6 +205,37 @@ export default {
   watch: {},
   //方法集合
   methods: {
+    sendTONewPhone() {
+      getNewPhoneCode({ phone: this.phoneBox.newphone })
+        .then(res => {
+          console.log("您的模拟验证码为" + res.data.CODE);
+          this.changePhoneRight = true;
+        })
+        .finally(() => {
+          this.changePhoneRight = false;
+        });
+    },
+    sendToMdfPhone() {
+      // console.log(123);
+      getPhoneCode({ phone: this.phone })
+        .then(res => {
+          this.checkPhoneRight = true;
+          console.log("模拟验证码为:" + res.data.CODE);
+        })
+        .finally(() => {
+          this.checkPhoneRight = false;
+        });
+    },
+    sendToMdfPsw() {
+      getPhoneCode({ phone: this.phone })
+        .then(res => {
+          this.checkPswRight = true;
+          console.log("模拟验证码为:" + res.data.CODE);
+        })
+        .finally(() => {
+          this.checkPswRight = false;
+        });
+    },
     changePhone() {
       if (this.phoneForm.check.length !== 4) {
         this.$message({
@@ -208,10 +244,21 @@ export default {
         });
         return;
       }
-      this.phoneVisible = false;
-      this.phoneBoxVisible = true;
-      this.phoneForm.check = "";
+      vaildCode({ phoneCode: this.phoneForm.check }).then(res => {
+        // console.log(res);
+        if (res.status === 1) {
+          this.phoneVisible = false;
+          this.phoneBoxVisible = true;
+          this.phoneForm.check = "";
+        } else {
+          this.$message({
+            message: "验证码有误",
+            type: "error"
+          });
+        }
+      });
     },
+
     pswNextStep() {
       //校验
       if (this.pswBox.check.length !== 4) {
@@ -221,15 +268,29 @@ export default {
         });
         return;
       }
-      (this.pswBoxVisible = false), (this.pswVisible = true);
+      vaildCode({ phoneCode: this.pswBox.check }).then(res => {
+        console.log(res);
+        if (res.status == 1) {
+          this.pswBoxVisible = false;
+          this.pswVisible = true;
+          this.pswBox.check = ""
+        }
+      });
     },
     submitPsw() {
-      if(!this.pawForm.psw){
+      if (!this.pswForm.psw) {
         this.$message({
           message: "请输入密码!",
           type: "error"
         });
-        return
+        return;
+      }
+      if(this.pswForm.psw.length>16||this.pswForm.psw.length<6){
+        this.$message({
+          message: "密码长度在6-16位之间!",
+          type: "error"
+        });
+        return;
       }
       if (this.pswForm.psw !== this.pswForm.checkpsw) {
         this.$message({
@@ -238,8 +299,21 @@ export default {
         });
         return;
       }
+      modifyPassword({newPassword:this.pswForm.psw})
+      .then(res=>{
+        // console.log(res)
+        if(res.status==1){
+          this.$message({
+            message:"修改成功!",
+            type:"success"
+          })
+          this.pswVisible = false
+          this.pswForm.psw = ""
+          this.pswForm.checkpsw = ""
+
+        }
+      })
     },
-    changePsw() {},
     changeImg() {
       this.getCheckImg();
     },
@@ -295,9 +369,22 @@ export default {
         return;
       }
       // console.log("成功!可以发送请求了!");
-      this.phoneBoxVisible = false;
-      this.phoneBox.newphone = "";
-      this.phoneBox.check = "";
+      modifyPhone({
+        phone: this.phoneBox.newphone,
+        phoneCode: this.phoneBox.check
+      }).then(res => {
+        // console.log(res);
+        if (res.status == 1) {
+          this.$message({
+            message: "修改成功!",
+            type: "success"
+          });
+          this.phoneBoxVisible = false;
+          this.phoneBox.newphone = "";
+          this.phoneBox.check = "";
+          this.getUser();
+        }
+      });
     },
     userchange() {
       if (this.nameForm.name === "") {
@@ -309,9 +396,9 @@ export default {
       }
       // console.log("可以修改用户名了!");
       //调用
-      const params = {"nickName": this.nameForm.name};
-      modifyNickName(params).then((res) => {
-        this.nickName = (res.status == 1)? params.nickName: this.nickName
+      const params = { nickName: this.nameForm.name };
+      modifyNickName(params).then(res => {
+        this.nickName = res.status == 1 ? params.nickName : this.nickName;
       });
       this.nameVisible = false;
       this.nameForm.name = "";

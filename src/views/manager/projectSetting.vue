@@ -311,11 +311,11 @@ export default {
   position: absolute;
   z-index: 20;
   left: 20px;
-  top: 10px;
+  top: 8px;
 }
 .check-btn {
   width: 50px;
-  height: 30px;
+  height: 25px;
   padding: 0;
 }
 .row {

@@ -1,48 +1,58 @@
 <!--  -->
 <template>
   <div class="get-msg">
-      <el-button v-if="state==0" :loading="isloading" @click="sendVerifyCode">获取验证码</el-button>
-      <el-button v-if="state==1" >{{timer}}秒后重发</el-button>
-    <!-- <span v-if="state==0" @click="sendVerifyCode">获取验证码</span> -->
-    <!-- <span v-if="state==1"  @click="waiting">60秒后重发</span> -->
+    <el-button v-if="state==0" :loading="isloading" @click="sendVerifyCode">获取验证码</el-button>
+    <el-button v-if="state==1">{{timer}}秒后重发</el-button>
   </div>
 </template>
 
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-const totalTime = 60 //总时间
+const totalTime = 60; //总时间
+
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {},
+  props: {
+    givecheckmsg: Boolean
+  },
   data() {
     //这里存放数据
     return {
-        state:0,
-        isloading:false,
-        timer:totalTime,
+      state: 0,
+      isloading: false,
+      timer: totalTime
     };
   },
   //监听属性 类似于data概念
   computed: {},
   //监控data中的数据变化
-  watch: {},
+  watch: {
+    givecheckmsg(value) {
+      this.givecheckmsg = value;
+      if(value==true){
+        this.setTimer()
+      }
+    }
+  },
   //方法集合
   methods: {
     sendVerifyCode() {
-        this.state = 1
-        this.timer = totalTime
-        var t = setInterval(()=>{
-            if(this.timer==0){
-                clearInterval(t)
-                this.state = 0
-            }
-            this.timer--
-            
-        },1000)
+        // console.log(111)
+        this.$emit("sendverify");
     },
-
-    
+    setTimer() {
+      this.state = 1;
+      this.timer = totalTime;
+      var t = setInterval(() => {
+        if (this.timer == 0) {
+          clearInterval(t);
+          this.state = 0;
+        }
+        this.timer--;
+      }, 1000);
+    }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
@@ -72,12 +82,12 @@ export default {
   display: inline-block;
   height: 100%;
 }
-.el-button{
-    color: #0584d7;
-    border: none;
-    background-color: white !important;
+.el-button {
+  color: #0584d7;
+  border: none;
+  background-color: white !important;
 }
-.el-button:hover{
-    background-color: white;
+.el-button:hover {
+  background-color: white;
 }
 </style>

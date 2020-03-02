@@ -19,10 +19,12 @@
         @rulecheck="checkRule"
         :hasVerifyCode="true"
         :formValue="form.check"
+        @sendverify="sendCheck"
+        :givecheckmsg="givecheckmsg"
       ></myinput>
     </div>
     <div slot="login">
-      <div class="total-error">{{totalError}}</div>
+      <!-- <div class="total-error">{{totalError}}</div> -->
       <el-button type="primary" @click="login" :loading="isLoading" class="loginbtn">登录</el-button>
     </div>
     <div slot="changestate">
@@ -36,6 +38,7 @@
 //例如：import 《组件名称》 from '《组件路径》';
 import logintemplate from "../../components/logintemplate";
 import myinput from "../../components/input/input";
+import { getPhoneCode, getNewPhoneCode,loginByPhone } from "../../network";
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {
@@ -46,7 +49,7 @@ export default {
     //这里存放数据
     return {
       isLoading: false,
-      totalError: "",
+      // totalError: "",
       phoneErr: false,
       phoneErrMsg: "请输入正确的手机号",
       checkErr: false,
@@ -54,7 +57,8 @@ export default {
       form: {
         check: "",
         phone: ""
-      }
+      },
+      givecheckmsg:false
     };
   },
   //监听属性 类似于data概念
@@ -67,11 +71,30 @@ export default {
       if (this.phoneErr || this.checkErr) {
         return;
       }
+      loginByPhone({phone:this.form.phone,phoneCode:this.form.check})
+      .then(res=>{
+        // console.log(res)
+        if(res.status==1){
+          sessionStorage.setItem('token',res.data)
+          this.$router.push('/manager')
+        }else{
+          const userReg = /用户/
+          const checkReg = /验证/
+          if(userReg.test(res.data.message)){
+            this.phoneErr = true
+            this.phoneErrMsg = res.data.message
+          }else{
+            this.checkErr = true
+            this.checkErrMsg = res.data.message
+          }
+        }
+      })
     },
     back() {
       this.$router.push("index");
     },
     checkphone(value) {
+      this.form.phone = value
       if (!/^1[3456789]\d{9}$/.test(value)) {
         this.phoneErr = true;
       } else {
@@ -79,10 +102,42 @@ export default {
       }
     },
     checkRule(value) {
+      this.form.check = value
       if (value.length !== 4) {
         this.checkErr = true;
       } else {
         this.checkErr = false;
+      }
+    },
+    sendCheck() {
+      //发送验证码
+      console.log(this.phoneErr)
+      console.log(this.form.phone)
+      if (!this.phoneErr && this.form.phone!=="") {
+        getNewPhoneCode({phone:this.form.phone})
+        .then(res=>{
+          // console.log(res)
+          // if(res.data.SUCCESS){
+          //   this.givecheckmsg = true
+          // }else{
+          //   const phoneReg = /手机|用户/
+          //   const checkReg = /验证/
+          //   if(phoneReg.test(res.data.ERROR)){
+          //     this.phoneErr = true
+          //     this.phoneErrMsg = res.data.ERROR
+          //   }else{
+          //     this.checkErr = true
+          //     this.checkErrMsg = res.data.ERROR
+          //   }
+          // }
+          this.givecheckmsg = true
+          console.log("模拟验证码为"+res.data.CODE)
+        })
+        .finally(()=>{
+          this.givecheckmsg = false
+        });
+      }else{
+        this.givecheckmsg = false//拒绝发送验证码
       }
     }
   },

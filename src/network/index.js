@@ -178,10 +178,7 @@ export const modifyPhone = (params) => {
 // 手机号码获取验证码
 export const getPhoneCode = (params) => {
     return service.get(getRandom('/lab/phonecode'), {
-        params: {
-            verifyCode: params.verifyCode,
-            phone: params.phone
-        }
+        params
     })
 }
 // 新的手机号码获取手机验证码
@@ -271,5 +268,19 @@ export const getGecoding = (address) => {
         params: {
             address
         }
+    })
+}
+//忘记密码修改接口
+export const mdfLabPsw = (params)=>{
+    return service.post('/lab/password',params)
+}
+//手机登录
+export const loginByPhone = (params)=>{
+    return service.post('/lab/phone/token',params)
+}
+//校验验证码是否正确
+export const vaildCode = (params) => {
+    return service.get('/lab/phonecode/expire',{
+        params,
     })
 }

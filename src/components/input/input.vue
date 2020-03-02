@@ -15,7 +15,7 @@
       :style="{borderColor:borderColor}"
       @blur="cancel"
     />
-    <verifyCode v-if="hasVerifyCode"></verifyCode>
+    <verifyCode v-if="hasVerifyCode" :givecheckmsg="givecheckmsg" @sendverify="sendToInput"></verifyCode>
     <div class="msg">{{isErr?errMsg:""}}</div>
     <!-- <div class="stack"></div> -->
     <img :src="checkUrl" class="checking" @click="checkOnce" alt />
@@ -45,7 +45,8 @@ export default {
     rule: String,
     err: Boolean,
     checkUrl: String,
-    hasVerifyCode:Boolean
+    hasVerifyCode:Boolean,
+    givecheckmsg:Boolean,
   },
   data() {
     //这里存放数据
@@ -71,6 +72,9 @@ export default {
         this.resetHidden = true;
       }
     },
+    givecheckmsg(value){
+      this.givecheckmsg = value
+    },
     err(newVal) {
       this.isErr = newVal;
     },
@@ -79,20 +83,20 @@ export default {
     },
     checkUrl(newValue) {
       this.checkUrl = newValue;
+    },
+    phone(newVal){
+      console.log(newVal)
+      this.phone = newVal
     }
   },
   //方法集合
   methods: {
     onInput() {
       //表单验证
-      //   console.log("in on input")
       this.$emit("rulecheck", this.value);
-      //   if (!this.$props.rule(this.value)) {
-      //     //验证失败
-      //     this.isErr = true;
-      //   } else {
-      //     this.isErr = false;
-      //   }
+    },
+    sendToInput(){
+      this.$emit('sendverify')
     },
     borderChange() {
       this.icon_src = this.activeImg;

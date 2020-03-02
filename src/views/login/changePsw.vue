@@ -3,15 +3,23 @@
   <logintemplate>
     <div slot="name">忘记密码</div>
     <div slot="form">
-      <myinput type="phone" placeholder="请输入你的手机号" :formValue="this.form.phone"></myinput>
+      <myinput
+        type="phone"
+        placeholder="请输入你的手机号"
+        :err="phoneErr"
+        :errorMsg="phoneErrMsg"
+        @rulecheck="checkphone"
+        :formValue="form.phone"
+      ></myinput>
       <myinput
         type="check"
         placeholder="请输入验证码"
-        errorMsg="请输入四位验证码"
+        :errorMsg="checkErrMsg"
         :err="checkErr"
         :checkUrl="checkUrl"
         @rulecheck="checkNum"
-        :formValue="this.form.check"
+        :formValue="form.check"
+        @repeatcheck="checkonce"
       ></myinput>
     </div>
     <div slot="login">
@@ -28,7 +36,7 @@
 //例如：import 《组件名称》 from '《组件路径》';
 import logintemplate from "../../components/logintemplate";
 import myinput from "../../components/input/input";
-import {getCheck } from '../../network'
+import { getCheck, getPhoneCode } from "../../network";
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {
@@ -38,13 +46,17 @@ export default {
   data() {
     //这里存放数据
     return {
+      phoneErr: false,
+      phoneErrMsg: "",
+      checkErr: false,
+      checkErrMsg: "",
       form: {
         phone: "",
         check: ""
       },
       checkUrl: "",
       isLoading: false,
-      checkErr: false,
+      checkErr: false
     };
   },
   //监听属性 类似于data概念
@@ -54,17 +66,60 @@ export default {
   //方法集合
   methods: {
     next() {
-      this.$router.push("step2");
+      // console.log(this.form.check);
+      // console.log(this.form.phone);
+      if(this.phoneErr||this.checkErr){
+        return
+      }
+      getPhoneCode({
+        verifyCode: this.form.check,
+        phone: this.form.phone
+      }).then(res => {
+        console.log(res);
+        if (res.data.SUCCESS) {
+          console.log("模拟验证码为" + res.data.CODE);
+          this.$router.push("step2");
+        } else {
+          const phoneReg = /手机|用户/;
+          const check = /验证/;
+          if (phoneReg.test(res.data.ERROR)) {
+            this.phoneErr = true;
+            this.phoneErrMsg = res.data.ERROR;
+          } else {
+            this.checkErr = true;
+            this.checkErrMsg = res.data.ERROR;
+          }
+        }
+
+        this.checkonce();
+      });
     },
     back() {
       //清空redux中的缓存
       this.$router.push("index");
     },
     checkNum(value) {
+      this.form.check = value;
       if (value.length !== 4) {
         this.checkErr = true;
       } else {
         this.checkErr = false;
+      }
+    },
+    checkonce() {
+      getCheck().then(data => {
+        let blob = data.data;
+        let src = window.URL.createObjectURL(blob);
+        this.checkUrl = src;
+      });
+    },
+    checkphone(value) {
+      this.form.phone = value;
+      if(!/^1[3456789]\d{9}$/.test(value)){
+        this.phoneErr = true
+        this.phoneErrMsg = "请输入正确的手机号"
+      }else{
+        this.phoneErr = false
       }
     }
   },
@@ -72,11 +127,11 @@ export default {
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
-    getCheck().then(data=>{
-      let blob = data.data
-      let src = window.URL.createObjectURL(blob)
-      this.checkUrl = src
-    })
+    getCheck().then(data => {
+      let blob = data.data;
+      let src = window.URL.createObjectURL(blob);
+      this.checkUrl = src;
+    });
   },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
