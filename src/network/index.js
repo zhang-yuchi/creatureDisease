@@ -64,7 +64,7 @@ export const errorHandle = () => {
             // console.log(res);
             if (res.data.status == -1) {
                 el.MessageBox({
-                    message:"登录身份过期,请重新登录!",
+                    message: "登录身份过期,请重新登录!",
                     confirmButtonText: "确定",
                     callback: action => {
                         router.push("/login");
@@ -236,24 +236,40 @@ export const singleOrderList = (orderSn) => {
 export const sureOrderList = (orderSn) => {
     return service.get(getRandom(`/order/receive/${orderSn}`))
 }
-export const savePdf = (params)=>{
-    return service.post('/report/new',params)
+export const savePdf = (params) => {
+    return service.post('/report/new', params)
 }
 export const delPdf = (params) => {
-    return service.delete(getRandom('/report/delbyUrl'),{
-        params:{
-            url:params.url
+    return service.delete(getRandom('/report/delbyUrl'), {
+        params: {
+            url: params.url
         }
     })
 }
-export const getLogistics = (sn)=>{
-    return service.get(getRandom('/express'),{
-        params:{number:sn}
+export const getLogistics = (sn) => {
+    return service.get(getRandom('/express'), {
+        params: {
+            number: sn
+        }
     })
 }
-export const getCommodity = ()=>{
+export const getCommodity = () => {
     return service.post('/commodity/list')
 }
 export const addCommodity = (params) => {
-    return service.post('/repertory/new',params)
+    return service.post('/repertory/new', params)
+}
+export const getLevel = (params) => {
+    return service.get(getRandom('/district/level/' + params.level), {
+        params: {
+            parentCode: params.parentCode
+        }
+    })
+}
+export const getGecoding = (address) => {
+    return service.get(getRandom('/district/gecoding'), {
+        params: {
+            address
+        }
+    })
 }

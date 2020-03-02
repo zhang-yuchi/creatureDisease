@@ -18,22 +18,6 @@
         <el-form-item label="公司名称" prop="company">
           <el-input type="text" v-model="ruleForm.company" autocomplete="off"></el-input>
         </el-form-item>
-        <!-- <el-form-item label="所在地区" required>
-          <el-cascader
-            style="margin-right:38px;width:250px"
-            v-model="value"
-            placeholder="请选择城市"
-            :options="options"
-            @change="handleChange"
-          ></el-cascader>
-          <el-cascader
-            style="width:250px"
-            v-model="value"
-            placeholder="请选择区"
-            :options="options"
-            @change="handleChange"
-          ></el-cascader>
-        </el-form-item>-->
         <el-form-item label="详细地址" prop="address">
           <el-input v-model="ruleForm.address" placeholder="请输入内容"></el-input>
         </el-form-item>
@@ -88,35 +72,24 @@
         <el-form-item label="收货人" prop="receiver">
           <el-input v-model="ruleForm.receiver" placeholder="请输入收货人姓名"></el-input>
         </el-form-item>
-        <!-- <el-form-item label="所在地区" prop="district">
-          <el-cascader v-model="ruleForm.province" style="margin-right:10px;width:173px" :options="options" @change="handleChange"></el-cascader>
-          <el-cascader v-model="ruleForm.city" style="margin-right:10px;width:172px" :options="options" @change="handleChange"></el-cascader>
-          <el-cascader v-model="ruleForm.district" style="width:172px" :options="options" @change="handleChange"></el-cascader>
-        </el-form-item>-->
         <el-form-item label="所在地区" prop="district">
-          <el-select style="width:32%;margin-right:10px;" v-model="value" placeholder="请选择">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
+          <el-select
+            style="width:32%;margin-right:10px;"
+            v-model="ruleForm.province"
+            placeholder="请选择省"
+          >
+            <el-option v-for="item in lv1" :key="item.code" :label="item.label" :value="item.value"></el-option>
           </el-select>
-          <el-select style="width:32%;margin-right:10px;" v-model="value" placeholder="请选择">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
+          <el-select
+            style="width:32%;margin-right:10px;"
+            v-model="ruleForm.city"
+            @change="changeCity"
+            placeholder="请选择市"
+          >
+            <el-option v-for="item in lv2" :key="item.code" :label="item.label" :value="item.value"></el-option>
           </el-select>
-          <el-select style="width:32%;" v-model="value" placeholder="请选择">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
+          <el-select style="width:32%;" v-model="ruleForm.district" placeholder="请选择区">
+            <el-option v-for="item in lv3" :key="item.code" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="详细地址" prop="receiverAddress">
@@ -143,7 +116,9 @@ import {
   ImgUploadUrl,
   getImage,
   modifyLaboratory,
-  errorHandle
+  errorHandle,
+  getLevel,
+  getGecoding
 } from "../../network/index";
 
 export default {
@@ -180,25 +155,12 @@ export default {
         province: "",
         city: "",
         district: "",
-        
+        longitudeAndLatitude: ""
       },
-      options: [{
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }],
-        value: '',
+      lv1: [],
+      lv2: [],
+      lv3: [],
+      value: "",
       rules: {
         laboratory: [
           { required: true, validator: validateNull, trigger: "blur" }
@@ -219,28 +181,173 @@ export default {
       token: sessionStorage.getItem("token"),
       actionUrl: ImgUploadUrl,
       logoUrl: "",
-      licenseUrl: ""
+      licenseUrl: "",
+      P2C: "" //省份到城市
     };
   },
   //监听属性 类似于data概念
-  computed: {},
+  computed: {
+    province() {
+      return this.ruleForm.province;
+    },
+    city() {
+      return this.ruleForm.city;
+    },
+    district() {
+      return this.ruleForm.district;
+    }
+  },
   //监控data中的数据变化
-  watch: {},
+  watch: {
+    province(newValue) {
+      getLevel({ level: 2 }).then(res => {
+        console.log(res);
+        if (!this.ruleForm.province) {
+          return;
+        }
+        this.lv1 = [];
+        let codeLv1 = "";
+        const data = res.data;
+        for (let item of data) {
+          const obj = {
+            label: item.name,
+            value: item.name
+          };
+          if (this.ruleForm.province == item.name) {
+            codeLv1 = item.code;
+          }
+          this.lv1.push(obj);
+        }
+        getLevel({ level: 3, parentCode: codeLv1 }).then(res => {
+          this.lv2 = [];
+          let codeLv2 = "";
+          const data = res.data;
+          this.P2C = data;
+          for (let item of data) {
+            const obj = {
+              label: item.name,
+              value: item.name
+            };
+            this.lv2.push(obj);
+          }
+          if (!this.ruleForm.city) {
+            //如果没有城市
+            return;
+          }
+          for (let item of data) {
+            if (this.ruleForm.city == item.name) {
+              codeLv2 = item.code;
+            }
+          }
+          if (!codeLv2) {
+            if (this.lv2.length != 0) {
+              this.ruleForm.city = this.lv2[0].label;
+            } else {
+              this.ruleForm.city = "";
+              this.ruleForm.district = "";
+            }
+          }
+        });
+      });
+    },
+    P2C(newValue) {
+      if (newValue.length == 0) {
+        this.ruleForm.district = "";
+        this.lv3 = [];
+        this.ruleForm.city = "";
+        return;
+      }
+      let codeLv2 = "";
+      for (let item of newValue) {
+        if (this.ruleForm.city == item.name) {
+          codeLv2 = item.code;
+        }
+      }
+      getLevel({ level: 4, parentCode: codeLv2 }).then(res => {
+        this.lv3 = [];
+        let districtData = res.data;
+        for (let item of districtData) {
+          let obj = {
+            label: item.name,
+            value: item.name
+          };
+          this.lv3.push(obj);
+        }
+        if (this.ruleForm.city) {
+          this.ruleForm.district = this.lv3[0].label;
+        }
+      });
+    }
+  },
   //方法集合
   methods: {
+    changeCity(value) {
+      console.log(this.P2C)
+      let codeLv3 = ""
+      for(let item of this.P2C){
+        if(value==item.name){
+          codeLv3 = item.code
+        }
+      }
+      console.log(codeLv3)
+      getLevel({level:4,parentCode:codeLv3})
+      .then(res=>{
+        console.log(res)
+        const data = res.data
+        this.lv3 = []
+        for(let item of data){
+          let obj = {
+            label:item.name,
+            value:item.name,
+          }
+          this.lv3.push(obj)
+        }
+          this.ruleForm.district = this.lv3[0].label
+      })
+    },
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
           // alert("submit!");
           console.log(this.ruleForm);
-          modifyLaboratory(this.ruleForm).then(res => {
-            // console.log(res)
-            this.$message({
-              type: "success",
-              message: "保存成功!"
+          console.log(getGecoding);
+          getGecoding(
+            this.ruleForm.province +
+              this.ruleForm.city +
+              this.ruleForm.district +
+              this.ruleForm.address
+          )
+            .then(res => {
+              // console.log("first")
+              // console.log(res);
+              if (res.status == 1) {
+                const result = res.data.SUCCESS.result.location;
+                const address = result.lng + "," + result.lat;
+                console.log(address);
+                this.ruleForm.longitudeAndLatitude = address;
+                // console.log(this.ruleForm)
+              }
+            })
+            .catch(() => {})
+            .then(() => {
+              // console.log("second")
+              modifyLaboratory(this.ruleForm).then(res => {
+                // console.log(res)
+                this.$message({
+                  type: "success",
+                  message: "保存成功!"
+                });
+                this.initData();
+              });
             });
-            this.initData();
-          });
+          // modifyLaboratory(this.ruleForm).then(res => {
+          //   // console.log(res)
+          //   this.$message({
+          //     type: "success",
+          //     message: "保存成功!"
+          //   });
+          //   this.initData();
+          // });
         } else {
           // console.log("error submit!!");
           this.$message({
@@ -354,6 +461,7 @@ export default {
     this.initUploadStyle();
     this.initTextarea();
     this.initData();
+    // this.getGeo();
   },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
