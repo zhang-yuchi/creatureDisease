@@ -184,7 +184,7 @@ export default {
       pswVisible: false,
       pswForm: {
         psw: "",
-        checkpsw: "",
+        checkpsw: ""
         // check: ""
       },
       pswBoxVisible: false,
@@ -229,8 +229,11 @@ export default {
     sendToMdfPsw() {
       getPhoneCode({ phone: this.phone })
         .then(res => {
-          this.checkPswRight = true;
-          console.log("模拟验证码为:" + res.data.CODE);
+          console.log(res);
+          if (res.data.SUCCESS) {
+            this.checkPswRight = true;
+            console.log("模拟验证码为:" + res.data.CODE);
+          }
         })
         .finally(() => {
           this.checkPswRight = false;
@@ -273,7 +276,7 @@ export default {
         if (res.status == 1) {
           this.pswBoxVisible = false;
           this.pswVisible = true;
-          this.pswBox.check = ""
+          this.pswBox.check = "";
         }
       });
     },
@@ -285,7 +288,7 @@ export default {
         });
         return;
       }
-      if(this.pswForm.psw.length>16||this.pswForm.psw.length<6){
+      if (this.pswForm.psw.length > 16 || this.pswForm.psw.length < 6) {
         this.$message({
           message: "密码长度在6-16位之间!",
           type: "error"
@@ -299,20 +302,18 @@ export default {
         });
         return;
       }
-      modifyPassword({newPassword:this.pswForm.psw})
-      .then(res=>{
+      modifyPassword({ newPassword: this.pswForm.psw }).then(res => {
         // console.log(res)
-        if(res.status==1){
+        if (res.status == 1) {
           this.$message({
-            message:"修改成功!",
-            type:"success"
-          })
-          this.pswVisible = false
-          this.pswForm.psw = ""
-          this.pswForm.checkpsw = ""
-
+            message: "修改成功!",
+            type: "success"
+          });
+          this.pswVisible = false;
+          this.pswForm.psw = "";
+          this.pswForm.checkpsw = "";
         }
-      })
+      });
     },
     changeImg() {
       this.getCheckImg();
