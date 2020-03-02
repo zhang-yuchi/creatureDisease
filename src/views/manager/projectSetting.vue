@@ -217,7 +217,7 @@ export default {
       this.optionsloading = true;
       getCommodity()
         .then(res => {
-          console.log(res);
+          // console.log(res);
           res.data.map(item => {
             var obj = {
               value: item.id,
@@ -234,7 +234,7 @@ export default {
         });
     },
     handleAvatarSuccess(res) {
-      console.log(res)
+      // console.log(res)
       this.imageUrl = res.data.url  
       this.addForm.logo = res.data.id
       this.$message({
@@ -259,7 +259,7 @@ export default {
       // console.log(this.addForm)
       addCommodity(this.addForm)
       .then(res=>{
-        console.log(res)
+        // console.log(res)
         if(res.status==1){
           this.$message({
             message:"添加成功!",

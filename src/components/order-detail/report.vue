@@ -76,11 +76,11 @@ export default {
   //方法集合
   methods: {
     handlePreview(file) {
-      console.log(file);
+      // console.log(file);
       window.open(file.url);
     },
     handleSuccess(res, file, fileList) {
-      console.log(res);
+      // console.log(res);
       // console.log(fileList)
       if (res.status == 1) {
         //成功时

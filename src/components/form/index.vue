@@ -201,7 +201,7 @@ export default {
   watch: {
     province(newValue) {
       getLevel({ level: 2 }).then(res => {
-        console.log(res);
+        // console.log(res);
         if (!this.ruleForm.province) {
           return;
         }
@@ -282,17 +282,17 @@ export default {
   //方法集合
   methods: {
     changeCity(value) {
-      console.log(this.P2C)
+      // console.log(this.P2C)
       let codeLv3 = ""
       for(let item of this.P2C){
         if(value==item.name){
           codeLv3 = item.code
         }
       }
-      console.log(codeLv3)
+      // console.log(codeLv3)
       getLevel({level:4,parentCode:codeLv3})
       .then(res=>{
-        console.log(res)
+        // console.log(res)
         const data = res.data
         this.lv3 = []
         for(let item of data){
@@ -309,8 +309,8 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           // alert("submit!");
-          console.log(this.ruleForm);
-          console.log(getGecoding);
+          // console.log(this.ruleForm);
+          // console.log(getGecoding);
           getGecoding(
             this.ruleForm.province +
               this.ruleForm.city +
@@ -323,7 +323,7 @@ export default {
               if (res.status == 1) {
                 const result = res.data.SUCCESS.result.location;
                 const address = result.lng + "," + result.lat;
-                console.log(address);
+                // console.log(address);
                 this.ruleForm.longitudeAndLatitude = address;
                 // console.log(this.ruleForm)
               }
@@ -376,9 +376,9 @@ export default {
       this.ruleForm.businessLicense = res.data.id;
     },
     beforeLogoUpload(file) {
-      console.log(file);
+      // console.log(file);
       var formdata = new FormData();
-      console.log(formdata);
+      // console.log(formdata);
       formdata.append("multipartFile", file);
       this.$message({
         message: "上传中,请等侯"
@@ -386,9 +386,9 @@ export default {
       return formdata;
     },
     beforeLicenseUpload(file) {
-      console.log(file);
+      // console.log(file);
       var formdata = new FormData();
-      console.log(formdata);
+      // console.log(formdata);
       formdata.append("multipartFile", file);
       this.$message({
         message: "上传中,请等侯"

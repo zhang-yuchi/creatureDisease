@@ -54,9 +54,9 @@ export default {
   watch: {
     logistics(newValue) {
       this.logistics = newValue;
-      console.log(this.logistics);
+      // console.log(this.logistics);
       getLogistics(this.logistics).then(res => {
-        console.log(res);
+        // console.log(res);
         this.hasSuccess = res.data.SUCCESS ? true : false;
 
         if (this.hasSuccess) {

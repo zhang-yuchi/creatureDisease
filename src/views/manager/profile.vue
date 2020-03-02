@@ -254,7 +254,7 @@ export default {
       this.isloading = true;
       getUserInfo()
         .then(res => {
-          console.log(res.data)
+          // console.log(res.data)
           if (res.status == 1) {
             (this.userName = res.data.userName),
               (this.phone = res.data.phone),
@@ -294,7 +294,7 @@ export default {
         });
         return;
       }
-      console.log("成功!可以发送请求了!");
+      // console.log("成功!可以发送请求了!");
       this.phoneBoxVisible = false;
       this.phoneBox.newphone = "";
       this.phoneBox.check = "";
@@ -307,7 +307,7 @@ export default {
         });
         return;
       }
-      console.log("可以修改用户名了!");
+      // console.log("可以修改用户名了!");
       //调用
       const params = {"nickName": this.nameForm.name};
       modifyNickName(params).then((res) => {

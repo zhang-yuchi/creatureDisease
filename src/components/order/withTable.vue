@@ -131,7 +131,7 @@ export default {
       };
     },
     handleDetail(index, row) {
-      console.log(row);
+      // console.log(row);
       this.$router.push({
         path: "order-detail",
         query: {
@@ -141,8 +141,8 @@ export default {
       // this.$router.push("order-detail");
     },
     handleCheck(index, row) {
-      console.log(index, row);
-      console.log(row.orderId);
+      // console.log(index, row);
+      // console.log(row.orderId);
       // this.$router.go(0)
       this.$confirm("请确认你已收到样本", "", {
         confirmButtonText: "收到了",
@@ -152,7 +152,7 @@ export default {
         .then(() => {
           sureOrderList(row.orderId)
             .then(res => {
-              console.log(res);
+              // console.log(res);
               this.$message({
                 type: "success",
                 message: "确认收货成功!"
