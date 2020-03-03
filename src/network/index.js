@@ -3,7 +3,7 @@ let isDev = process.env.NODE_ENV == 'development'
 import router from '../router'
 import el from 'element-ui'
 import qs from 'qs'
-// isDev = false
+isDev = false
 const baseURL = isDev ? "http://rap2.taobao.org:38080/app/mock/245259" : "http://ruankun.xyz:8821/disease/"
 const service = axios.create({
     baseURL,
@@ -46,7 +46,7 @@ export const errorHandle = () => {
         .catch(() => {
             // console.log(router)
             if (router.history.current.path.indexOf('/manager') !== -1) {
-                console.log(111)
+                // console.log(111)
                 router.push('500')
             } else {
                 el.Message({

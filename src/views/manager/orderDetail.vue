@@ -86,7 +86,7 @@ export default {
     this.isloading = true;
     singleOrderList(orderSn)
       .then(res => {
-        console.log(res);
+        // console.log(res);
         const details = res.data
         this.id = details.info.id
         // console.log(details.order_sn)
@@ -143,7 +143,7 @@ export default {
         this.logistics = details.info.logistics_sn
         // 检测报告
         this.report = details.reports
-        console.log(details)
+        // console.log(details)
       })
       .finally(() => {
         this.isloading = false;

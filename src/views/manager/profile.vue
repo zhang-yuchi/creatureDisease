@@ -55,7 +55,7 @@
         </el-dialog>
         <!-- 用户名 -->
         <div class="text item">
-          <span class="item-text">昵称</span>
+          <span class="item-text">用户名</span>
           <span class="item-text">{{nickName}}</span>
           <el-link type="primary" style="color:#0584D7;" @click="nameVisible = true">修改</el-link>
         </div>
@@ -229,7 +229,7 @@ export default {
     sendToMdfPsw() {
       getPhoneCode({ phone: this.phone })
         .then(res => {
-          console.log(res);
+          // console.log(res);
           if (res.data.SUCCESS) {
             this.checkPswRight = true;
             console.log("模拟验证码为:" + res.data.CODE);
@@ -272,7 +272,7 @@ export default {
         return;
       }
       vaildCode({ phoneCode: this.pswBox.check }).then(res => {
-        console.log(res);
+        // console.log(res);
         if (res.status == 1) {
           this.pswBoxVisible = false;
           this.pswVisible = true;

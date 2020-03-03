@@ -84,6 +84,7 @@ export default {
 .content .title {
   margin-top: 10px;
   font-size: 14px;
+
 }
 .pic-box {
   width: 1000px;
@@ -99,5 +100,8 @@ export default {
   border-radius: 4px;
   height: 104px;
   margin-right: 10px;
+}
+.content,.tip{
+    min-width: 1200px;
 }
 </style>
