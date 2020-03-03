@@ -85,7 +85,7 @@ export default {
       this.checkUrl = newValue;
     },
     phone(newVal){
-      console.log(newVal)
+      // console.log(newVal)
       this.phone = newVal
     }
   },

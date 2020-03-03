@@ -111,8 +111,8 @@ export default {
     },
     sendCheck() {
       //发送验证码
-      console.log(this.phoneErr)
-      console.log(this.form.phone)
+      // console.log(this.phoneErr)
+      // console.log(this.form.phone)
       if (!this.phoneErr && this.form.phone!=="") {
         getNewPhoneCode({phone:this.form.phone})
         .then(res=>{

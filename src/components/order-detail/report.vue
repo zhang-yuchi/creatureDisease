@@ -16,7 +16,7 @@
           :before-upload="rejectFile"
         >
           <el-button size="small" type="primary">点击上传</el-button>
-          <div slot="tip" class="el-upload__tip">只能上传pdf文件</div>
+          <div slot="tip" class="el-upload__tip">请上传检测报告</div>
         </el-upload>
       </div>
       <div class="file-list" v-else>
@@ -131,13 +131,7 @@ export default {
     },
     rejectFile(file) {
       var reg = /.pdf$/;
-      if (!reg.test(file.name)) {
-        this.$message({
-          message: "只能上传pdf文件!",
-          type: "error"
-        });
-        return false;
-      }
+
     },
     checkPdf(e) {
       window.open(this.fileList[parseInt(e.currentTarget.dataset.index)].url);

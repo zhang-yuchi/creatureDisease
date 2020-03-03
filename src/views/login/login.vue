@@ -4,12 +4,12 @@
     <span slot="name">登录</span>
     <div slot="form">
       <myInput
-        type="username"
+        type="phone"
         :formValue="form.username"
         @rulecheck="checkaccount"
         :err="accounterr"
         :errorMsg="this.accountErrMsg"
-        placeholder="请输入用户名"
+        placeholder="请输入手机号"
       ></myInput>
       <myInput
         type="password"
@@ -115,8 +115,12 @@ export default {
       this.form.username = value;
       if (!value) {
         this.accounterr = true;
-        this.accountErrMsg = "用户名不能为空";
-      } else {
+        this.accountErrMsg = "手机号不能为空";
+      } else if(!/^1[3456789]\d{9}$/.test(value)){
+        this.accounterr = true;
+        this.accountErrMsg = "请输入正确的手机号";
+      }
+      else {
         this.accounterr = false;
       }
     },
@@ -153,7 +157,7 @@ export default {
             const pswReg = /密码/
             const checkReg = /验证码/
             if(accountReg.test(err)){
-              console.log(err)
+              // console.log(err)
               this.accounterr = true
               this.accountErrMsg = err
             }else if(pswReg.test(err)){

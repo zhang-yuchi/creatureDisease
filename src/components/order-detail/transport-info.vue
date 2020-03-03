@@ -6,7 +6,7 @@
       <div class="row">
         <div class="row-item">
           <span class="row-title length6">送检单位:</span>
-          <span class="row-content">{{msg.company}}</span>
+          <span class="row-content">{{msg.company}}sfdafdfasd手动阀十分撒旦发射点发</span>
         </div>
         <div class="row-item">
           <span class="row-title length6">所在地区:</span>
@@ -116,5 +116,8 @@ export default {
 }
 .last .row-content{
   text-align: left;
+}
+.row-item{
+  min-width: 270px;
 }
 </style>
