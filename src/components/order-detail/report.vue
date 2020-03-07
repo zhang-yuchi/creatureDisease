@@ -71,6 +71,9 @@ export default {
   watch: {
     state(newValue) {
       this.state = newValue;
+    },
+    fileList(newValue){
+      this.$emit('filechange',newValue)
     }
   },
   //方法集合
@@ -97,7 +100,7 @@ export default {
         };
         fileList[fileList.length - 1].url = url; //需要通过url来删除
         // console.log(this.orderId);
-
+        // console.log(fileList)
         savePdf(params)
           .then(res => {
             // console.log(res);
@@ -105,6 +108,7 @@ export default {
               message: "保存成功",
               type: "success"
             });
+            this.fileList = fileList
           })
           .catch(() => {
             this.$message({
@@ -122,11 +126,13 @@ export default {
     },
     removeFile(file) {
       // console.log(file);
+      // console.log(this.fileList)
       const params = {
         url: file.url
       };
       delPdf(params).then(res => {
         // console.log(res);
+        this.fileList.pop()
       });
     },
     rejectFile(file) {

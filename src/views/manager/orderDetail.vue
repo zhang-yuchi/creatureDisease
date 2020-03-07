@@ -2,7 +2,7 @@
 <template>
   <div class v-loading="isloading">
     <!-- 检测中按钮 -->
-    <check-control :state="state" :orderSn="orderNo" v-if="state=='3'||state=='4'"></check-control>
+    <check-control :state="state" :nowfile="filelist" :orderSn="orderNo" v-if="state=='3'||state=='4'"></check-control>
     <!-- 订单信息 -->
     <order-detail :orderDetail="orderDetail"></order-detail>
     <!-- 订单进度 -->
@@ -16,7 +16,7 @@
     <!-- 物流信息 -->
     <logistics :logistics="logistics"></logistics>
     <!-- 检测报告 -->
-    <report :report="report" :state="state" :orderId="id"  v-if="state=='4'||state=='5'"></report>
+    <report :report="report" :state="state" :orderId="id" @filechange="filechange"  v-if="state=='4'||state=='5'"></report>
   </div>
 </template>
 
@@ -59,7 +59,8 @@ export default {
       logistics: "", //物流信息
       report: {}, //检测报告
       id:"",
-      isloading: false
+      isloading: false,
+      filelist:[]
     };
   },
   //监听属性 类似于data概念
@@ -67,7 +68,12 @@ export default {
   //监控data中的数据变化
   watch: {},
   //方法集合
-  methods: {},
+  methods: {
+    filechange(files){
+      console.log(files)
+      this.filelist = files
+    }
+  },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）

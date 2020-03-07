@@ -61,9 +61,6 @@ function getRandom(url) {
     return url + "?t=" + Math.random()
 }
 
-function appendRandom(url) {
-    return url + "&t=" + Math.random()
-}
 //文件上传
 //图片上传
 export const ImgUploadUrl = baseURL + "/file/image"
