@@ -49,7 +49,7 @@
           <span>{{ scope.row.updateTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" width="145">
         <template slot-scope="scope">
           <el-link
             class="checkbtn"
@@ -262,7 +262,7 @@ export default {
           this.singleForm.price = item.repertory.price.toFixed(2);
           this.singleForm.inventory = item.repertory.inventory;
           let time = moment(item.repertory.createTime).format(
-            "YYYY-MM-DD hh:mm:ss"
+            "yyyy-MM-dd HH:mm:ss"
           );
           this.singleForm.createTime = time;
           this.singleForm.deletectionInstruction =

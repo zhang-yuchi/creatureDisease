@@ -142,6 +142,6 @@ export default {
 .query {
   margin-left: 20px;
   background-color: rgb(5, 132, 215);
-  padding: 9px 25px;
+  padding: 13px 25px 5px 25px;
 }
 </style>

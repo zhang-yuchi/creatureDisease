@@ -255,5 +255,8 @@ li[role="menuitem"] {
 }
 .el-breadcrumb {
   padding: 0 20px;
+  font-family: 'PingFangSC-Regular', 'PingFang SC', sans-serif;
+  font-size: 16px;
+  font-style: normal;
 }
 </style>
