@@ -2,9 +2,9 @@
 <template>
   <div class="project-setting">
     <div class="addForm">
-      <el-button type="primary" class="check-btn" @click="showAddForm">
+      <!-- <el-button type="primary" class="check-btn" @click="showAddForm">
         <i class="el-icon-plus"></i>
-      </el-button>
+      </el-button> -->
     </div>
     <withTab :tabArray="settingTabArray" @handleTabChange="tabChange" left="40"></withTab>
     <withTable

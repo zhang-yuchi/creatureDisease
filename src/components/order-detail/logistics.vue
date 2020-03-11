@@ -103,7 +103,7 @@ export default {
 .row {
   color: #333333;
   font-size: 14px;
-  margin-bottom: 10px;
+  margin-bottom: 18px;
 }
 .logistics-detail {
   margin-bottom: 10px;

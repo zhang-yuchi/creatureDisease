@@ -7,7 +7,7 @@
       <slot name="form"></slot>
     </div>
     <div class="control">
-      <slot name="login"></slot>
+      <slot name="login" style="width:70%"></slot>
     </div>
     <div class="changepsw">
       <slot name="changestate"></slot>
@@ -58,7 +58,8 @@ deactivated() {}, //如果有keep-alive缓存功能,当该页面撤销使这个�
 </script>
 <style scoped>
 .control {
-  margin-top: 20px;
+  margin: 20px 60px;
+  width: 70%;
   text-align: center;
 }
 .logtips {
@@ -77,8 +78,9 @@ deactivated() {}, //如果有keep-alive缓存功能,当该页面撤销使这个�
   border-color: #0484d6;
 }
 .changepsw {
-  margin-top: 20px;
+  margin: 20px 60px ;
   text-align: center;
+  width: 70%;
 }
 .pswbtn {
   color: #4b6477;

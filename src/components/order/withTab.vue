@@ -4,7 +4,7 @@
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <el-tab-pane
         v-for="(item,index) in tabArray"
-        :key="index"
+        :key="item"
         :label="item"
         :name="index.toString()"
       ></el-tab-pane>

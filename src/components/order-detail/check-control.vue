@@ -1,17 +1,17 @@
 <!-- 检测中   完成订单和取消订单按钮 -->
 <template>
   <div class="control">
-    <div v-if="state=='3'">
+
       <el-button
+      v-if="state==3"
         style="line-height:10px;"
         @click="sureReceive"
         v-loading="sureloading"
         :disabled="disable"
         type="primary"
       >确认收样</el-button>
-    </div>
-    <div v-if="state=='4'&&nowfile.length>0">
       <el-button
+        v-if="state==4"
         style="line-height:10px;"
         @click="finishOrder"
         v-loading="sureloading"
@@ -23,8 +23,9 @@
         @click="cancelOrder"
         :disabled="disable"
         v-loading="cancelloading"
+        v-if="state==1||state==2||state==3"
       >取消订单</el-button>
-    </div>
+
   </div>
 </template>
 
@@ -38,10 +39,10 @@ export default {
   props: {
     state: String,
     orderSn: String,
-    nowfile:{
-      type:Array,
-      default:[]
-    },
+    nowfile: {
+      type: Array,
+      default: []
+    }
   },
   data() {
     //这里存放数据
@@ -75,13 +76,7 @@ export default {
             message: "确定收样成功!",
             type: "success"
           });
-
-          this.$router.push({
-            name: "订单管理",
-            params: {
-              needFresh: true
-            }
-          });
+          this.$emit("refresh");
         })
         .catch(() => {})
         .finally(() => {
@@ -91,8 +86,13 @@ export default {
         });
     },
     finishOrder() {
+      if (this.nowfile.length <= 0) {
+        this.$message.warning("请先上传检测报告");
+        return;
+      }
       this.sureloading = true;
       this.disable = true;
+
       finishOrderList(this.orderSn)
         .then(res => {
           // console.log(res);
@@ -100,13 +100,13 @@ export default {
             message: "完成订单成功!",
             type: "success"
           });
-
-          this.$router.push({
-            name: "订单管理",
-            params: {
-              needFresh: true
-            }
-          });
+          this.$emit("refresh");
+          // this.$router.push({
+          //   name: "订单管理",
+          //   params: {
+          //     needFresh: true
+          //   }
+          // });
         })
         .catch(() => {})
         .finally(() => {

@@ -9,7 +9,7 @@
       :header-cell-style="headerStyle"
       v-loading="loading"
     >
-      <el-table-column label="订单号" width="150" style="padding:30px;">
+      <el-table-column label="订单号" width="190" style="padding:30px;">
         <template slot-scope="scope">
           <span style="height:40px">{{ scope.row.orderId }}</span>
         </template>
@@ -29,9 +29,9 @@
           <span>{{ scope.row.updateTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="订单金额" width="100">
-        <template slot-scope="scope">
-          <span>￥{{ scope.row.price }}</span>
+      <el-table-column  label="订单金额" width="100">
+        <template  slot-scope="scope">
+          <span class="table-money">￥{{ scope.row.price }}</span>
         </template>
       </el-table-column>
       <el-table-column label="送检单位" width="200">
@@ -210,6 +210,14 @@ export default {
 };
 </script>
 <style scoped>
+.table-money{
+  display: inline-block;
+  width: 100%;
+  text-align: right;
+  word-break: normal;;
+  box-sizing: border-box;
+  padding-right: 20px;
+}
 .el-table__header {
   width: 100%;
 }

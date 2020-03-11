@@ -8,12 +8,11 @@
       class="inner-input"
       :class="isErr?'error':''"
       :placeholder="this.$props.placeholder"
-      @input="onInput"
       v-model="value"
       :type="this.$props.type"
       @focus="borderChange"
       :style="{borderColor:borderColor}"
-      @blur="cancel"
+      @blur="onInput"
     />
     <verifyCode v-if="hasVerifyCode" :givecheckmsg="givecheckmsg" @sendverify="sendToInput"></verifyCode>
     <div class="msg">{{isErr?errMsg:""}}</div>
@@ -93,6 +92,8 @@ export default {
   methods: {
     onInput() {
       //表单验证
+      this.icon_src=this.value?this.activeImg:this.icon_src = this.img;
+      
       this.$emit("rulecheck", this.value);
     },
     sendToInput(){
@@ -100,9 +101,11 @@ export default {
     },
     borderChange() {
       this.icon_src = this.activeImg;
+      // console.log(this.value);
       this.borderColor = "#0784D8";
       if (!this.value) {
         this.resetHidden = false;
+        
         return;
       }
       this.resetHidden = true;
@@ -115,6 +118,7 @@ export default {
         this.resetHidden = false;
       }
       //颜色控制 最基本功能
+      
       this.borderColor = "#979797";
       this.icon_src = this.img;
       // console.log(this.icon_src)

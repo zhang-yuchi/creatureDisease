@@ -5,14 +5,15 @@
       <el-card class="box-card" v-loading="isloading">
         <!-- 手机 -->
         <div class="text item">
-          <span class="item-text">手机号</span>
-          <span class="item-text">{{phone}}</span>
+          <span class="item-text">手机号码</span>
+          <span class="item-text">{{serectPhone}}</span>
           <el-link type="primary" @click="phoneVisible = true" style="color:#0584D7;">修改</el-link>
         </div>
 
         <!-- 手机对话框--验证码 -->
         <el-dialog class="form-dialog" title="修改手机号码" :visible.sync="phoneVisible">
           <div class="body">
+            <div class="phone-tips">发送验证码到手机{{serectPhone}}</div>
             <div class="row">
               <span class="input-title">验证码:</span>
               <el-input class="form-input" v-model="phoneForm.check" placeholder="请输入验证码"></el-input>
@@ -28,6 +29,7 @@
         <!-- 手机对话框--修改手机号 -->
         <el-dialog class="form-dialog" title="修改手机号码" :visible.sync="phoneBoxVisible">
           <div class="body">
+            
             <div class="row">
               <span class="input-title" style="text-align:right;">新手机号:</span>
               <el-input
@@ -61,10 +63,10 @@
         </div>
 
         <!-- 修改用户名弹窗 -->
-        <el-dialog class="form-dialog" title="修改昵称" :visible.sync="nameVisible">
+        <el-dialog class="form-dialog" title="修改用户名" :visible.sync="nameVisible">
           <div class="body">
-            <span class="input-title">昵称:</span>
-            <el-input class="form-input" v-model="nameForm.name" placeholder="请输入昵称"></el-input>
+            <span class="input-title">用户名:</span>
+            <el-input class="form-input" v-model="nameForm.name" placeholder="请输入用户名"></el-input>
           </div>
           <div slot="footer" class="dialog-footer">
             <el-button @click="nameVisible = false">取 消</el-button>
@@ -80,6 +82,7 @@
         <!-- 修改密码--获取验证码 -->
         <el-dialog class="form-dialog" title="修改密码" :visible.sync="pswBoxVisible">
           <div class="body">
+            <div class="phone-tips">发送验证码到手机{{serectPhone}}</div>
             <div class="row">
               <span class="input-title">验证码:</span>
               <el-input
@@ -99,6 +102,7 @@
         <!-- 修改密码弹窗 -->
         <el-dialog class="form-dialog" title="修改密码" :visible.sync="pswVisible">
           <div class="body">
+            
             <div class="row">
               <span class="input-title" style="text-align:right;">新密码:</span>
               <el-input
@@ -200,7 +204,11 @@ export default {
     };
   },
   //监听属性 类似于data概念
-  computed: {},
+  computed: {
+    serectPhone(){
+      return this.phone.slice(0,3) + "****" + this.phone.slice(7)
+    }
+  },
   //监控data中的数据变化
   watch: {},
   //方法集合
@@ -261,7 +269,6 @@ export default {
         }
       });
     },
-
     pswNextStep() {
       //校验
       if (this.pswBox.check.length !== 4) {
@@ -339,9 +346,9 @@ export default {
               ));
             this.$store.commit({
               type: "changeUsername",
-              name: this.userName
+              name: this.nickName
             });
-            sessionStorage.setItem("username", this.userName);
+            sessionStorage.setItem("username", this.nickName);
           } else {
             errorHandle();
           }
@@ -424,6 +431,10 @@ export default {
 };
 </script>
 <style scoped>
+.phone-tips{
+  margin:0px 0px 18px 0px;
+  text-align: center;
+}
 .text {
   font-size: 14px;
 }

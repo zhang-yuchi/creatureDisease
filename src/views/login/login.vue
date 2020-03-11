@@ -212,6 +212,9 @@ export default {
 <style scoped>
 .loginbtn {
   background-color: #318ff9;
+  width: 100%;
+  padding: 13px 15px;
+  box-sizing: border-box;
 }
 .loginbtn:hover {
   background-color: #0484d6;

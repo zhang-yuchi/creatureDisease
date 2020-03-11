@@ -26,6 +26,7 @@ service.interceptors.response.use((res) => {
     if (data.status === SUCCESS_STATUS) {
         return res.data
     } else {
+        // errorHandle()
         return res
     }
 })
@@ -46,7 +47,7 @@ export const errorHandle = () => {
         .catch(() => {
             // console.log(router)
             if (router.history.current.path.indexOf('/manager') !== -1) {
-                // console.log(111)
+                console.log(111)
                 router.push('500')
             } else {
                 el.Message({
