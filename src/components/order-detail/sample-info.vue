@@ -12,7 +12,7 @@
       <div class="content">
         <span class="title">采样图片:</span>
         <div class="pic-box">
-          <img v-for=" (item,index) in sample.images" :key="index" :src="item" alt />
+          <img v-for=" (item) in sample.images" :key="item" :src="item" alt />
         </div>
       </div>
     </wrap>

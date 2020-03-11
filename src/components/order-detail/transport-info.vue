@@ -3,7 +3,7 @@
   <div class v-loading="isloading">
     <Ititle title="送检消息"></Ititle>
     <wrap>
-      <div class="row">
+      <!-- <div class="row">
         <div class="row-item">
           <span class="row-title length6">送检单位:</span>
           <span class="row-content">{{msg.company}}</span>
@@ -26,6 +26,26 @@
           <span class="row-title length6">送检人电话:</span>
           <span class="row-content">{{msg.phone}}</span>
         </div>
+      </div> -->
+      <div class="row">
+        <div class="row-title">送检单位:</div>
+        <div class="row-content">{{msg.company}}</div>
+      </div>
+      <div class="row">
+        <div class="row-title">所在地区:</div>
+        <div class="row-content">{{msg.location}}</div>
+      </div>
+      <div class="row">
+        <div class="row-title">详细地址:</div>
+        <div class="row-content">{{msg.receiverAddress}}</div>
+      </div>
+      <div class="row">
+        <div class="row-title">送检人:</div>
+        <div class="row-content">{{msg.receiver}}</div>
+      </div>
+      <div class="row">
+        <div class="row-title">送检人电话:</div>
+        <div class="row-content">{{msg.phone}}</div>
       </div>
     </wrap>
   </div>
@@ -98,9 +118,9 @@ export default {
 .row-title {
   display: inline-block;
   /* width: 6em; */
-  width: 30% !important;
+  width: 6em !important;
   text-align: right;
-  margin-right: 10%;
+  margin-right: 10px;
 }
 .length3 {
   width: 3em;

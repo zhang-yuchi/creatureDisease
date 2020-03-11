@@ -4,7 +4,7 @@
     <el-table
       :data="showList"
       style="width: 100%;"
-      height="450"
+      height="500px"
       :cell-style="cellStyle"
       :header-cell-style="headerStyle"
       v-loading="loading"
@@ -327,7 +327,7 @@ export default {
     },
     handleOnSale(index, row) {
       //上架商品
-      this.$confirm("确定要上架商品 " + row.name + " 吗", "", {
+      this.$confirm("确定要上架商品 \"" + row.name + "\" 吗?", "", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
@@ -349,7 +349,7 @@ export default {
     },
     handleOffSale(index, row) {
       //下架商品
-      this.$confirm("确定要下架商品 " + row.name + " 吗", "", {
+      this.$confirm("确定要下架商品 \"" + row.name + "\" 吗?", "", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"

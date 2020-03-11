@@ -66,8 +66,9 @@ export default {
 .back-btn {
     margin-left: 18px;
   font-weight: bold;
-  margin-top: -4px;
+  /* margin-top: -4px; */
   display: inline-block;
+  font-size: 16px;
   color: #0584d7;
 }
 .tips {

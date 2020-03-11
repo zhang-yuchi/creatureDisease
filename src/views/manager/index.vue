@@ -14,10 +14,7 @@
           active-text-color="#fff"
           :router="true"
         >
-          <el-menu-item index="profile">
-            <i class="el-icon-menu"></i>
-            <span slot="title">个人中心</span>
-          </el-menu-item>
+          
           <el-menu-item index="order">
             <i class="el-icon-document-remove"></i>
             <span slot="title">订单管理</span>
@@ -32,13 +29,17 @@
               <el-menu-item class="sub-list" index="project-setting">检测项目配置</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
+          <el-menu-item index="profile">
+            <i class="el-icon-menu"></i>
+            <span slot="title">个人中心</span>
+          </el-menu-item>
         </el-menu>
       </el-col>
     </el-aside>
     <el-container>
       <el-header>
         <div class="controls">
-          <span class="name">{{username}}</span>
+          <router-link class="name" to="/manager/profile">{{username}}</router-link>
           <i @click="logout" class="el-icon-switch-button"></i>
           <!-- <img class="logout" @click="logout" src="../../assets/psw.png" alt /> -->
         </div>
@@ -48,7 +49,7 @@
           <el-breadcrumb-item
             v-for="(item,index) in this.BreadcrumbList"
             :to="item=='订单管理'&&index==0?'order':''"
-            :key="index"
+            :key="item"
           >{{item}}</el-breadcrumb-item>
         </el-breadcrumb>
         <keep-alive exclude="orderdetail">
@@ -78,13 +79,16 @@ export default {
       nowpath: "",
       BreadcrumbList: [],
       routePath: this.$router.history.current.path,
-      username: sessionStorage.getItem("username")
-        ? sessionStorage.getItem("username")
-        : this.$store.state.username
     };
   },
   //监听属性 类似于data概念
-  computed: {},
+  computed: {
+    username(){
+      return this.$store.state.username
+        ? this.$store.state.username
+        : sessionStorage.getItem("username")
+    }
+  },
   //监控data中的数据变化
   watch: {
     $route(to, from) {
@@ -188,6 +192,9 @@ export default {
   padding: 0 13px;
   background-color: rgba(221, 221, 221, 0.5);
   line-height: 25px;
+  cursor: pointer;
+  color: #051f39;
+  text-decoration: none;
 }
 .el-aside {
   user-select: none;

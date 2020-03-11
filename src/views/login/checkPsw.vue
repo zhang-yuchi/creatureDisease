@@ -84,7 +84,7 @@ export default {
         phoneCode: this.form.check,
         newPwd: this.form.checkpsw
       }).then(res => {
-        // console.log(res);
+        console.log(res);
         if (res.data.SUCCESS) {
           this.$router.push("success");
         }else{

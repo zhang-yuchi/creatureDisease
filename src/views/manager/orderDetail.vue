@@ -2,7 +2,13 @@
 <template>
   <div class v-loading="isloading">
     <!-- 检测中按钮 -->
-    <check-control :state="state" :nowfile="filelist" :orderSn="orderNo" v-if="state=='3'||state=='4'"></check-control>
+    <check-control
+      :state="state"
+      :nowfile="filelist"
+      :orderSn="orderNo"
+      @refresh="refreshDetail"
+      v-if="state=='3'||state=='4'"
+    ></check-control>
     <!-- 订单信息 -->
     <order-detail :orderDetail="orderDetail"></order-detail>
     <!-- 订单进度 -->
@@ -16,7 +22,13 @@
     <!-- 物流信息 -->
     <logistics :logistics="logistics"></logistics>
     <!-- 检测报告 -->
-    <report :report="report" :state="state" :orderId="id" @filechange="filechange"  v-if="state=='4'||state=='5'"></report>
+    <report
+      :report="report"
+      :state="state"
+      :orderId="id"
+      @filechange="filechange"
+      v-if="state=='4'||state=='5'"
+    ></report>
   </div>
 </template>
 
@@ -32,7 +44,7 @@ import sampleInfo from "../../components/order-detail/sample-info";
 import report from "../../components/order-detail/report";
 import logistics from "../../components/order-detail/logistics";
 import { errorHandle, singleOrderList } from "../../network";
-import moment from 'moment'
+import moment from "moment";
 export default {
   //import引入的组件需要注入到对象中才能使用
   name: "orderdetail",
@@ -50,7 +62,7 @@ export default {
     //这里存放数据
     return {
       state: "",
-      orderNo:"",
+      orderNo: "",
       orderDetail: {}, //订单信息
       orderProcess: {}, //订单进度
       commodities: [], //订单明细
@@ -58,9 +70,9 @@ export default {
       sample: {}, //样本信息
       logistics: "", //物流信息
       report: {}, //检测报告
-      id:"",
+      id: "",
       isloading: false,
-      filelist:[]
+      filelist: []
     };
   },
   //监听属性 类似于data概念
@@ -69,17 +81,13 @@ export default {
   watch: {},
   //方法集合
   methods: {
-    filechange(files){
-      console.log(files)
-      this.filelist = files
-    }
-  },
-  //生命周期 - 创建完成（可以访问当前this实例）
-  created() {},
-  //生命周期 - 挂载完成（可以访问DOM元素）
-  mounted() {
-    const orderSn = this.$route.query.orderSn;
-    const stateMap = {
+    filechange(files) {
+      console.log(files);
+      this.filelist = files;
+    },
+    getDetail() {
+      const orderSn = this.$route.query.orderSn;
+      const stateMap = {
         "0": "已取消",
         "1": "待付款",
         "2": "待寄样",
@@ -88,72 +96,93 @@ export default {
         "5": "已完成",
         "6": "退款中"
       };
-    // console.log(this.$route)
-    this.isloading = true;
-    singleOrderList(orderSn)
-      .then(res => {
-        // console.log(res);
-        const details = res.data
-        this.id = details.info.id
-        // console.log(details.order_sn)
-        // 订单信息
-        var tempInfo = Object.assign({},details.info,{
-          status:stateMap[details.info.status]
-        })
-        for(let key in tempInfo){
-          if(!tempInfo[key]){
-            tempInfo[key] = "暂无"
+      // console.log(this.$route)
+      this.isloading = true;
+      singleOrderList(orderSn)
+        .then(res => {
+          // console.log(res);
+          const details = res.data;
+          this.id = details.info.id;
+          // console.log(details.order_sn)
+          // 订单信息
+          var tempInfo = Object.assign({}, details.info, {
+            status: stateMap[details.info.status]
+          });
+          for (let key in tempInfo) {
+            if (!tempInfo[key]) {
+              tempInfo[key] = "暂无";
+            }
           }
-        }
-        this.orderNo = tempInfo.order_sn
-        this.orderDetail = tempInfo
+          this.orderNo = tempInfo.order_sn;
+          this.orderDetail = tempInfo;
 
-        //状态分析
-        this.state = res.data.info.status
-        //订单明细
-        this.commodities = res.data.commodities;
-        //送检信息
-        this.sendMsg = {
-          company:details.info.company,
-          location:details.info.province+details.info.city+details.info.district,
-          receiverAddress:details.info.address,
-          receiver:details.info.name,
-          phone:details.info.phone,
-        }
-        //订单进度
-        var list = res.data.statuses.sort((a,b)=>{
-          return parseInt(a.type<b.type)
-        }).map((item)=>{
-          item.time = moment(item).format('YYYY/MM/DD hh:mm:ss')
-          return item
+          //状态分析
+          this.state = res.data.info.status;
+          //订单明细
+          this.commodities = res.data.commodities;
+          //送检信息
+          this.sendMsg = {
+            company: details.info.company,
+            location:
+              details.info.province + details.info.city + details.info.district,
+            receiverAddress: details.info.address,
+            receiver: details.info.name,
+            phone: details.info.phone
+          };
+          //订单进度
+          var list = res.data.statuses
+            .sort((a, b) => {
+              return parseInt(a.type < b.type);
+            })
+            .map(item => {
+              // console.log(item);
+              item.time = moment(item.time * 1000).format(
+                "YYYY/MM/DD hh:mm:ss"
+              );
+              return item;
+            })
+            .filter(item => {
+              return item.type !== "0";
+            });
+          var obj = {};
+          list.map(item => {
+            obj[item.type] = item.time;
+          });
+          let arr = Object.keys(obj);
+          // console.log(arr)
+          let maxNum = arr[arr.length - 1];
+          // console.log(maxNum)
+          obj.maxSize = maxNum;
+          this.orderProcess = obj;
+          console.log(this.orderProcess);
+          //样本信息
+          this.sample = Object.assign(
+            {},
+            {},
+            {
+              images: details.images,
+              intro: details.info.instruction
+            }
+          );
+          // 物流快递
+          this.logistics = details.info.logistics_sn;
+          // 检测报告
+          this.report = details.reports;
+          // console.log(details)
         })
-        .filter((item)=>{
-          return item.type!=="0"
-        })
-        var obj = {}
-        list.map(item=>{
-          obj[item.type] = item.time
-        })
-        let arr = Object.keys(obj)
-        // console.log(arr)
-        let maxNum = arr[arr.length-1]
-        // console.log(maxNum)
-        obj.maxSize = maxNum
-        this.orderProcess = obj
-        //样本信息
-        this.sample = Object.assign({},{},{
-          images:details.images,
-          intro:details.info.instruction
-        })
-        // 物流快递
-        this.logistics = details.info.logistics_sn
-        // 检测报告
-        this.report = details.reports
-        // console.log(details)
-      })
-      .finally(() => {
-        this.isloading = false;
-      });
+        .finally(() => {
+          this.isloading = false;
+        });
+    },
+    refreshDetail() {
+      this.getDetail();
+    }
+  },
+  //生命周期 - 创建完成（可以访问当前this实例）
+  created() {},
+  //生命周期 - 挂载完成（可以访问DOM元素）
+  mounted() {
+    this.getDetail();
   },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
