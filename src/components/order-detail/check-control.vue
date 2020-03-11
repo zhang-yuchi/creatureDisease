@@ -10,7 +10,7 @@
         type="primary"
       >确认收样</el-button>
     </div>
-    <div v-if="state=='4'">
+    <div v-if="state=='4'&&nowfile.length>0">
       <el-button
         style="line-height:10px;"
         @click="finishOrder"
@@ -37,7 +37,11 @@ export default {
   components: {},
   props: {
     state: String,
-    orderSn: String
+    orderSn: String,
+    nowfile:{
+      type:Array,
+      default:[]
+    },
   },
   data() {
     //这里存放数据
@@ -140,7 +144,9 @@ export default {
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
-  mounted() {},
+  mounted() {
+    // console.log(this.report)
+  },
   beforeCreate() {}, //生命周期 - 创建之前
   beforeMount() {}, //生命周期 - 挂载之前
   beforeUpdate() {}, //生命周期 - 更新之前

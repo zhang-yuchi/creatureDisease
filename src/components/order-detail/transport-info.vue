@@ -6,7 +6,7 @@
       <div class="row">
         <div class="row-item">
           <span class="row-title length6">送检单位:</span>
-          <span class="row-content">{{msg.company}}sfdafdfasd手动阀十分撒旦发射点发</span>
+          <span class="row-content">{{msg.company}}</span>
         </div>
         <div class="row-item">
           <span class="row-title length6">所在地区:</span>
@@ -89,15 +89,18 @@ export default {
   width: 25%;
 }
 .row-content {
-  margin-left: 15px;
+  /* margin-left: 15px; */
   display: inline-block;
   width: 180px;
   vertical-align: top;
+  width: 60%;
 }
 .row-title {
   display: inline-block;
   /* width: 6em; */
+  width: 30% !important;
   text-align: right;
+  margin-right: 10%;
 }
 .length3 {
   width: 3em;
@@ -118,6 +121,6 @@ export default {
   text-align: left;
 }
 .row-item{
-  min-width: 270px;
+  min-width: 25%;
 }
 </style>
