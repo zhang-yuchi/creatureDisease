@@ -432,8 +432,8 @@ export default {
 </script>
 <style scoped>
 .phone-tips{
-  margin:0px 0px 18px 0px;
-  text-align: center;
+  margin:0px 0px 18px 73px;
+  /* text-align: center; */
 }
 .text {
   font-size: 14px;
@@ -467,14 +467,16 @@ export default {
 }
 .input-title {
   display: inline-block;
-  width: 60px;
+  width: 62px;
 }
 .form-input {
   display: inline-block;
   width: 435px;
+  margin-left: 10px;
 }
 .row {
   margin-bottom: 16px;
   position: relative;
+  /* margin-left: 10px; */
 }
 </style>
