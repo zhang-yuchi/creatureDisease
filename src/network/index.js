@@ -255,17 +255,17 @@ export const loginByPhone = (params) => {
 }
 //校验验证码是否正确
 export const vaildCode = (params) => {
-    return service.get('/lab/phonecode/expire', {
+    return service.get(getRandom('/lab/phonecode/expire'), {
         params,
     })
 }
 export const getOffsaleItemV2 = (params)=>{
-    return service.get('/v2/laboratory/item/offsale',{
+    return service.get(getRandom('/v2/laboratory/item/offsale'),{
         params,
     })
 }
 export const getOnsaleItemV2 = (params)=>{
-    return service.get('/v2/laboratory/item/onsale',{
+    return service.get(getRandom('/v2/laboratory/item/onsale'),{
         params,
     })
 }
