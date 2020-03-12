@@ -47,8 +47,8 @@ export const errorHandle = () => {
         .catch(() => {
             // console.log(router)
             if (router.history.current.path.indexOf('/manager') !== -1) {
-                console.log(111)
-                router.push('500')
+                // console.log(111)
+                // router.push('500')
             } else {
                 el.Message({
                     message:"网络错误,请稍后重试",
@@ -256,6 +256,16 @@ export const loginByPhone = (params) => {
 //校验验证码是否正确
 export const vaildCode = (params) => {
     return service.get('/lab/phonecode/expire', {
+        params,
+    })
+}
+export const getOffsaleItemV2 = (params)=>{
+    return service.get('/v2/laboratory/item/offsale',{
+        params,
+    })
+}
+export const getOnsaleItemV2 = (params)=>{
+    return service.get('/v2/laboratory/item/onsale',{
         params,
     })
 }

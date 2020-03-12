@@ -41,7 +41,7 @@
       </el-table-column>
       <el-table-column v-if="changeState==0" label="上架时间" width="150">
         <template slot-scope="scope">
-          <span>{{ scope.row.createTime }}</span>
+          <span>{{ scope.row.updateTime }}</span>
         </template>
       </el-table-column>
       <el-table-column v-if="changeState==1" label="下架时间" width="150">
@@ -86,8 +86,8 @@
       layout="prev, pager, next"
       :hide-on-single-page="true"
       @current-change="pageChange"
-      :current-page="this.offset+1"
-      :total="this.list.length"
+      :current-page="currentPage"
+      :total="totalPage"
     ></el-pagination>
     <el-dialog title="编辑商品" :visible.sync="EditFormVisible">
       <div class="tips">
@@ -161,7 +161,7 @@
 //例如：import 《组件名称》 from '《组件路径》';
 import baseInfoVue from "../../views/manager/baseInfo.vue";
 import moment from "moment";
-import { initDg } from '../../assets/utils'
+import { initDg } from "../../assets/utils";
 import {
   editLabItem,
   errorHandle,
@@ -169,6 +169,7 @@ import {
   onSaleItem,
   getSingleItem
 } from "../../network";
+import { type } from 'os';
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {},
@@ -184,6 +185,14 @@ export default {
       type: Number,
       default: 0,
       required: true
+    },
+    totalPage: {
+      type: Number,
+      default: 0
+    },
+    currentPage:{
+      type:Number,
+      default: 0,
     }
   },
   data() {
@@ -224,16 +233,21 @@ export default {
   //监控data中的数据变化
   watch: {
     list(newValue) {
+      console.log(newValue);
       this.tableData = newValue;
-      this.offset = 0
+      this.offset = 0;
       this.getShowList();
-      this.initTable()
+      this.initTable();
     },
     isloading(newValue) {
       this.loading = newValue;
     },
     state(newValue) {
       this.changeState = newValue;
+    },
+    totalPage(newVal) {
+      // console.log(newVal);
+      this.totalPage = newVal;
     }
   },
   //方法集合
@@ -255,15 +269,17 @@ export default {
       this.windowloading = true;
       getSingleItem({ id: row.id })
         .then(res => {
+          console.log(res);
           const item = res.data;
-          this.singleForm.id = item.repertory.id;
+          this.singleForm.id = item.repertory.commodityId;
           this.singleForm.name = item.commodity.name;
           this.singleForm.diseaseName = item.diseaseType.name;
           this.singleForm.price = item.repertory.price.toFixed(2);
           this.singleForm.inventory = item.repertory.inventory;
-          let time = moment(item.repertory.createTime).format(
+          let time = moment(item.repertory.createTime * 1000).format(
             "yyyy-MM-dd HH:mm:ss"
           );
+          console.log(time);
           this.singleForm.createTime = time;
           this.singleForm.deletectionInstruction =
             item.commodity.deletectionInstruction;
@@ -289,9 +305,7 @@ export default {
         // var times = Object.keys(this.tableData[0]).length;
         var times = 8; //列数为8
         // console.log(tr_cell)
-        var firstitem = document.querySelectorAll(
-          ".el-table__row td"
-        );
+        var firstitem = document.querySelectorAll(".el-table__row td");
         // console.log(firstitem)
         // console.log(firstitem)
         for (let index in firstitem) {
@@ -305,7 +319,7 @@ export default {
         document.querySelector(".el-table__header").style.width = "100%";
 
         //修改弹窗样式
-        initDg()  
+        initDg();
       });
     },
     getShowList() {
@@ -322,12 +336,14 @@ export default {
       }
     },
     pageChange(page) {
-      this.offset = page - 1;
-      this.getShowList();
+      // this.offset = page - 1;
+      console.log();
+      this.$emit('refreshList',page)
+      // this.getShowList();
     },
     handleOnSale(index, row) {
       //上架商品
-      this.$confirm("确定要上架商品 \"" + row.name + "\" 吗?", "", {
+      this.$confirm('确定要上架商品 "' + row.name + '" 吗?', "", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
@@ -349,7 +365,7 @@ export default {
     },
     handleOffSale(index, row) {
       //下架商品
-      this.$confirm("确定要下架商品 \"" + row.name + "\" 吗?", "", {
+      this.$confirm('确定要下架商品 "' + row.name + '" 吗?', "", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"

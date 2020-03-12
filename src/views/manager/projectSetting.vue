@@ -4,14 +4,17 @@
     <div class="addForm">
       <!-- <el-button type="primary" class="check-btn" @click="showAddForm">
         <i class="el-icon-plus"></i>
-      </el-button> -->
+      </el-button>-->
     </div>
     <withTab :tabArray="settingTabArray" @handleTabChange="tabChange" left="40"></withTab>
     <withTable
+      :totalPage="totalNum"
       :list="this.list"
       :state="this.state"
       :isloading="this.isloading"
       @requestnewList="sendNewList"
+      :currentPage="this.currentPage"
+      @refreshList="refreshList"
     ></withTable>
     <el-dialog class="form-dialog" title="新增商品" :visible.sync="addVisible">
       <div class="body">
@@ -83,6 +86,8 @@ import {
   getCommodity,
   ImgUploadUrl,
   addCommodity,
+  getOffsaleItemV2,
+  getOnsaleItemV2
 } from "../../network";
 import moment from "moment";
 export default {
@@ -99,9 +104,9 @@ export default {
       isloading: false,
       optionsloading: false,
       state: 0,
-      token:{token:sessionStorage.getItem('token')},
+      token: { token: sessionStorage.getItem("token") },
       addVisible: false,
-      uploadUrl:ImgUploadUrl,
+      uploadUrl: ImgUploadUrl,
       addForm: {
         commodityId: "",
         price: "",
@@ -109,15 +114,18 @@ export default {
         status: "",
         logo: ""
       },
+      currentPage: 1,
+      pageSize: 10,
+      totalNum: 0,
       options: [],
-      stateOptions:[
+      stateOptions: [
         {
-          value:"1",
-          label:"上架",
+          value: "1",
+          label: "上架"
         },
         {
-          value:"0",
-          label:"下架",
+          value: "0",
+          label: "下架"
         }
       ],
       imageUrl: ""
@@ -131,44 +139,58 @@ export default {
   methods: {
     tabChange(obj) {
       // console.log(obj)
-      if (obj == "1") {
-        this.isTable = true;
-        this.getSecondList();
-      } else {
-        this.isTable = true;
-        this.getNewList();
+      // this.state = obj
+      if(!obj){
+        this.state = 0
+      }else{
+        this.state = 1
       }
+      
+      // console.log(this.state);
+      this.sendNewList()
     },
-    createList(item, index) {
-      var listItem = {};
-      listItem.index = index + 1;
-      listItem.id = item.repertory.id;
-      listItem.name = item.commodity.name;
-      listItem.diseaseName = item.diseaseType.name;
-      listItem.price = item.repertory.price.toFixed(2);
-      listItem.inventory = item.repertory.inventory;
-      listItem.updateTime = moment(item.commodity.updateTime).format(
-        "YYYY-MM-DD"
-      );
-      let time = moment(item.repertory.createTime).format("YYYY-MM-DD");
-      listItem.createTime = time;
-      return listItem;
+    //数据规范化
+    createList(element,index) {
+      return {
+        index:index+(this.currentPage-1)*this.pageSize+1,
+        id: element.id,
+        price: element.price,
+        name: element.commodityName,
+        diseaseName: element.disaseName,
+        updateTime: moment(element.updateTime * 1000).format(
+          "YYYY-MM-DD hh:mm:ss"
+        ),
+        inventory: element.inventory
+      };
     },
     getNewList() {
       this.isloading = true;
       this.state = 0;
-      getOnsaleList()
+      getOnsaleItemV2({
+        pageNum: this.currentPage - 1,
+        pageSize: this.pageSize
+      })
         .then(res => {
-          // console.log(res)
+          // console.log(res);
           //处理列表并传给子组件
-          let temp = res.data;
+          let temp = res.data.result;
+          this.totalNum = res.data.totalElements;
+          // this.currentPage = res.data.currentPage
+          // console.log(temp.length);
           var list = [];
           if (temp.length > 0) {
-            list = temp.map((item, index) => {
-              return this.createList(item, index);
+            console.log(temp);
+            temp.forEach((element, index) => {
+              // console.log(element, index);
+              list.push(this.createList(element,index));
             });
+            // list = temp.map((item, index) => {
+            //   console.log(item);
+            //   return this.createList(item, index);
+            // });
+            // console.log(list);
           }
-          // console.log(list)
+          // console.log(list);
           this.list = list;
         })
         .catch(err => {
@@ -181,14 +203,23 @@ export default {
     getSecondList() {
       this.isloading = true;
       this.state = 1;
-      getOffsaleList()
+
+      getOffsaleItemV2({
+        pageNum: this.currentPage - 1,
+        pageSize: this.pageSize
+      })
         .then(res => {
           //处理列表并传给子组件
-          let temp = res.data;
+          console.log(res);
+          let temp = res.data.result;
+          this.totalNum = res.data.totalElements;
+          // this.currentPage = res.data.currentPage
           var list = [];
           if (temp.length > 0) {
-            list = temp.map((item, index) => {
-              return this.createList(item, index);
+            temp.forEach((element, index) => {
+              // console.log(element, index);
+              // console.log(222);
+              list.push(this.createList(element,index));
             });
           }
           // console.log(list)
@@ -201,12 +232,24 @@ export default {
           this.isloading = false;
         });
     },
+    //tab切换
     sendNewList() {
+      console.log(111);
+      this.currentPage = 1;
       if (this.state === 0) {
         //处于已上架状态
         this.getNewList();
       } else {
         // console.log(2)
+        this.getSecondList();
+      }
+    },
+    refreshList(page) {
+      // console.log(page);
+      this.currentPage = page;
+      if (this.state == 0) {
+        this.getNewList();
+      } else {
         this.getSecondList();
       }
     },
@@ -226,8 +269,8 @@ export default {
             this.options.push(obj);
           });
         })
-        .catch(()=>{
-          errorHandle()
+        .catch(() => {
+          errorHandle();
         })
         .finally(() => {
           this.optionsloading = false;
@@ -235,54 +278,59 @@ export default {
     },
     handleAvatarSuccess(res) {
       // console.log(res)
-      this.imageUrl = res.data.url  
-      this.addForm.logo = res.data.id
+      this.imageUrl = res.data.url;
+      this.addForm.logo = res.data.id;
       this.$message({
-        message:"上传成功!",
-        type:"success"
-      })
+        message: "上传成功!",
+        type: "success"
+      });
     },
     initStyle() {
       this.$nextTick(() => {
         document.querySelectorAll(".el-dialog")[2].style.marginTop = "20px";
       });
     },
-    submit(){
-      if(!this.addForm.commodityId||!this.addForm.price||!this.addForm.inventory||!this.addForm.status||!this.addForm.logo){
+    submit() {
+      if (
+        !this.addForm.commodityId ||
+        !this.addForm.price ||
+        !this.addForm.inventory ||
+        !this.addForm.status ||
+        !this.addForm.logo
+      ) {
         this.$message({
-          message:"您还有信息未填写!请检查!",
-          type:"error"
-        })
-        return
+          message: "您还有信息未填写!请检查!",
+          type: "error"
+        });
+        return;
       }
-      this.addForm.price = parseFloat(this.addForm.price).toFixed(2)
+      this.addForm.price = parseFloat(this.addForm.price).toFixed(2);
       // console.log(this.addForm)
       addCommodity(this.addForm)
-      .then(res=>{
-        // console.log(res)
-        if(res.status==1){
-          this.$message({
-            message:"添加成功!",
-            type:"success"
-          })
-          this.addVisible = false
-          this.addForm.commodity = "",
-          this.addForm.price = ""
-          this.addForm.inventory = ""
-          this.addForm.status = ""
-          this.addForm.logo = ""
-          this.imageUrl = ""
-          this.sendNewList()
-        }else{
-          this.$message({
-            message:res.message,
-            type:"error"
-          })
-        }
-      })
-      .catch(()=>{
-        errorHandle()
-      })
+        .then(res => {
+          // console.log(res)
+          if (res.status == 1) {
+            this.$message({
+              message: "添加成功!",
+              type: "success"
+            });
+            this.addVisible = false;
+            (this.addForm.commodity = ""), (this.addForm.price = "");
+            this.addForm.inventory = "";
+            this.addForm.status = "";
+            this.addForm.logo = "";
+            this.imageUrl = "";
+            this.sendNewList();
+          } else {
+            this.$message({
+              message: res.message,
+              type: "error"
+            });
+          }
+        })
+        .catch(() => {
+          errorHandle();
+        });
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
