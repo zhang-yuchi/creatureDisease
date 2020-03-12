@@ -153,14 +153,15 @@ export default {
     createList(element,index) {
       return {
         index:index+(this.currentPage-1)*this.pageSize+1,
-        id: element.id,
+        id: element.repId,
         price: element.price,
         name: element.commodityName,
         diseaseName: element.disaseName,
         updateTime: moment(element.updateTime * 1000).format(
           "YYYY-MM-DD hh:mm:ss"
         ),
-        inventory: element.inventory
+        inventory: element.inventory,
+        commodityId:element.id
       };
     },
     getNewList() {

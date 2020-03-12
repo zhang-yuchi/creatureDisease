@@ -16,7 +16,7 @@
       </el-table-column>
       <el-table-column label="商品编号" width="150">
         <template slot-scope="scope">
-          <span>{{ scope.row.id }}</span>
+          <span>{{ scope.row.commodityId }}</span>
         </template>
       </el-table-column>
       <el-table-column label="商品名称" width="200">
@@ -264,6 +264,7 @@ export default {
       };
     },
     handleDetail(index, row) {
+      console.log(row);
       // this.$router.push("order-detail");
       this.detailVisible = true;
       this.windowloading = true;
