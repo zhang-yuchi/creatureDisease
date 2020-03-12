@@ -165,6 +165,7 @@ export default {
       };
     },
     getNewList() {
+      this.list = []
       this.isloading = true;
       this.state = 0;
       getOnsaleItemV2({
@@ -204,7 +205,7 @@ export default {
     getSecondList() {
       this.isloading = true;
       this.state = 1;
-
+      this.list = []
       getOffsaleItemV2({
         pageNum: this.currentPage - 1,
         pageSize: this.pageSize
