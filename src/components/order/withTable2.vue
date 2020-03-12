@@ -4,7 +4,6 @@
     <el-table
       :data="showList"
       style="width: 100%;"
-      height="500px"
       :cell-style="cellStyle"
       :header-cell-style="headerStyle"
       v-loading="loading"
