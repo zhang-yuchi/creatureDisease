@@ -12,4 +12,5 @@
     font-family: "noto_sans_sc_regularregular";
     height: 100%;
   }
+  
 </style>

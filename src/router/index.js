@@ -72,6 +72,11 @@ const routes = [{
         component: () => import("../views/manager/projectSetting")
       },
       {
+        path:'message',
+        name:"消息中心",
+        component:() => import('../views/manager/msg-center')
+      },
+      {
         path:"500",
         name:"服务器错误",
         component:()=>import('../components/notFound/500')

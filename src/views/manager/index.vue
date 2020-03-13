@@ -14,7 +14,6 @@
           active-text-color="#fff"
           :router="true"
         >
-          
           <el-menu-item index="order">
             <i class="el-icon-document-remove"></i>
             <span slot="title">订单管理</span>
@@ -39,6 +38,43 @@
     <el-container>
       <el-header>
         <div class="controls">
+          <el-popover placement="bottom" title="最新消息" width="200" trigger="click">
+            <div>
+              <ul class="infinite-list"  style="overflow:auto">
+                <li class="box-item">
+                  <div class="box-inner-title">您的新订单: 订单号20200312772696</div>
+                  <div class="box-inner-time">2020-03-11 </div>
+                </li>
+                <li class="box-item">
+                  <div class="box-inner-title">您的新订单: 订单号3785478545888888</div>
+                  <div class="box-inner-time">2020-03-11 </div>
+                </li>
+                <li class="box-item">
+                  <div class="box-inner-title">您的新订单: 订单号3785478545888888</div>
+                  <div class="box-inner-time">2020-03-11 </div>
+                </li>
+                <li class="box-item">
+                  <div class="box-inner-title">您的新订单: 订单号3785478545888888</div>
+                  <div class="box-inner-time">2020-03-11 </div>
+                </li>
+                <li class="box-item">
+                  <div class="box-inner-title">您的新订单: 订单号3785478545888888</div>
+                  <div class="box-inner-time">2020-03-11 </div>
+                </li>
+                <li class="box-item">
+                  <div class="box-inner-title">您的新订单: 订单号3785478545888888</div>
+                  <div class="box-inner-time">2020-03-11 </div>
+                </li>
+                
+              </ul>
+              <div style="text-align:center"><router-link to="message" style="color:#0584D7;text-decoration:none;">查看全部信息</router-link></div>
+              
+            </div>
+            <div slot="reference" class="msg-btn new-msg">
+              <img src="../../assets/letter.png" alt />
+            </div>
+          </el-popover>
+
           <router-link class="name" to="/manager/profile">{{username}}</router-link>
           <i @click="logout" class="el-icon-switch-button"></i>
           <!-- <img class="logout" @click="logout" src="../../assets/psw.png" alt /> -->
@@ -68,7 +104,8 @@ var routeMap = {
   order: "订单管理",
   baseInfo: "实验室设置/基础信息",
   "project-setting": "实验室设置/检测项目配置",
-  "order-detail": "订单管理/订单详情"
+  "order-detail": "订单管理/订单详情",
+  message:"系统消息",
 };
 export default {
   //import引入的组件需要注入到对象中才能使用
@@ -76,17 +113,18 @@ export default {
   data() {
     //这里存放数据
     return {
+      count: 0,
       nowpath: "",
       BreadcrumbList: [],
-      routePath: this.$router.history.current.path,
+      routePath: this.$router.history.current.path
     };
   },
   //监听属性 类似于data概念
   computed: {
-    username(){
+    username() {
       return this.$store.state.username
         ? this.$store.state.username
-        : sessionStorage.getItem("username")
+        : sessionStorage.getItem("username");
     }
   },
   //监控data中的数据变化
@@ -131,7 +169,10 @@ export default {
       sessionStorage.setItem("token", null);
       this.$router.replace({ path: "/" });
       //replace替换原路由，作用是避免回退死循环
-    }
+    },
+    load () {
+        this.count += 2
+      }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
@@ -255,8 +296,55 @@ li[role="menuitem"] {
 }
 .el-breadcrumb {
   padding: 0 20px;
-  font-family: 'PingFangSC-Regular', 'PingFang SC', sans-serif;
+  font-family: "PingFangSC-Regular", "PingFang SC", sans-serif;
   font-size: 16px;
   font-style: normal;
+}
+.box-item{
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+.box-item:last-of-type{
+  margin-bottom: 0;
+}
+.box-inner-title{
+  color: #000;
+}
+.box-inner-time{
+  font-weight: 300;
+  font-family: 'PingFang SC';
+  color: rgb(103, 102, 105);
+}
+.msg-btn {
+  vertical-align: middle;
+  cursor: pointer;
+  /* overflow: hidden; */
+  /* margin-top: 5px; */
+  display: inline-block;
+  margin-right: 15px;
+  position: relative;
+}
+.msg-btn img {
+  width: 15px;
+  height: 15px;
+}
+.new-msg::after {
+  content: "";
+  width: 7px;
+  height: 7px;
+  background-color: #d70505;
+  position: absolute;
+  right: 0;
+  border-radius: 50%;
+  top: 0;
+  transform: translate(50%, -50%);
+}
+.infinite-list{
+  height: 315px;
+  padding: 0;
+  margin: 13px 0;
+}
+li{
+  list-style: none;
 }
 </style>

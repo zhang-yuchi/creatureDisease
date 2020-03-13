@@ -1,0 +1,7 @@
+.el-popover__title{
+    font-weight: bold;
+    font-size: 16px;
+  }
+.el-popover{
+      width: 300px !important;
+  }
