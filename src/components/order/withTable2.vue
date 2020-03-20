@@ -3,7 +3,6 @@
   <div class="table">
     <el-table
       :data="showList"
-      style="width: 100%;"
       :cell-style="cellStyle"
       :header-cell-style="headerStyle"
       v-loading="loading"
@@ -48,7 +47,7 @@
           <span>{{ scope.row.updateTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="145">
+      <el-table-column label="操作" width="">
         <template slot-scope="scope">
           <el-link
             class="checkbtn"
@@ -253,7 +252,7 @@ export default {
   methods: {
     cellStyle() {
       return {
-        padding: "7px 0"
+        // padding: "7px 0"
       };
     },
     headerStyle() {

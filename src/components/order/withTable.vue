@@ -44,7 +44,7 @@
           <span>{{ scope.row.state }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="130">
+      <el-table-column label="操作" width="">
         <template slot-scope="scope">
           <el-link
             class="checkbtn"

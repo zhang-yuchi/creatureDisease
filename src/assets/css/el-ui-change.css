@@ -5,3 +5,14 @@
 .el-popover{
       width: 300px !important;
   }
+  /* 对部分内容进行响应式优化 */
+  @media screen and (min-width:1480px){
+    #app .el-button{
+      padding: 10px 25px;
+    }
+  }
+  @media screen and (max-width:1480px){
+    .el-table_1_column_8 .cell{
+      width: 145px;
+    }
+  }
