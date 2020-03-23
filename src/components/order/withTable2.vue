@@ -37,12 +37,12 @@
           <span>{{ scope.row.inventory }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="changeState==0" label="上架时间" width="150">
+      <el-table-column v-if="changeState==0" label="上架时间" width="160">
         <template slot-scope="scope">
           <span>{{ scope.row.updateTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="changeState==1" label="下架时间" width="150">
+      <el-table-column v-if="changeState==1" label="下架时间" width="160">
         <template slot-scope="scope">
           <span>{{ scope.row.updateTime }}</span>
         </template>

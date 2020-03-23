@@ -41,36 +41,16 @@
           <el-popover placement="bottom" title="最新消息" width="200" trigger="click">
             <div>
               <ul class="infinite-list"  style="overflow:auto">
-                <li class="box-item">
-                  <div class="box-inner-title">您的新订单: 订单号20200312772696</div>
-                  <div class="box-inner-time">2020-03-11 </div>
+                <li class="box-item" v-for="item in msgList" :key="item.order_sn" >
+                  <div class="box-inner-title">您的新订单: 订单号{{item.order_sn}}</div>
+                  <div class="box-inner-time">{{item.create_time}} </div>
                 </li>
-                <li class="box-item">
-                  <div class="box-inner-title">您的新订单: 订单号3785478545888888</div>
-                  <div class="box-inner-time">2020-03-11 </div>
-                </li>
-                <li class="box-item">
-                  <div class="box-inner-title">您的新订单: 订单号3785478545888888</div>
-                  <div class="box-inner-time">2020-03-11 </div>
-                </li>
-                <li class="box-item">
-                  <div class="box-inner-title">您的新订单: 订单号3785478545888888</div>
-                  <div class="box-inner-time">2020-03-11 </div>
-                </li>
-                <li class="box-item">
-                  <div class="box-inner-title">您的新订单: 订单号3785478545888888</div>
-                  <div class="box-inner-time">2020-03-11 </div>
-                </li>
-                <li class="box-item">
-                  <div class="box-inner-title">您的新订单: 订单号3785478545888888</div>
-                  <div class="box-inner-time">2020-03-11 </div>
-                </li>
-                
+         
               </ul>
               <div style="text-align:center"><router-link to="message" style="color:#0584D7;text-decoration:none;">查看全部信息</router-link></div>
               
             </div>
-            <div slot="reference" class="msg-btn new-msg">
+            <div slot="reference" :class="['msg-btn',msgList.length>0?'new-msg':'']">
               <img src="../../assets/letter.png" alt />
             </div>
           </el-popover>
@@ -99,6 +79,9 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
+import Utils from '../../utils/index'
+import moment from 'moment'
+import { getLastestNotice } from '../../network/msg-server'
 var routeMap = {
   profile: "个人中心",
   order: "订单管理",
@@ -116,7 +99,9 @@ export default {
       count: 0,
       nowpath: "",
       BreadcrumbList: [],
-      routePath: this.$router.history.current.path
+      routePath: this.$router.history.current.path,
+      msgList:[],
+      poller:null
     };
   },
   //监听属性 类似于data概念
@@ -183,6 +168,21 @@ export default {
     //   history.pushState(null, null, document.URL);
     //   window.addEventListener("popstate", this.logout, false);
     // }
+    // console.log(Utils);
+    this.poller = new Utils.Poller({
+      axios:getLastestNotice,
+      success:(res)=>{
+        let list = res.data
+        list = list.map(item=>{
+          item.create_time = moment(item.create_time*1000).format('YYYY-MM-DD')
+          return item
+        })
+        // console.log(list);
+        this.msgList = list
+      },
+    })
+    this.poller.start(10000)
+    
     this.beautifyStyle();
     this.getnowpath();
     this.getBreadcrumbList();
@@ -193,13 +193,14 @@ export default {
   updated() {}, //生命周期 - 更新之后
   beforeDestroy() {}, //生命周期 - 销毁之前
   destroyed() {
+    this.poller.destory()
     window.removeEventListener("popstate", this.goBack, false);
   }, //生命周期 - 销毁完成
   activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
   deactivated() {} //如果有keep-alive缓存功能,当该页面撤销使这个函数会触发
 };
 </script>
-<style scoped>
+<style lang="less" scoped>
 .el-header,
 .el-footer {
   /* background-color: #b3c0d1; */
@@ -316,6 +317,7 @@ li[role="menuitem"] {
   color: rgb(103, 102, 105);
 }
 .msg-btn {
+  outline: none;
   vertical-align: middle;
   cursor: pointer;
   /* overflow: hidden; */

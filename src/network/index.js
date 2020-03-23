@@ -1,10 +1,9 @@
 import axios from 'axios'
-let isDev = process.env.NODE_ENV == 'development'
+export let isDev = false
 import router from '../router'
 import el from 'element-ui'
 import qs from 'qs'
-isDev = false
-const baseURL = isDev ? "http://rap2.taobao.org:38080/app/mock/245259" : "http://ruankun.xyz:8821/disease/"
+export const baseURL = isDev ? "http://rap2.taobao.org:38080/app/mock/245259" : "http://ruankun.xyz:8821/disease/"
 const service = axios.create({
     baseURL,
 })
@@ -30,6 +29,7 @@ service.interceptors.response.use((res) => {
         return res
     }
 })
+export const Service = service
 export const errorHandle = () => {
     checkToken()
         .then(res => {
