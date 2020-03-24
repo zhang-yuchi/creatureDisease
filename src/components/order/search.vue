@@ -9,7 +9,7 @@
     <el-select v-model="searchSelect" style="width:120px" @change="selectChange" placeholder="请选择">
       <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
     </el-select>
-    <el-input v-model="input"  class="searchinput" placeholder="请输入搜索内容"></el-input>
+    <el-input v-model="input" class="searchinput" placeholder="请输入搜索内容"></el-input>
     <el-button type="primary" @click="handleSearch" class="query">查询</el-button>
   </div>
 </template>
@@ -17,7 +17,7 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-import moment from 'moment'
+import moment from "moment";
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {},
@@ -49,7 +49,7 @@ export default {
         }
       ],
       searchSelect: "订单编号",
-      defaultValue:"orderSn",
+      defaultValue: "orderSn",
       input: ""
     };
   },
@@ -70,28 +70,37 @@ export default {
         }
       }
     },
-    handleSearch(){
-      if((this.startTime&&!this.endTime)||(!this.startTime&&this.endTime)){
+    handleSearch() {
+      if (
+        (this.startTime && !this.endTime) ||
+        (!this.startTime && this.endTime)
+      ) {
         this.$message({
-          message:"日期需成对输入才会生效",
-          type:"warning"
-        })
-        this.startTime = ""
-        this.endTime = ""
-      }else if(this.startTime&&this.endTime){
-        this.startTime = moment(this.startTime,'YYYY-MM-DD HH:mm:ss').valueOf()
-        this.endTime = moment(this.endTime,'YYYY-MM-DD HH:mm:ss').valueOf()
+          message: "日期需成对输入才会生效",
+          type: "warning"
+        });
+        this.startTime = "";
+        this.endTime = "";
+      } else if (this.startTime && this.endTime) {
+        // console.log(this.startTime);
+        if (typeof this.startTime == "string") {
+          this.startTime = moment(
+            this.startTime,
+            "YYYY-MM-DD HH:mm:ss"
+          ).valueOf();
+          this.endTime = moment(this.endTime, "YYYY-MM-DD HH:mm:ss").valueOf();
+        }
       }
-
-      this.$emit("handlesearch",{
-        startTime:parseInt(this.startTime/1000),
-        endTime:parseInt(this.endTime/1000),
-        searchValue:this.input,
-        key:this.defaultValue,
-      })
+      // console.log(this.startTime);
+      this.$emit("handlesearch", {
+        startTime: parseInt(this.startTime / 1000),
+        endTime: parseInt(this.endTime / 1000),
+        searchValue: this.input,
+        key: this.defaultValue
+      });
     },
-    selectChange(value){
-      this.defaultValue = value
+    selectChange(value) {
+      this.defaultValue = value;
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
@@ -124,8 +133,8 @@ export default {
   margin: 0 5px;
   font-size: 8px;
 }
-.el-select{
-  width:170px;
+.el-select {
+  width: 170px;
 }
 .tips {
   margin-right: 8px;
