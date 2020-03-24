@@ -74,14 +74,14 @@
         </el-form-item>
         <el-form-item label="所在地区" prop="district">
           <el-select
-            style="width:32%;margin-right:10px;"
+            style="width:32%;margin-right:1.8%;"
             v-model="ruleForm.province"
             placeholder="请选择省"
           >
             <el-option v-for="item in lv1" :key="item.code" :label="item.label" :value="item.value"></el-option>
           </el-select>
           <el-select
-            style="width:32%;margin-right:10px;"
+            style="width:32%;margin-right:1.8%;"
             v-model="ruleForm.city"
             @change="changeCity"
             placeholder="请选择市"

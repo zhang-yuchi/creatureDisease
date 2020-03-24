@@ -95,7 +95,7 @@ export default {
   deactivated() {} //如果有keep-alive缓存功能,当该页面撤销使这个函数会触发
 };
 </script>
-<style scoped>
+<style lang="less" scoped>
 .title {
   display: inline-block;
   width: 5em;
@@ -105,8 +105,14 @@ export default {
   font-size: 14px;
   margin-bottom: 18px;
 }
+.row:last-of-type{
+  margin-bottom: 0;
+}
 .logistics-detail {
   margin-bottom: 10px;
+}
+.logistics-detail:last-of-type{
+  margin-bottom: 0;
 }
 .detail-list {
   margin-bottom: 10px;

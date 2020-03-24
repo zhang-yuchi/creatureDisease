@@ -25,14 +25,14 @@
           <div class="msg-content" :class="{isNew:scope.row.isNew}">{{ scope.row.msg }}</div>
         </template>
       </el-table-column>
-      <el-table-column prop="create_time" label="时间" width="400"></el-table-column>
+      <el-table-column prop="create_time" label="时间" width="350"></el-table-column>
       <el-table-column prop="address" label="操作" show-overflow-tooltip>
         <template slot-scope="scope">
           <el-link
             type="danger"
             style="color:#D70505;font-weight:bold;"
-            @click="deleteOne(scope.row.order_id)"
-            :id="scope.row.order_id"
+            @click="deleteOne(scope.row.id)"
+            :id="scope.row.id"
           >删除</el-link>
         </template>
       </el-table-column>
@@ -165,14 +165,15 @@ export default {
         // console.log(res);
         if (res.status === 1) {
           // this.tableData = res.data.result
+          console.log(res);
           this.total = res.data.totalElements;
           this.tableData = res.data.result.map(item => {
             item.msg = `您的新订单: 订单单号${item.order_sn},请进入订单管理页面查看`;
             item.create_time = moment(item.create_time * 1000).format(
-              "YYYY-MM-DD hh:mm:ss"
+              "YYYY-MM-DD HH:mm:ss"
             );
             item.isNew = !item.if_new;
-            item.id = item.order_id;
+            // item.id = item.order_id;
             return item;
           });
           // console.log(this.tableData);

@@ -2,16 +2,19 @@
     font-weight: bold;
     font-size: 16px;
   }
+  .table-money{
+    text-align: right;
+  }
 .el-popover{
       width: 300px !important;
   }
   /* 对部分内容进行响应式优化 */
-  @media screen and (min-width:1480px){
+  @media screen and (min-width:1410px){
     #app .el-button{
       padding: 10px 25px;
     }
   }
-  @media screen and (max-width:1480px){
+  @media screen and (max-width:1410px){
     .el-table_1_column_8 .cell{
       width: 145px;
     }

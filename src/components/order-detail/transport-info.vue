@@ -100,7 +100,7 @@ export default {
 .row {
   margin-bottom: 15px;
 }
-.row:last-of-type {
+.row:last-of-type{
   margin-bottom: 0;
 }
 .row-item {

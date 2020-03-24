@@ -86,7 +86,7 @@ export default {
       single.orderId = item.order_sn;
       single.phoneNum = item.phone;
       single.logisticsNum = item.logistics_sn ? item.logistics_sn : "暂无";
-      single.updateTime = moment(item.create_time*1000).format("YYYY/MM/DD hh:mm:ss");
+      single.updateTime = moment(item.create_time*1000).format("YYYY/MM/DD HH:mm:ss");
       single.price = item.payable.toFixed(2);
       single.to = item.company;
       single.state = stateMap[item.status];

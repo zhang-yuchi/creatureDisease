@@ -158,7 +158,7 @@ export default {
         name: element.commodityName,
         diseaseName: element.disaseName,
         updateTime: moment(element.updateTime * 1000).format(
-          "YYYY-MM-DD hh:mm:ss"
+          "YYYY-MM-DD HH:mm:ss"
         ),
         inventory: element.inventory,
         commodityId:element.id
@@ -236,7 +236,7 @@ export default {
     },
     //tab切换
     sendNewList() {
-      console.log(111);
+      // console.log(111);
       this.currentPage = 1;
       if (this.state === 0) {
         //处于已上架状态

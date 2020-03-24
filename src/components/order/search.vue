@@ -6,10 +6,10 @@
     <span class="sperator">一</span>
     <el-date-picker v-model="endTime" type="datetime" placeholder="请输入结束时间"></el-date-picker>
     <span class="holder"></span>
-    <el-select v-model="searchSelect" @change="selectChange" placeholder="请选择">
+    <el-select v-model="searchSelect" style="width:120px" @change="selectChange" placeholder="请选择">
       <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
     </el-select>
-    <el-input v-model="input" class="searchinput" placeholder="请输入搜索内容"></el-input>
+    <el-input v-model="input"  class="searchinput" placeholder="请输入搜索内容"></el-input>
     <el-button type="primary" @click="handleSearch" class="query">查询</el-button>
   </div>
 </template>
@@ -79,13 +79,13 @@ export default {
         this.startTime = ""
         this.endTime = ""
       }else if(this.startTime&&this.endTime){
-        this.startTime = moment(this.startTime,'YYYY-MM-DD hh:mm:ss').valueOf()/1000
-        this.endTime = moment(this.endTime,'YYYY-MM-DD hh:mm:ss').valueOf()/1000
+        this.startTime = moment(this.startTime,'YYYY-MM-DD HH:mm:ss').valueOf()
+        this.endTime = moment(this.endTime,'YYYY-MM-DD HH:mm:ss').valueOf()
       }
 
       this.$emit("handlesearch",{
-        startTime:this.startTime,
-        endTime:this.endTime,
+        startTime:parseInt(this.startTime/1000),
+        endTime:parseInt(this.endTime/1000),
         searchValue:this.input,
         key:this.defaultValue,
       })

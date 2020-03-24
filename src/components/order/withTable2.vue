@@ -1,13 +1,13 @@
 <!-- 检测项目配置表格 -->
 <template>
-  <div class="table">
+  <div class="table2">
     <el-table
       :data="showList"
       :cell-style="cellStyle"
       :header-cell-style="headerStyle"
       v-loading="loading"
     >
-      <el-table-column label="序号" width="120" style="padding:30px;">
+      <el-table-column label="序号" width="100" style="padding:30px;">
         <template slot-scope="scope">
           <span style="height:40px">{{ scope.row.index }}</span>
         </template>
@@ -32,7 +32,7 @@
           <span>￥{{ scope.row.price }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="库存" width="150">
+      <el-table-column label="库存" width="90">
         <template slot-scope="scope">
           <span>{{ scope.row.inventory }}</span>
         </template>
@@ -96,8 +96,8 @@
         <span class="item-title">商品名称:</span>
         {{editForm.name}}
       </div>
-      <el-form :model="editForm">
-        <el-form-item label="供货价格:" :label-width="'72px'">
+      <el-form :model="editForm" label-position="left">
+        <el-form-item label="供货价格:"  :label-width="'72px'">
           <el-input v-model="editForm.price" placeholder="请输入供货价格" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="库存:" :label-width="'72px'">
@@ -110,7 +110,7 @@
       </div>
     </el-dialog>
     <!-- 商品详情弹框 -->
-    <el-dialog title="商品详情" v-loading="windowloading" :visible.sync="detailVisible" width="30%">
+    <el-dialog title="商品详情" class="item-details" v-loading="windowloading" :visible.sync="detailVisible" width="30%">
       <div class="text-row">
         <span class="detail-name">商品名称:</span>
         <span class="text-content">{{singleForm.name}}</span>
@@ -268,7 +268,7 @@ export default {
       this.windowloading = true;
       getSingleItem({ id: row.id })
         .then(res => {
-          console.log(res);
+          // console.log(res);
           const item = res.data;
           this.singleForm.id = item.repertory.commodityId;
           this.singleForm.name = item.commodity.name;
@@ -276,9 +276,9 @@ export default {
           this.singleForm.price = item.repertory.price.toFixed(2);
           this.singleForm.inventory = item.repertory.inventory;
           let time = moment(item.repertory.createTime * 1000).format(
-            "yyyy-MM-dd HH:mm:ss"
+            "YYYY-MM-DD HH:mm:ss"
           );
-          console.log(time);
+          // console.log(time);
           this.singleForm.createTime = time;
           this.singleForm.deletectionInstruction =
             item.commodity.deletectionInstruction;
@@ -336,7 +336,7 @@ export default {
     },
     pageChange(page) {
       // this.offset = page - 1;
-      console.log();
+      // console.log();
       this.$emit('refreshList',page)
       // this.getShowList();
     },
@@ -433,16 +433,24 @@ export default {
   deactivated() {} //如果有keep-alive缓存功能,当该页面撤销使这个函数会触发
 };
 </script>
-<style scoped>
+<style >
 .item-title {
   display: inline-block;
   width: 5em;
-  padding-right: 12px;
+  /* padding-right: 12px; */
   /* text-align: right; */
   line-height: 40px;
 }
+.el-dialog__body{
+  padding: 10px 20px;
+}
 .el-table__header {
   width: 100%;
+}
+.table2 .el-form-item__label{
+  padding: 0;
+  /* width: 84px ; */
+  
 }
 .cell {
   padding-left: 10px;
@@ -463,7 +471,7 @@ export default {
 }
 .detail-name {
   display: inline-block;
-  width: 88px;
+  width: 75px;
   text-align: right;
   margin-right: 10px;
   font-weight: bold;
@@ -475,7 +483,7 @@ export default {
   vertical-align: top;
 }
 .mulit-row {
-  line-height: 36px;
-  margin-top: -10px;
+  line-height: 20px;
+  /* margin-top: -10px; */
 }
 </style>

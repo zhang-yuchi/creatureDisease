@@ -137,7 +137,7 @@ export default {
             .map(item => {
               // console.log(item);
               item.time = moment(item.time * 1000).format(
-                "YYYY/MM/DD hh:mm:ss"
+                "YYYY/MM/DD HH:mm:ss"
               );
               return item;
             })
