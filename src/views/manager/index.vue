@@ -38,16 +38,16 @@
     <el-container>
       <el-header>
         <div class="controls">
-          <el-popover placement="bottom" title="最新消息" width="200" trigger="click">
+          <el-popover placement="bottom" :value="isPopoverShowen" :title="`最新消息(${msgList.length})`" width="200" trigger="click">
             <div>
               <ul class="infinite-list"  style="overflow:auto">
-                <li class="box-item" v-for="item in msgList" :key="item.order_sn" >
+                <li class="box-item" @click="toDetails" :data-sn="item.order_sn" v-for="item in msgList" :key="item.order_sn" >
                   <div class="box-inner-title">您的新订单: 订单号{{item.order_sn}}</div>
                   <div class="box-inner-time">{{item.create_time}} </div>
                 </li>
          
               </ul>
-              <div style="text-align:center"><router-link to="message" style="color:#0584D7;text-decoration:none;">查看全部信息</router-link></div>
+              <div style="text-align:center"><div @click="toMsgCenter" style="color:#0584D7;text-decoration:none;">查看全部信息</div></div>
               
             </div>
             <div slot="reference" :class="['msg-btn',msgList.length>0?'new-msg':'']">
@@ -101,7 +101,8 @@ export default {
       BreadcrumbList: [],
       routePath: this.$router.history.current.path,
       msgList:[],
-      poller:null
+      poller:null,
+      isPopoverShowen:false,
     };
   },
   //监听属性 类似于data概念
@@ -110,7 +111,8 @@ export default {
       return this.$store.state.username
         ? this.$store.state.username
         : sessionStorage.getItem("username");
-    }
+    },
+    
   },
   //监控data中的数据变化
   watch: {
@@ -127,6 +129,25 @@ export default {
       this.nowpath = this.$router.history.current.path.split("/")[
         this.$router.history.current.path.split("/").length - 1
       ];
+    },
+    toDetails(e){
+      let order_sn = e.currentTarget.dataset.sn
+      this.$router.push({
+        path: "order-detail",
+        query: {
+          orderSn: order_sn
+        }
+      });
+      document.querySelector('.el-popover').style.display = "none"
+    },
+    toMsgCenter(){
+      console.log(123);
+      this.isPopoverShowen = false
+      console.log(this.isPopoverShowen);
+      document.querySelector('.el-popover').style.display = "none"
+      if(!this.$route.path!=='/manager/message'){
+        this.$router.push('message')
+      }
     },
     getBreadcrumbList() {
       // console.log(this.nowpath);

@@ -2,12 +2,13 @@
 <template>
   <div class>
     <div class="msg-control">
-      <el-button type="danger" @click="deleteAll" icon="el-icon-delete" class="del-btn" plain>删除</el-button>
+      <el-button type="danger" @click="deleteAll" :disabled="isForbbiden" icon="el-icon-delete" class="del-btn" plain>删除</el-button>
       <el-button
         class="readed-btn"
         @click="checkAll"
         type="primary"
         plain
+        :disabled="isForbbiden"
         icon="el-icon-check"
       >标记为已读</el-button>
     </div>
@@ -16,6 +17,8 @@
       :data="tableData"
       tooltip-effect="dark"
       style="width: 100%"
+      :row-style="giveNewTips"
+      @row-click="toListDetail"
       header-row-class-name="header-class"
       @selection-change="handleSelectionChange"
     >
@@ -37,7 +40,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination background layout="prev, pager, next" :hide-on-single-page="true" :total="total"></el-pagination>
+    <el-pagination background layout="prev, pager, next" :hide-on-single-page="true" @current-change="pageChange" :total="total"></el-pagination>
     <!-- <div style="margin-top: 20px">
       <el-button @click="toggleSelection([tableData[1], tableData[2]])">切换第二、第三行的选中状态</el-button>
       <el-button @click="toggleSelection()">取消选择</el-button>
@@ -65,11 +68,15 @@ export default {
       multipleSelection: [],
       currentPage: 0,
       pageSize: 10,
-      total: 0
+      total: 0,
     };
   },
   //监听属性 类似于data概念
-  computed: {},
+  computed: {
+    isForbbiden(){
+      return this.multipleSelection.length===0
+    }
+  },
   //监控data中的数据变化
   watch: {},
   //方法集合
@@ -181,6 +188,35 @@ export default {
           this.tableData = [];
         }
       });
+    },
+    pageChange(cur){
+      // console.log(cur);
+      this.currentPage = cur-1
+      this.getNewList()
+    },
+    giveNewTips(scope){
+      // console.log(a);
+      if(!scope.row.isNew){
+        // console.log('123');
+        return {
+          color:"#c3c3c3",
+          cursor:"pointer"
+        }
+      }else{
+        return {
+          cursor:"pointer"
+        }
+      }
+      
+    },
+    toListDetail(row){
+      // console.log(row);
+      this.$router.push({
+        path: "order-detail",
+        query: {
+          orderSn: row.order_sn
+        }
+      });
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
@@ -248,7 +284,7 @@ export default {
   width: 8px;
   height: 8px;
   position: absolute;
-  background-color: #d70505;
+  background-color: rgb(4, 132, 215);
   top: 50%;
   left: 0;
   transform: translate(-200%, -50%);
