@@ -214,7 +214,7 @@ export default {
   //方法集合
   methods: {
     sendTONewPhone() {
-      getNewPhoneCode({ phone: this.phoneBox.newphone })
+      getNewPhoneCode({ phone: this.phoneBox.newphone , type:"CHANGE_PHONE" })
         .then(res => {
           console.log("您的模拟验证码为" + res.data.CODE);
           this.changePhoneRight = true;
@@ -225,7 +225,7 @@ export default {
     },
     sendToMdfPhone() {
       // console.log(123);
-      getPhoneCode({ phone: this.phone })
+      getNewPhoneCode({ phone: this.phone,type:"CHANGE_PHONE" })
         .then(res => {
           this.checkPhoneRight = true;
           console.log("模拟验证码为:" + res.data.CODE);
@@ -235,11 +235,11 @@ export default {
         });
     },
     sendToMdfPsw() {
-      getPhoneCode({ phone: this.phone })
+      getNewPhoneCode({ phone: this.phone ,type:"CHANGE_PASSWORD" })
         .then(res => {
+          this.checkPswRight = true;
           // console.log(res);
           if (res.data.SUCCESS) {
-            this.checkPswRight = true;
             console.log("模拟验证码为:" + res.data.CODE);
           }
         })

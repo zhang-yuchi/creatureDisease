@@ -213,7 +213,8 @@ export default {
 .loginbtn {
   background-color: #318ff9;
   width: 100%;
-  padding: 13px 15px;
+  padding: 0 !important;
+  line-height: 40px;
   box-sizing: border-box;
 }
 .loginbtn:hover {
@@ -227,7 +228,10 @@ export default {
   line-height: 20px;
   height: 20px;
 }
-.phonebtn{
-  margin-right: 10px;
+.input{
+  margin-top: 20px;
+}
+.input:first-of-type{
+  margin-top: 30px;
 }
 </style>

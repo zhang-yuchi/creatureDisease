@@ -66,7 +66,7 @@ deactivated() {}, //如果有keep-alive缓存功能,当该页面撤销使这个�
   color: #333333;
   font-size: 36px;
   font-weight: bold;
-  margin: 70px 0 0 60px;
+  margin: 40px 0 0 60px;
   letter-spacing: 2px;
 }
 .loginbtn {
@@ -78,9 +78,13 @@ deactivated() {}, //如果有keep-alive缓存功能,当该页面撤销使这个�
   border-color: #0484d6;
 }
 .changepsw {
-  margin: 20px 60px ;
-  text-align: center;
+  margin: 30px 60px ;
   width: 70%;
+}
+.changepsw>div{
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
 }
 .pswbtn {
   color: #4b6477;

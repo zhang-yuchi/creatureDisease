@@ -114,22 +114,8 @@ export default {
       // console.log(this.phoneErr)
       // console.log(this.form.phone)
       if (!this.phoneErr && this.form.phone!=="") {
-        getNewPhoneCode({phone:this.form.phone})
+        getNewPhoneCode({phone:this.form.phone,type:"LOGIN"})
         .then(res=>{
-          // console.log(res)
-          // if(res.data.SUCCESS){
-          //   this.givecheckmsg = true
-          // }else{
-          //   const phoneReg = /手机|用户/
-          //   const checkReg = /验证/
-          //   if(phoneReg.test(res.data.ERROR)){
-          //     this.phoneErr = true
-          //     this.phoneErrMsg = res.data.ERROR
-          //   }else{
-          //     this.checkErr = true
-          //     this.checkErrMsg = res.data.ERROR
-          //   }
-          // }
           this.givecheckmsg = true
           console.log("模拟验证码为"+res.data.CODE)
         })

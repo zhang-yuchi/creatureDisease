@@ -3,7 +3,7 @@ export let isDev = false
 import router from '../router'
 import el from 'element-ui'
 import qs from 'qs'
-export const baseURL = isDev ? "http://rap2.taobao.org:38080/app/mock/245259" : "http://ruankun.xyz:8821/disease/"
+export const baseURL = isDev ? "http://rap2.taobao.org:38080/app/mock/245259" : "http://hz.nadev.xyz:8080/disease"
 const service = axios.create({
     baseURL,
 })
@@ -20,6 +20,7 @@ service.interceptors.request.use((config) => {
 })
 service.interceptors.response.use((res) => {
     //做全局处理
+    console.log(res);
     let data = isDev ? res : res.data
     const SUCCESS_STATUS = isDev ? 200 : 1
     if (data.status === SUCCESS_STATUS) {
@@ -153,14 +154,18 @@ export const modifyPhone = (params) => {
 // 手机号码获取验证码
 export const getPhoneCode = (params) => {
     return service.get(getRandom('/lab/phonecode'), {
-        params
+        params:{
+            phone:params.phone,
+            verifyCode:params.verifyCode,
+        }
     })
 }
 // 新的手机号码获取手机验证码
 export const getNewPhoneCode = (params) => {
     return service.get(getRandom('/lab/newphone/phonecode'), {
         params: {
-            phone: params.phone
+            phone: params.phone,
+            smsType:params.type
         }
     })
 }

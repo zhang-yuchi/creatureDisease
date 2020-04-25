@@ -76,7 +76,7 @@ export default {
         phone: this.form.phone
       }).then(res => {
         // console.log(res);
-        if (res.data.SUCCESS) {
+        if (res.data.STATUS==='SUCCESS') {
           console.log("模拟验证码为" + res.data.CODE);
           this.$router.push("step2");
         } else {

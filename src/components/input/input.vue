@@ -221,7 +221,7 @@ export default {
   /* float: right; */
   text-align: right;
   padding-top: 5px;
-  font-size: 15px;
+  font-size: 12px;
   height: 22px;
   width: 100%;
 }

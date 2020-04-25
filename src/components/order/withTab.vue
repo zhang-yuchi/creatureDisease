@@ -1,6 +1,6 @@
 <!-- 标签 -->
 <template>
-  <div class>
+  <div class="tab-box">
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <el-tab-pane
         v-for="(item,index) in tabArray"
@@ -82,22 +82,22 @@ export default {
         // tab.style.marginTop = "10px"
 
         //小蓝条长度矫正
-        var active_bar = document.querySelector(".el-tabs__active-bar");
+        // var active_bar = document.querySelector(".el-tabs__active-bar");
 
-        active_bar.style.backgroundColor = primaryColor;
-        var firstBox = document.querySelector("#tab-0");
-        firstBox.style.paddingRight = "20px";
-        var padding = 20;
-        var initLength = firstBox.offsetWidth - padding / 2; //初始为64
-        active_bar.style.width = initLength + "px";
+        // active_bar.style.backgroundColor = primaryColor;
+        // var firstBox = document.querySelector("#tab-0");
+        // firstBox.style.paddingRight = "20px";
+        // var padding = 20;
+        // var initLength = firstBox.offsetWidth - padding / 2; //初始为64
+        // active_bar.style.width = initLength + "px";
 
-        //使tab居中
-        var itemList = document.querySelector(".el-tabs__nav");
-        var i = itemList;
-        i.style.transition = "none";
-        i.style.position = "relative";
-        i.style.left = this.left + "%";
-        i.style.fontSize = "14px";
+        // //使tab居中
+        // var itemList = document.querySelector(".el-tabs__nav");
+        // var i = itemList;
+        // i.style.transition = "none";
+        // i.style.position = "relative";
+        // i.style.left = this.left + "%";
+        // i.style.fontSize = "14px";
         this.getActiveStyle(0);
       });
     }
@@ -118,14 +118,24 @@ export default {
   deactivated() {} //如果有keep-alive缓存功能,当该页面撤销使这个函数会触发
 };
 </script>
-<style scoped>
+<style>
 .el-tabs__nav {
   float: none;
 }
 .el-tabs__header {
   margin-top: 30px;
 }
-.is-active {
+/* .is-active {
   font-weight: bold;
+} */
+.el-tabs__nav{
+  text-align: center;
+}
+.tab-box{
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  height: 70px;
+  border-bottom: 2px solid rgb(228, 231, 237);
 }
 </style>
